@@ -1,0 +1,77 @@
+-- limanya_db.sql
+-- SQL schema pour l'API Limanya
+
+CREATE DATABASE IF NOT EXISTS `limanya` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `limanya`;
+
+-- users
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nom` VARCHAR(150) NOT NULL,
+  `email` VARCHAR(200) NOT NULL UNIQUE,
+  `password` VARCHAR(255) NOT NULL,
+  `role` VARCHAR(50) NOT NULL DEFAULT 'user',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- actualites
+CREATE TABLE IF NOT EXISTS `actualites` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `titre` VARCHAR(255) NOT NULL,
+  `contenu` TEXT,
+  `image` VARCHAR(255) DEFAULT NULL,
+  `date_publication` DATETIME DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Exemple admin dans users
+-- INSERT INTO users (nom, email, password, role) VALUES ('Admin', 'admin@example.com', '<HASH>', 'admin');
+
+-- realisations
+CREATE TABLE IF NOT EXISTS `realisations` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `titre` VARCHAR(255) NOT NULL,
+  `description` TEXT,
+  `image` VARCHAR(255) DEFAULT NULL,
+  `lieu` VARCHAR(255) DEFAULT NULL,
+  `date_realisation` DATE DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- devis
+CREATE TABLE IF NOT EXISTS `devis` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nom` VARCHAR(150) NOT NULL,
+  `telephone` VARCHAR(50) DEFAULT NULL,
+  `email` VARCHAR(200) DEFAULT NULL,
+  `service` VARCHAR(150) DEFAULT NULL,
+  `message` TEXT DEFAULT NULL,
+  `statut` VARCHAR(50) DEFAULT 'nouveau',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- contacts
+CREATE TABLE IF NOT EXISTS `contacts` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nom` VARCHAR(150) NOT NULL,
+  `telephone` VARCHAR(50) DEFAULT NULL,
+  `email` VARCHAR(200) DEFAULT NULL,
+  `message` TEXT DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- equipements
+CREATE TABLE IF NOT EXISTS `equipements` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nom` VARCHAR(255) NOT NULL,
+  `description` TEXT DEFAULT NULL,
+  `image` VARCHAR(255) DEFAULT NULL,
+  `disponibilite` VARCHAR(50) DEFAULT 'disponible',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

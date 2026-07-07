@@ -1,0 +1,541 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ==========================================================================
+   LIMANYA GROUPE — Thème global
+   Palette : Crème chaude / Charbon profond / Ambre chantier
+   ========================================================================== */
+
+:root {
+  /* Couleurs de marque */
+  --lg-cream: #f4f1e9;
+  --lg-cream-2: #ece7db;
+  --lg-surface: #ffffff;
+  --lg-ink: #17140f;
+  --lg-ink-soft: #2c281f;
+  --lg-muted: #6f685a;
+  --lg-line: #e2dccd;
+  --lg-amber: #bf571c;
+  --lg-amber-dark: #9d4514;
+  --lg-amber-soft: #f6e7da;
+
+  /* Bootstrap overrides */
+  --bs-primary: #bf571c;
+  --bs-primary-rgb: 191, 87, 28;
+  --bs-body-color: #2c281f;
+  --bs-body-bg: #f4f1e9;
+  --bs-border-color: #e2dccd;
+  --bs-font-sans-serif: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+
+  font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--lg-ink-soft);
+  background-color: var(--lg-cream);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--lg-cream);
+  color: var(--lg-ink-soft);
+  font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+#app {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.container {
+  max-width: 1200px;
+}
+
+/* ---------- Typographie ---------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+.navbar-brand,
+.display-1,
+.display-2,
+.display-3,
+.display-4,
+.display-5,
+.display-6 {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  color: var(--lg-ink);
+  letter-spacing: -0.01em;
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+p,
+li {
+  color: var(--lg-muted);
+}
+
+a {
+  color: var(--lg-amber);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--lg-amber-dark);
+}
+
+.eyebrow {
+  display: inline-block;
+  letter-spacing: 0.22em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--lg-amber);
+}
+
+.text-amber {
+  color: var(--lg-amber) !important;
+}
+
+/* ---------- Hero de page réutilisable ---------- */
+.page-hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #17140f 0%, #2c281f 100%);
+  color: #f4f1e9;
+}
+
+.page-hero::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  right: -80px;
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(191, 87, 28, 0.4), transparent 70%);
+  pointer-events: none;
+}
+
+.page-hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.page-hero h1,
+.page-hero h2,
+.page-hero h3 {
+  color: #fff;
+}
+
+.page-hero .eyebrow {
+  color: var(--lg-amber-soft);
+}
+
+.page-hero p,
+.page-hero li {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.hero-media {
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+}
+
+.object-fit-cover {
+  object-fit: cover;
+}
+
+.bg-ink {
+  background-color: var(--lg-ink) !important;
+  color: #f4f1e9 !important;
+}
+
+.text-white-75 {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  background: rgba(244, 241, 233, 0.85) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--lg-line);
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+}
+
+.navbar-brand {
+  color: var(--lg-ink) !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: 1.35rem;
+}
+
+.navbar-brand .brand-accent {
+  color: var(--lg-amber);
+}
+
+.nav-link {
+  color: var(--lg-ink-soft) !important;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding-left: 0.85rem !important;
+  padding-right: 0.85rem !important;
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0.85rem;
+  right: 0.85rem;
+  bottom: 0.35rem;
+  height: 2px;
+  background: var(--lg-amber);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.nav-link:hover,
+.nav-link.router-link-active {
+  color: var(--lg-amber) !important;
+}
+
+.nav-link:hover::after,
+.nav-link.router-link-active::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Boutons ---------- */
+.btn {
+  border-radius: 999px !important;
+  font-weight: 600;
+  padding: 0.65rem 1.6rem;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.btn-lg {
+  padding: 0.85rem 2rem;
+}
+
+.btn-primary {
+  background: var(--lg-amber);
+  border: 0;
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(191, 87, 28, 0.22);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: var(--lg-amber-dark);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(191, 87, 28, 0.28);
+}
+
+.btn-outline-primary {
+  border: 1.5px solid var(--lg-amber);
+  color: var(--lg-amber);
+  background: transparent;
+}
+
+.btn-outline-primary:hover {
+  background: var(--lg-amber);
+  color: #fff;
+}
+
+.btn-outline-light {
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  color: #fff;
+}
+
+.btn-outline-light:hover {
+  background: #fff;
+  color: var(--lg-ink);
+}
+
+.btn-dark,
+.btn-light {
+  color: var(--lg-ink);
+}
+
+.btn-dark {
+  background: var(--lg-ink);
+  color: #f4f1e9;
+}
+
+.btn-dark:hover {
+  background: #000;
+  color: #fff;
+}
+
+.btn-success {
+  background: #1f7a4d;
+  border: 0;
+}
+
+/* ---------- Cartes ---------- */
+.card {
+  background: var(--lg-surface);
+  border: 1px solid var(--lg-line);
+  border-radius: 1.25rem !important;
+  box-shadow: 0 18px 40px rgba(23, 20, 15, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--lg-amber);
+  box-shadow: 0 26px 50px rgba(23, 20, 15, 0.1);
+}
+
+/* Icône ronde ambre pour les cartes de service */
+.service-icon {
+  width: 52px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: var(--lg-amber-soft);
+  color: var(--lg-amber);
+  font-size: 1.4rem;
+}
+
+/* ---------- Backgrounds utilitaires ---------- */
+.bg-light {
+  background-color: var(--lg-cream-2) !important;
+}
+
+.bg-white {
+  background-color: var(--lg-surface) !important;
+}
+
+/* ---------- Formulaires ---------- */
+.form-control,
+.form-select,
+textarea {
+  border-radius: 0.85rem !important;
+  border: 1px solid var(--lg-line);
+  background: var(--lg-surface);
+  box-shadow: none;
+  padding: 0.7rem 1rem;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea:focus {
+  border-color: var(--lg-amber);
+  box-shadow: 0 0 0 0.2rem rgba(191, 87, 28, 0.16);
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--lg-ink);
+  font-size: 0.9rem;
+}
+
+/* ---------- Tables (admin) ---------- */
+.table {
+  --bs-table-bg: var(--lg-surface);
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--lg-line);
+  box-shadow: 0 14px 34px rgba(23, 20, 15, 0.05);
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+.table thead,
+.table > thead,
+.table-dark {
+  --bs-table-bg: var(--lg-ink);
+  background: var(--lg-ink);
+  color: #fff;
+}
+
+.table thead th {
+  background: var(--lg-ink);
+  color: #fff;
+  border-bottom: 0;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.95rem 1rem;
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: 0.85rem 1rem;
+  border-color: var(--lg-line);
+  color: var(--lg-ink-soft);
+}
+
+.table-bordered,
+.table-bordered td,
+.table-bordered th {
+  border-color: var(--lg-line);
+}
+
+.table-hover tbody tr {
+  transition: background 0.15s ease;
+}
+
+.table-hover tbody tr:hover {
+  background: var(--lg-amber-soft);
+}
+
+/* Enveloppe visuelle pour les tableaux admin */
+.table-responsive {
+  border-radius: 1rem;
+}
+
+/* ---------- Badges ---------- */
+.badge {
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.4em 0.85em;
+}
+
+.badge.bg-warning {
+  background: var(--lg-amber-soft) !important;
+  color: var(--lg-amber-dark) !important;
+}
+
+.badge.bg-success {
+  background: #e2efe4 !important;
+  color: #1f7a4d !important;
+}
+
+.badge.bg-danger {
+  background: #f7e0dc !important;
+  color: #b23b2a !important;
+}
+
+.badge.bg-primary {
+  background: var(--lg-amber-soft) !important;
+  color: var(--lg-amber-dark) !important;
+}
+
+/* ---------- Boutons d'action admin ---------- */
+.btn-warning {
+  background: var(--lg-amber-soft);
+  border: 0;
+  color: var(--lg-amber-dark);
+}
+
+.btn-warning:hover,
+.btn-warning:focus {
+  background: #efd8c4;
+  color: var(--lg-amber-dark);
+}
+
+.btn-outline-success {
+  border: 1.5px solid #1f7a4d;
+  color: #1f7a4d;
+}
+
+.btn-outline-success:hover {
+  background: #1f7a4d;
+  color: #fff;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.95rem;
+  font-size: 0.85rem;
+}
+
+.btn-secondary {
+  background: var(--lg-cream-2);
+  border: 0;
+  color: var(--lg-ink);
+}
+
+.btn-secondary:hover {
+  background: var(--lg-line);
+  color: var(--lg-ink);
+}
+
+.btn-danger {
+  background: #b23b2a;
+  border: 0;
+  color: #fff;
+}
+
+.btn-danger:hover,
+.btn-danger:focus {
+  background: #96311f;
+  color: #fff;
+}
+
+/* ---------- Fiche détail (VoirContact) ---------- */
+.detail-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #a79e8b;
+}
+
+.detail-value {
+  font-size: 1.02rem;
+  font-weight: 500;
+  color: var(--lg-ink);
+  margin-top: 2px;
+}
+
+.message-box {
+  background: var(--lg-cream);
+  border: 1px solid var(--lg-line);
+  border-radius: 0.9rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.message-box p {
+  color: var(--lg-ink-soft);
+  line-height: 1.7;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  margin-top: 0;
+  background: var(--lg-ink);
+  color: #cfc7b6;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+/* ---------- Divers ---------- */
+.list-group-item {
+  background: transparent;
+  border-color: var(--lg-line);
+  color: var(--lg-ink-soft);
+}
+
+::selection {
+  background: var(--lg-amber);
+  color: #fff;
+}

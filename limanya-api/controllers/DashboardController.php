@@ -26,6 +26,6 @@ class DashboardController
             "realisations" => (int)$realisations,
             "devis" => (int)$devis,
             "contacts" => (int)$contacts
-        ]);s
+        ]);
     }
 }

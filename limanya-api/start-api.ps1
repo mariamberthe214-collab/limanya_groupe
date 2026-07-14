@@ -1,6 +1,6 @@
 $phpRoot = 'C:\Users\THINKPAD\AppData\Local\Microsoft\WinGet\Packages\PHP.PHP.8.2_Microsoft.Winget.Source_8wekyb3d8bbwe'
 $phpExe = Join-Path $phpRoot 'php.exe'
-$apiDir = 'C:\Users\THINKPAD\limanya-groupe\limanya-api'
+$apiDir = 'C:\Users\THINKPAD\limanya_groupe\limanya-api'
 $phpIni = Join-Path $apiDir 'php.ini'
 
 if (-not (Test-Path $phpExe)) {

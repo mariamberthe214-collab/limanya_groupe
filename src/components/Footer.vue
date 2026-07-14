@@ -4,13 +4,14 @@
       <div class="row gy-4 pb-5">
         <div class="col-lg-4">
           <div class="d-flex align-items-center gap-2 mb-3">
-            <span class="foot-mark"><i class="bi bi-buildings-fill"></i></span>
-            <span class="foot-brand">LIMANYA <span class="text-amber">Groupe</span></span>
+            <RouterLink class="navbar-brand" to="/">
+              <img src="../assets/logo.png" class="logo">
+            </RouterLink>
           </div>
           <p class="foot-text mb-4">Nous construisons vos rêves : BTP, forages hydrauliques, assainissement, énergies renouvelables et gestion immobilière.</p>
           <div class="d-flex gap-2">
             <a class="foot-social" href="https://wa.me/0564613584" target="_blank" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
-            <a class="foot-social" href="https://www.facebook.com/groupelimanyaservices" target="_blank" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a class="foot-social" href="https://www.facebook.com/limanyagroup" target="_blank" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
             <a class="foot-social" href="mailto:groupelimanya18@gmail.com" aria-label="Email"><i class="bi bi-envelope-fill"></i></a>
           </div>
         </div>
@@ -55,6 +56,7 @@
 </template>
 
 <script setup>
+import logo from '../assets/logo.png'
 </script>
 
 <style scoped>
@@ -122,5 +124,10 @@
   color: #8a8271;
   font-size: 0.88rem;
   margin: 0;
+}
+.logo{
+
+height:55px;
+
 }
 </style>

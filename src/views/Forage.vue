@@ -48,128 +48,746 @@ const advantages = [
 </script>
 
 <template>
-  <section class="page-hero py-5">
-    <div class="container py-4">
-      <div class="row align-items-center gy-4">
+  <section class="forage-hero">
+
+    <div class="overlay"></div>
+
+    <div class="container">
+
+      <div class="row align-items-center min-vh-100">
+
         <div class="col-lg-7">
-          <span class="eyebrow">Forage &amp; études géophysiques</span>
-          <h1 class="display-5 fw-bold mt-3">Forage d&apos;eau professionnel et solutions géotechniques complètes</h1>
-          <p class="lead mt-4">Limanya Groupe réalise des forages de puits, des études géophysiques et des prestations de génie civil avec un engagement qualité durable.</p>
-          <div class="d-flex flex-wrap gap-3 mt-4">
-            <a href="#devis" class="btn btn-primary btn-lg">Demander un devis</a>
-            <router-link to="/contacts" class="btn btn-outline-light btn-lg">Nous contacter</router-link>
+
+          <span class="hero-badge">
+            💧 Spécialiste du forage hydraulique
+          </span>
+
+          <h1 class="display-3 fw-bold mt-4">
+            Des solutions fiables pour
+            <span>l'accès à l'eau potable</span>
+          </h1>
+
+          <p class="lead mt-4">
+            LIMANYA Groupe accompagne les particuliers, entreprises,
+            collectivités et exploitations agricoles dans la réalisation
+            de forages hydrauliques, d'études géophysiques et
+            d'installations de pompage adaptées à chaque besoin.
+          </p>
+
+          <div class="mt-5 d-flex flex-wrap gap-3">
+
+            <RouterLink
+              to="/contacts"
+              class="btn btn-warning btn-lg">
+
+              Demander un devis
+
+            </RouterLink>
+
+            <RouterLink
+              to="/realisations-btp-services-de-construction"
+              class="btn btn-outline-light btn-lg">
+
+              Nos réalisations
+
+            </RouterLink>
+
           </div>
+
         </div>
-        <div class="col-lg-5">
-          <div class="hero-media ratio ratio-4x3">
-            <img src="/images/service-forage.png" alt="Foreuse en activité sur un chantier de forage d'eau" class="w-100 h-100 object-fit-cover" />
-          </div>
-        </div>
+
       </div>
+
     </div>
+
   </section>
 
-  <section class="py-5 bg-light">
-    <div class="container">
-      <div class="row gy-4">
-        <div class="col-lg-6">
-          <h2>Nos services de forage</h2>
-          <p class="text-muted">Forage d’eau, assistance technique, installation d’équipements et maintenance de réseaux hydrauliques.</p>
-          <ul class="list-unstyled mt-4">
-            <li class="mb-3"><strong>Forage vertical et horizontal</strong> pour puits domestiques et industriels.</li>
-            <li class="mb-3"><strong>Études géophysiques</strong> : résistivité, sismique et cyber-sonde pour un diagnostic fiable.</li>
-            <li class="mb-3"><strong>Équipement de forage</strong> : pompes, tuyauterie, têtes de puits, coffres et supports techniques.</li>
-            <li><strong>Assistance chantier</strong> : supervision de chantier, tests de débit et mise en service.</li>
-          </ul>
-        </div>
-        <div class="col-lg-6">
-          <div class="ratio ratio-16x9 rounded-4 overflow-hidden shadow-sm">
-            <img src="/images/service-forage.png" alt="Forage chantier" class="w-100 h-100 object-fit-cover" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section class="prestations-section py-5">
 
-  <section class="py-5" id="devis">
-    <div class="container">
-      <div class="row g-4">
-        <div class="col-lg-6">
-          <h2>Avantages de Limanya Groupe</h2>
-          <p class="text-muted">Nous combinons la technique, le terrain et le service pour des solutions robustes et efficaces.</p>
-          <ul class="list-group list-group-flush mt-4">
-            <li class="list-group-item">Equipe d’ingénieurs et techniciens expérimentés</li>
-            <li class="list-group-item">Respect des règles de sécurité et des normes locales</li>
-            <li class="list-group-item">Tarification claire et accompagnement de A à Z</li>
-            <li class="list-group-item">Maintien et suivi après livraison du chantier</li>
-          </ul>
-        </div>
-        <div class="col-lg-6">
-          <div class="card border-0 shadow-sm p-4 h-100">
-            <div class="card-body">
-              <h3 class="h5 mb-4">Formulaire de demande de devis</h3>
-              <form @submit.prevent="submitForm">
-                <div class="mb-3">
-                  <label class="form-label">Nom complet</label>
-                  <input v-model="form.name" type="text" class="form-control" placeholder="Votre nom" required />
-                </div>
-                <div class="mb-3 row g-3">
-                  <div class="col-sm-6">
-                    <label class="form-label">Email</label>
-                    <input v-model="form.email" type="email" class="form-control" placeholder="email@exemple.com" required />
-                  </div>
-                  <div class="col-sm-6">
-                    <label class="form-label">Téléphone</label>
-                    <input v-model="form.phone" type="tel" class="form-control" placeholder="+229 00 00 00 00" required />
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Type de projet</label>
-                  <select v-model="form.project" class="form-select" required>
-                    <option value="" disabled>Choisissez un service</option>
-                    <option>Forage d’eau</option>
-                    <option>Étude géophysique</option>
-                    <option>BTP & infrastructure</option>
-                    <option>Assainissement</option>
-                    <option>Location de matériel</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Message</label>
-                  <textarea v-model="form.message" class="form-control" rows="4" placeholder="Décrivez votre projet"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Envoyer ma demande</button>
-              </form>
-              <div v-if="submitted" class="alert alert-success mt-4" role="alert">
-                Merci, votre demande a bien été reçue. Nous vous recontacterons rapidement.
-              </div>
+  <div class="container">
+
+    <div class="row align-items-center mb-5">
+
+      <div class="col-lg-5">
+
+        <span class="section-tag">
+          Nos expertises
+        </span>
+
+        <h2 class="mt-3">
+          Des solutions complètes pour vos projets hydrauliques
+        </h2>
+
+        <p>
+          LIMANYA Groupe intervient dans toutes les étapes d'un projet
+          d'accès à l'eau : étude du terrain, forage, installation des
+          équipements de pompage et maintenance des ouvrages.
+        </p>
+
+      </div>
+
+
+      <div class="col-lg-7">
+
+        <div class="services-list">
+
+
+          <div class="service-item">
+
+            <div class="icon">
+              💧
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="py-5 bg-light">
-    <div class="container">
-      <div class="text-center mb-5">
-        <span class="eyebrow text-uppercase">Équipements et performance</span>
-        <h2>Matériel adapté à chaque type de forage</h2>
-      </div>
-      <div class="row gy-4">
-        <div class="col-md-6 col-lg-3" v-for="(item, index) in advantages" :key="index">
-          <div class="card border-0 shadow-sm h-100 p-4 text-center">
-            <div class="service-icon mx-auto mb-3"><i class="bi bi-check-lg"></i></div>
-            <p class="mb-0">{{ item }}</p>
+            <div>
+              <h4>Forages hydrauliques</h4>
+              <p>
+                Réalisation de forages adaptés aux besoins des ménages,
+                entreprises, collectivités et exploitations agricoles.
+              </p>
+            </div>
+
           </div>
+
+
+          <div class="service-item">
+
+            <div class="icon">
+              🌍
+            </div>
+
+            <div>
+              <h4>Études géophysiques</h4>
+              <p>
+                Analyse du sous-sol pour identifier les meilleures zones
+                d'implantation des forages.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="service-item">
+
+            <div class="icon">
+              🌞
+            </div>
+
+            <div>
+              <h4>Pompes solaires</h4>
+              <p>
+                Installation de systèmes autonomes utilisant l'énergie
+                solaire pour l'approvisionnement en eau.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="service-item">
+
+            <div class="icon">
+              ⚡
+            </div>
+
+            <div>
+              <h4>Pompes électriques</h4>
+              <p>
+                Solutions de pompage électrique fiables pour différents
+                types d'installations.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="service-item">
+
+            <div class="icon">
+              🔋
+            </div>
+
+            <div>
+              <h4>Systèmes hybrides</h4>
+
+              <p>
+                Combinaison solaire et électrique pour garantir la
+                disponibilité permanente de l'eau.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="service-item">
+
+            <div class="icon">
+              🏗️
+            </div>
+
+            <div>
+              <h4>Châteaux d'eau</h4>
+
+              <p>
+                Conception et installation d'ouvrages de stockage et
+                distribution d'eau.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="service-item">
+
+            <div class="icon">
+              🛠️
+            </div>
+
+            <div>
+              <h4>Réhabilitation & maintenance</h4>
+
+              <p>
+                Entretien, réparation et amélioration des installations
+                existantes.
+              </p>
+
+            </div>
+
+          </div>
+
+
         </div>
+
       </div>
+
+
     </div>
-  </section>
+
+  </div>
+
+</section>
+
+<section class="method-section py-5">
+
+  <div class="container">
+
+    <div class="text-center mb-5">
+
+      <span class="section-tag">
+        Notre méthode
+      </span>
+
+      <h2 class="mt-3">
+        Un accompagnement complet de l'étude à la mise en service
+      </h2>
+
+      <p class="method-intro">
+        LIMANYA Groupe vous accompagne à chaque étape afin de garantir
+        des installations fiables, durables et adaptées à vos besoins.
+      </p>
+
+    </div>
+
+
+    <div class="steps-container">
+
+
+      <div class="step-item">
+
+        <div class="step-number">
+          01
+        </div>
+
+        <div class="step-content">
+
+          <div class="step-icon">
+            🌍
+          </div>
+
+          <h4>
+            Étude du terrain
+          </h4>
+
+          <p>
+            Analyse des besoins et étude de la zone d'intervention
+            avant le démarrage des travaux.
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="step-item">
+
+        <div class="step-number">
+          02
+        </div>
+
+        <div class="step-content">
+
+          <div class="step-icon">
+            🔎
+          </div>
+
+          <h4>
+            Recherche d'eau
+          </h4>
+
+          <p>
+            Réalisation d'études géophysiques pour identifier
+            les meilleures zones de captage.
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="step-item">
+
+        <div class="step-number">
+          03
+        </div>
+
+        <div class="step-content">
+
+          <div class="step-icon">
+            🛠️
+          </div>
+
+          <h4>
+            Réalisation du forage
+          </h4>
+
+          <p>
+            Exécution des travaux avec des équipements adaptés
+            et respect des normes techniques.
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="step-item">
+
+        <div class="step-number">
+          04
+        </div>
+
+        <div class="step-content">
+
+          <div class="step-icon">
+            ⚡
+          </div>
+
+          <h4>
+            Installation du pompage
+          </h4>
+
+          <p>
+            Mise en place de pompes solaires, électriques ou hybrides
+            selon les besoins du projet.
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="step-item">
+
+        <div class="step-number">
+          05
+        </div>
+
+        <div class="step-content">
+
+          <div class="step-icon">
+            ✅
+          </div>
+
+          <h4>
+            Mise en service & suivi
+          </h4>
+
+          <p>
+            Contrôle final, accompagnement et maintenance des ouvrages.
+          </p>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+</section>
 </template>
 
 <style scoped>
+
+.method-section{
+
+    background:#f8f8f8;
+
+}
+
+
+.method-section h2{
+
+    font-size:42px;
+
+    font-weight:700;
+
+}
+
+
+.method-intro{
+
+    max-width:700px;
+
+    margin:auto;
+
+    color:#666;
+
+}
+
+
+
+.steps-container{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:25px;
+
+    position:relative;
+
+}
+
+
+
+.steps-container::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:45px;
+
+    left:8%;
+
+    right:8%;
+
+    height:3px;
+
+    background:#bf571c;
+
+}
+
+
+
+.step-item{
+
+    flex:1;
+
+    position:relative;
+
+    text-align:center;
+
+}
+
+
+
+.step-number{
+
+    width:90px;
+
+    height:90px;
+
+    background:#bf571c;
+
+    color:white;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    margin:auto;
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+
+
+.step-content{
+
+    margin-top:30px;
+
+    background:white;
+
+    padding:25px 20px;
+
+    border-radius:15px;
+
+    min-height:260px;
+
+    height:auto;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+
+}
+
+
+
+.step-icon{
+
+    font-size:40px;
+
+    margin-bottom:15px;
+
+}
+
+
+.step-content h4{
+
+    font-weight:700;
+
+}
+
+
+@media(max-width:992px){
+
+    .steps-container{
+
+        flex-direction:column;
+
+    }
+
+
+    .steps-container::before{
+
+        display:none;
+
+    }
+
+}
+
+.prestations-section{
+
+    background:#fff;
+
+}
+
+
+.section-tag{
+
+    display:inline-block;
+
+    background:#bf571c;
+
+    color:white;
+
+    padding:8px 18px;
+
+    border-radius:30px;
+
+    font-weight:600;
+
+}
+
+
+.prestations-section h2{
+
+    font-size:42px;
+
+    font-weight:700;
+
+    color:#1b1b1b;
+
+}
+
+
+.prestations-section p{
+
+    color:#666;
+
+    line-height:1.8;
+
+}
+
+
+
+.services-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+
+
+.service-item{
+
+    display:flex;
+
+    gap:20px;
+
+    padding:25px;
+
+    background:#fafafa;
+
+    border-left:4px solid #bf571c;
+
+    border-radius:12px;
+
+    transition:.3s;
+
+}
+
+
+
+.service-item:hover{
+
+    transform:translateX(10px);
+
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+
+}
+
+
+
+.service-item .icon{
+
+    font-size:35px;
+
+}
+
+
+
+.service-item h4{
+
+    margin-bottom:8px;
+
+    font-weight:700;
+
+}
 .page-hero h1 {
   max-width: 700px;
+}
+
+.forage-hero{
+
+    position:relative;
+
+    min-height:100vh;
+
+    background:url("/images/service-forage.png") center center/cover no-repeat;
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:rgba(0,0,0,.60);
+
+}
+
+.forage-hero .container{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+.hero-badge{
+
+    display:inline-block;
+
+    background:#bf571c;
+
+    color:#fff;
+
+    padding:10px 22px;
+
+    border-radius:50px;
+
+    font-weight:600;
+
+}
+
+.forage-hero h1{
+
+    color:#fff;
+
+    line-height:1.2;
+
+}
+
+.forage-hero h1 span{
+
+    color:#ffb347;
+
+}
+
+.forage-hero p{
+
+    color:#f5f5f5;
+
+    max-width:700px;
+
+}
+
+.btn-warning{
+
+    background:#bf571c;
+
+    border:none;
+
+}
+
+.btn-warning:hover{
+
+    background:#a64815;
+
+}
+
+.btn-outline-light:hover{
+
+    color:#000;
+
 }
 </style>

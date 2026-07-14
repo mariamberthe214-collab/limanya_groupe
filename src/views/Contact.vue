@@ -41,7 +41,7 @@ const submitContact = async () => {
     <div class="container">
       <span class="eyebrow" style="color: #f6e7da;">Parlons de votre projet</span>
       <h1 class="display-5 fw-bold text-white mt-3">Contactez-nous</h1>
-      <p class="lead text-white-75 mt-3">groupelimanya18@gmail.com &nbsp;•&nbsp; +225 07 07 17 21 72 &nbsp;•&nbsp; +225 07 77 04 70 57</p>
+      <p class="lead text-white-75 mt-3">groupelimanya18@gmail.com &nbsp;•&nbsp; +225 21 50 04 33 27 &nbsp;•&nbsp; +225 07 77 04 70 57</p>
     </div>
   </section>
 
@@ -54,13 +54,13 @@ const submitContact = async () => {
             <p class="text-muted">Suivez-nous et contactez-nous via WhatsApp ou Facebook.</p>
             <ul class="list-unstyled mb-0">
               <li class="mb-3"><strong>Email :</strong> <a href="mailto:groupelimanya18@gmail.com">groupelimanya18@gmail.com</a></li>
-              <li class="mb-3"><strong>Phone :</strong> +225 2150043327</li>
-              <li class="mb-3"><strong>Fixe :</strong> +225 0707172172</li>
-              <li><strong>Fixe :</strong> +225 0777047057</li>
+              <li class="mb-3"><strong>Phone :</strong> +225 21 50 04 33 27</li>
+              <li class="mb-3"><strong>Fixe :</strong> +225 07 98 44 93 60</li>
+              <li><strong>Fixe :</strong> +225 07 77 04 70 57</li>
             </ul>
             <div class="mt-4">
-                      <a class="btn btn-success me-2" href="https://wa.me/0564613584" target="_blank">WhatsApp</a>
-              <a class="btn btn-outline-primary" href="https://www.facebook.com/groupelimanyaservices" target="_blank">Facebook</a>
+              <a class="btn btn-success me-2" href="https://wa.me/0798449360" target="_blank">WhatsApp</a>
+              <a class="btn btn-outline-primary" href="https://www.facebook.com/limanyagroup" target="_blank">Facebook</a>
             </div>
           </div>
         </div>

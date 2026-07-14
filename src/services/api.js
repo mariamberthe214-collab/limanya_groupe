@@ -2,7 +2,7 @@ import axios from 'axios'
 import router from '../router'
 
 const api = axios.create({
-  baseURL: 'http://localhost/limanya-groupe/limanya-api/index.php',
+  baseURL: 'http://localhost/limanya_groupe/limanya-api/index.php',
   headers: {
     'Content-Type': 'application/json',
   },

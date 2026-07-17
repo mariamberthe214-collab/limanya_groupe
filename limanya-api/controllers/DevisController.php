@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/Devis.php';
+require_once __DIR__ . '/../helpers/validate.php';
 
 class DevisController
 {
@@ -35,7 +36,21 @@ class DevisController
             $this->sendJson(['message' => 'Invalid input'], 400);
             return;
         }
-        $id = $this->model->create($input);
+
+        $errors = validate($input, [
+            'nom' => 'required|max:150',
+            'telephone' => 'required|max:50',
+            'email' => 'email|max:200',
+            'service' => 'max:150',
+            'message' => 'max:2000',
+        ]);
+
+        if (!empty($errors)) {
+            $this->sendJson(['message' => 'Données invalides', 'errors' => $errors], 422);
+            return;
+        }
+
+        $id = $this->model->create(sanitizeArray($input));
         $this->sendJson(['id' => $id], 201);
     }
 

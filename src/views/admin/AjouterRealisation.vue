@@ -1,7 +1,8 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../../services/api'
+import { uploadImage, getImageUrl } from '../../utils/images'
 
 const router = useRouter()
 
@@ -13,12 +14,31 @@ const form = reactive({
     date_realisation: ''
 })
 
+const fichierImage = ref(null)
+const apercu = ref(null)
+const envoiEnCours = ref(false)
+const erreur = ref('')
+
+const choisirImage = (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+    fichierImage.value = file
+    apercu.value = URL.createObjectURL(file)
+}
+
 const enregistrer = async () => {
+    erreur.value = ''
+    envoiEnCours.value = true
     try {
+
+        let imagePath = null
+        if (fichierImage.value) {
+            imagePath = await uploadImage(fichierImage.value)
+        }
 
         await api.post('/realisations', {
             ...form,
-            image: null
+            image: imagePath
         })
 
         router.push('/admin/realisations')
@@ -26,7 +46,10 @@ const enregistrer = async () => {
     } catch (error) {
 
         console.error(error)
+        erreur.value = "Erreur lors de l'enregistrement. Vérifiez les champs et réessayez."
 
+    } finally {
+        envoiEnCours.value = false
     }
 }
 </script>
@@ -57,9 +80,15 @@ const enregistrer = async () => {
 
         <div class="mb-3">
             <label class="form-label">Catégorie</label>
-            <input
+            <select
                 v-model="form.categorie"
-                class="form-control">
+                class="form-select">
+                <option disabled value="">Choisir une catégorie</option>
+                <option>Forages Hydrauliques</option>
+                <option>Études Géophysiques</option>
+                <option>Assainissement</option>
+                <option>BTP & Génie Civil</option>
+            </select>
         </div>
 
         <div class="mb-3">
@@ -78,6 +107,16 @@ const enregistrer = async () => {
         </div>
 
         <div class="mb-3">
+            <label class="form-label">Photo</label>
+            <input
+                type="file"
+                accept="image/*"
+                class="form-control"
+                @change="choisirImage">
+            <img v-if="apercu" :src="apercu" class="img-thumbnail mt-3" style="max-height:180px;" />
+        </div>
+
+        <div class="mb-3">
             <label class="form-label">Description</label>
             <textarea
                 v-model="form.description"
@@ -86,10 +125,14 @@ const enregistrer = async () => {
             </textarea>
         </div>
 
-        <button
-            class="btn btn-primary btn-lg">
+        <div v-if="erreur" class="alert alert-danger py-2">{{ erreur }}</div>
 
-            <i class="bi bi-check-lg me-1"></i>Enregistrer
+        <button
+            class="btn btn-primary btn-lg"
+            :disabled="envoiEnCours">
+
+            <span v-if="envoiEnCours" class="spinner-border spinner-border-sm me-2"></span>
+            <i v-else class="bi bi-check-lg me-1"></i>Enregistrer
 
         </button>
 

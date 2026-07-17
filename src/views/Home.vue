@@ -1,5 +1,7 @@
 <script setup>
-const whatsappLink = 'https://wa.me/0564613584?text=Bonjour%20LIMANYA%20Groupe%20%2D%20je%20souhaite%20un%20devis%20pour%20un%20projet.'
+import { buildWhatsAppLink } from '../utils/whatsapp'
+
+const whatsappLink = buildWhatsAppLink('Bonjour LIMANYA Groupe, je souhaite un devis pour un projet.')
 
 const stats = [
   { value: '15+', label: "Années d'expertise" },
@@ -10,46 +12,40 @@ const stats = [
 
 const categories = [
   {
-    icon: 'bi-building',
-    title: 'Construction & Travaux Publics',
-    description: 'Construction immobilière, implantation de poteaux de réseaux, achat/vente de terrains, plans, devis et suivi de chantier.',
-    action: '/btp',
+    icon: 'bi-water',
+    title: 'Forages Hydrauliques',
+    description: 'Forages villageois, agricoles, industriels, essais de pompage, réhabilitation et maintenance.',
+    action: '/forage',
   },
   {
-    icon: 'bi-droplet-half',
+    icon: 'bi-globe2',
+    title: 'Études Géophysiques',
+    description: "Recherche d'eau, études géophysiques et implantation des forages avant tout chantier.",
+    action: '/etudes-geophysiques',
+  },
+  {
+    icon: 'bi-recycle',
     title: 'Assainissement',
-    description: 'Solutions écologiques : fosses septiques biodigesteurs, caniveaux et égouts, traitement des eaux usées.',
+    description: 'Réseaux d\u2019assainissement, gestion des eaux usées, fosses septiques et fosses biodigesteurs.',
     action: '/assainissement',
   },
   {
-    icon: 'bi-water',
-    title: 'Forages & Énergies renouvelables',
-    description: "Forages, châteaux d'eau, installation de pompes et systèmes photovoltaïques pour un accès durable à l'eau.",
-    action: '/forage',
-  },
-  {
-    icon: 'bi-house-gear',
-    title: 'Gestion immobilière',
-    description: 'Vente et gestion de biens immobiliers avec sérieux et confiance pour valoriser votre patrimoine.',
-    action: '/realisations-btp-services-de-construction',
+    icon: 'bi-building',
+    title: 'BTP & Génie Civil',
+    description: 'Construction, génie civil, VRD et travaux publics.',
+    action: '/btp',
   },
   {
     icon: 'bi-tools',
-    title: 'Ventes de matériels de forage',
-    description: 'Une sélection de matériels de forage adaptés à chaque besoin hydraulique, conçus pour le terrain.',
+    title: 'Vente de Matériels',
+    description: 'Pompes solaires, électriques et hybrides, panneaux solaires, PVC hydrauliques, matériels de forage et accessoires.',
     action: '/materiels-de-forages',
-  },
-  {
-    icon: 'bi-lightning-charge',
-    title: 'Énergie solaire',
-    description: 'Installation de systèmes solaires photovoltaïques pour une énergie propre, fiable et économique.',
-    action: '/forage',
   },
 ]
 
 const highlights = [
-  { icon: 'bi-patch-check', title: 'Expertise reconnue', text: "Fort de son savoir-faire dans le BTP et la gestion immobilière." },
-  { icon: 'bi-diagram-3', title: 'Solutions complètes', text: 'Construction, assainissement et énergies renouvelables réunis.' },
+  { icon: 'bi-patch-check', title: 'Spécialiste du forage', text: "Forages hydrauliques, villageois, agricoles et industriels, réalisés avec rigueur." },
+  { icon: 'bi-diagram-3', title: 'Solutions complètes', text: 'Études géophysiques, assainissement, BTP et vente de matériels réunis.' },
   { icon: 'bi-clock-history', title: 'Respect des délais', text: 'Engagement qualité rigoureux sur chaque chantier.' },
   { icon: 'bi-tree', title: 'Approche durable', text: 'Bâtir un avenir solide et respectueux de l’environnement.' },
 ]
@@ -62,9 +58,9 @@ const highlights = [
     <div class="container py-5 position-relative">
       <div class="row align-items-center g-5">
         <div class="col-lg-7">
-          <span class="hero-eyebrow">BTP • Forages hydrauliques • Énergies renouvelables</span>
-          <h1 class="hero-title mt-4">Nous construisons <span class="text-amber">vos rêves</span></h1>
-          <p class="lead text-white-75 mt-4">Découvrez tous nos services pour bâtir, gérer et assainir vos projets : construction, gestion immobilière, forages hydrauliques et énergies durables.</p>
+          <span class="hero-eyebrow">Forages Hydrauliques • Études Géophysiques • Assainissement • BTP</span>
+          <h1 class="hero-title mt-4">L'eau, notre <span class="text-amber">expertise</span></h1>
+          <p class="lead text-white-75 mt-4">LIMANYA Groupe réalise vos forages hydrauliques, villageois, agricoles et industriels, en Côte d'Ivoire. Nous accompagnons aussi vos projets d'études géophysiques, d'assainissement, de BTP et de vente d'équipements.</p>
           <div class="d-flex flex-column flex-sm-row gap-3 mt-4">
             <router-link to="/contacts" class="btn btn-primary btn-lg">Demander un devis</router-link>
             <a :href="whatsappLink" target="_blank" class="btn btn-outline-light btn-lg"><i class="bi bi-whatsapp me-2"></i>WhatsApp</a>
@@ -78,10 +74,10 @@ const highlights = [
           <div class="hero-panel p-4">
             <h3 class="h5 mb-4 text-white">Nos expertises</h3>
             <ul class="list-unstyled mb-0 hero-list">
-              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>Construction & Immobilier</li>
-              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>Solutions hydrauliques complètes</li>
-              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>Assainissement écologique</li>
-              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>Énergies renouvelables</li>
+              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>Forages Hydrauliques</li>
+              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>Études Géophysiques</li>
+              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>Assainissement</li>
+              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>BTP & Génie Civil</li>
             </ul>
           </div>
         </div>
@@ -107,13 +103,13 @@ const highlights = [
       <div class="row gy-5 align-items-center">
         <div class="col-lg-6">
           <span class="eyebrow">Notre savoir-faire</span>
-          <h2 class="mt-3">Une expertise complète pour construire, équiper et gérer vos projets</h2>
-          <p class="text-muted mt-3">Fort de son expertise dans le BTP et la gestion immobilière, LIMANYA GROUPE maîtrise l'ensemble de la chaîne de valeur, de la conception à la gestion de votre patrimoine.</p>
+          <h2 class="mt-3">Une expertise complète autour du forage hydraulique</h2>
+          <p class="text-muted mt-3">Spécialiste des forages hydrauliques, LIMANYA GROUPE maîtrise l'ensemble de la chaîne de valeur : de l'étude géophysique à la mise en service, en passant par l'assainissement et le BTP.</p>
           <ul class="list-unstyled mt-4 feature-list">
-            <li><i class="bi bi-arrow-right-circle text-amber me-2"></i>Construction immobilière et travaux publics</li>
-            <li><i class="bi bi-arrow-right-circle text-amber me-2"></i>Forages, châteaux d'eau et pompes de distribution</li>
-            <li><i class="bi bi-arrow-right-circle text-amber me-2"></i>Assainissement écologique et traitement des eaux</li>
-            <li><i class="bi bi-arrow-right-circle text-amber me-2"></i>Installation de systèmes solaires photovoltaïques</li>
+            <li><i class="bi bi-arrow-right-circle text-amber me-2"></i>Forages villageois, agricoles et industriels</li>
+            <li><i class="bi bi-arrow-right-circle text-amber me-2"></i>Études géophysiques et implantation des forages</li>
+            <li><i class="bi bi-arrow-right-circle text-amber me-2"></i>Assainissement écologique et fosses biodigesteurs</li>
+            <li><i class="bi bi-arrow-right-circle text-amber me-2"></i>Construction, génie civil et vente de matériels</li>
           </ul>
           <router-link to="/apropos" class="btn btn-outline-primary mt-3">En savoir plus sur nous</router-link>
         </div>
@@ -132,7 +128,7 @@ const highlights = [
       <div class="text-center mb-5">
         <span class="eyebrow">Nos services</span>
         <h2 class="mt-3">Découvrez une expertise complète</h2>
-        <p class="text-muted mt-2 mx-auto" style="max-width: 620px;">De la construction à la gestion immobilière, en passant par l'assainissement et les forages hydrauliques.</p>
+        <p class="text-muted mt-2 mx-auto" style="max-width: 620px;">Du forage hydraulique à la vente de matériels, en passant par l'étude géophysique, l'assainissement et le BTP.</p>
       </div>
       <div class="row g-4">
         <div class="col-md-6 col-lg-4" v-for="category in categories" :key="category.title">

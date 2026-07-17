@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import api from '../services/api'
+import { buildWhatsAppLink } from '../utils/whatsapp'
 
 const form = reactive({
   nom: '',
@@ -11,12 +12,26 @@ const form = reactive({
 })
 
 const submitted = ref(false)
+const lastWhatsAppLink = ref('')
+
+const buildRecapMessage = (data) => {
+  const lignes = [
+    `Bonjour LIMANYA Groupe, je viens d'envoyer un message via votre site :`,
+    `Nom : ${data.nom}`,
+    data.sujet ? `Objet : ${data.sujet}` : null,
+    `Téléphone : ${data.telephone}`,
+    `Message : ${data.message}`,
+  ].filter(Boolean)
+  return lignes.join('\n')
+}
 
 const submitContact = async () => {
   try {
+    const recapMessage = buildRecapMessage(form)
 
     await api.post('/contacts', form)
 
+    lastWhatsAppLink.value = buildWhatsAppLink(recapMessage)
     submitted.value = true
 
     form.nom = ''
@@ -24,10 +39,6 @@ const submitContact = async () => {
     form.telephone = ''
     form.sujet = ''
     form.message = ''
-
-    setTimeout(() => {
-      submitted.value = false
-    }, 3000)
 
   } catch (error) {
     console.error(error)
@@ -41,7 +52,7 @@ const submitContact = async () => {
     <div class="container">
       <span class="eyebrow" style="color: #f6e7da;">Parlons de votre projet</span>
       <h1 class="display-5 fw-bold text-white mt-3">Contactez-nous</h1>
-      <p class="lead text-white-75 mt-3">groupelimanya18@gmail.com &nbsp;•&nbsp; +225 21 50 04 33 27 &nbsp;•&nbsp; +225 07 77 04 70 57</p>
+      <p class="lead text-white-75 mt-3">contact@limanyagroupe.com &nbsp;•&nbsp; +225 21 50 04 33 27 &nbsp;•&nbsp; +225 07 77 04 70 57</p>
     </div>
   </section>
 
@@ -53,13 +64,16 @@ const submitContact = async () => {
             <h2>Réseaux sociaux</h2>
             <p class="text-muted">Suivez-nous et contactez-nous via WhatsApp ou Facebook.</p>
             <ul class="list-unstyled mb-0">
-              <li class="mb-3"><strong>Email :</strong> <a href="mailto:groupelimanya18@gmail.com">groupelimanya18@gmail.com</a></li>
-              <li class="mb-3"><strong>Phone :</strong> +225 21 50 04 33 27</li>
-              <li class="mb-3"><strong>Fixe :</strong> +225 07 98 44 93 60</li>
-              <li><strong>Fixe :</strong> +225 07 77 04 70 57</li>
+              <li class="mb-3"><strong>Email :</strong> <a href="mailto:contact@limanyagroupe.com">contact@limanyagroupe.com</a></li>
+              <li class="mb-3"><strong>Fixe :</strong> +225 21 50 04 33 27</li>
+              <li class="mb-3"><strong>Standard :</strong> +225 07 77 04 70 57</li>
+              <li class="mb-3"><strong>Commercial (WhatsApp) :</strong> +225 07 98 44 93 60</li>
+              <li><strong>Adresse :</strong> Port-Bouët, Gonzagueville, Rue I2T, à 100m du goudron</li>
             </ul>
             <div class="mt-4">
-              <a class="btn btn-success me-2" href="https://wa.me/0798449360" target="_blank">WhatsApp</a>
+              <a class="btn btn-success me-2" :href="buildWhatsAppLink('Bonjour LIMANYA Groupe, je souhaite avoir plus d\'informations sur vos services.')" target="_blank">
+                <i class="bi bi-whatsapp me-1"></i>WhatsApp
+              </a>
               <a class="btn btn-outline-primary" href="https://www.facebook.com/limanyagroup" target="_blank">Facebook</a>
             </div>
           </div>
@@ -95,7 +109,10 @@ const submitContact = async () => {
               <button type="submit" class="btn btn-primary mt-4">Envoyer</button>
             </form>
             <div v-if="submitted" class="alert alert-success mt-4" role="alert">
-              Merci ! Votre message a bien été envoyé. Nous revenons vers vous rapidement.
+              <p class="mb-3">Merci ! Votre message a bien été envoyé. Nous revenons vers vous rapidement.</p>
+              <a :href="lastWhatsAppLink" target="_blank" class="btn btn-success btn-sm">
+                <i class="bi bi-whatsapp me-1"></i>Continuer la conversation sur WhatsApp
+              </a>
             </div>
           </div>
         </div>

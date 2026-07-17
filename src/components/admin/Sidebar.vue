@@ -41,6 +41,13 @@
         <span>Utilisateurs</span>
       </RouterLink>
     </nav>
+
+    <div class="sidebar-footer">
+      <a href="/" target="_blank" class="sidebar-footer-link">
+        <i class="bi bi-box-arrow-up-right"></i>
+        <span>Voir le site public</span>
+      </a>
+    </div>
   </aside>
 </template>
 
@@ -52,6 +59,7 @@
   padding: 24px 18px;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
 .logo {
@@ -116,6 +124,30 @@ a:hover {
 
 .router-link-active:hover {
   background: #a94a15;
+  color: #fff;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-footer-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #c9c1b3;
+  text-decoration: none;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.sidebar-footer-link:hover {
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
 }
 

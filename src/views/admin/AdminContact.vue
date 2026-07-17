@@ -73,8 +73,11 @@ const contactsPagine = computed(() => {
 
 })
 
-const ouvrirConfirmation = () => {
+const contactASupprimer = ref(null)
 
+const ouvrirConfirmation = (id) => {
+
+    contactASupprimer.value = id
     afficherModal.value = true
 
 }
@@ -83,15 +86,17 @@ const supprimer = async () => {
 
     try {
 
-        await api.delete(`/contacts/${route.params.id}`)
+        await api.delete(`/contacts/${contactASupprimer.value}`)
 
         afficherModal.value = false
-
-        router.push('/admin/contacts')
+        afficherToast('Message supprimé avec succès.', 'success')
+        chargerContacts()
 
     } catch (error) {
 
         console.error(error)
+        afficherModal.value = false
+        afficherToast("Erreur lors de la suppression du message.", 'error')
 
     }
 

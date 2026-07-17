@@ -1,0 +1,10 @@
+# Empêche l'exécution de fichiers PHP dans ce dossier, même si un fichier
+# malveillant parvenait à s'y glisser (défense en profondeur).
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|phar)$">
+    Require all denied
+</FilesMatch>
+
+# Désactive l'exécution de scripts (Apache 2.4+)
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>

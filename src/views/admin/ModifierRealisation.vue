@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '../../services/api'
+import { uploadImage, getImageUrl } from '../../utils/images'
 
 const route = useRoute()
 const router = useRouter()
@@ -11,8 +12,13 @@ const form = ref({
   description: '',
   categorie: '',
   lieu: '',
-  date_realisation: ''
+  date_realisation: '',
+  image: null
 })
+
+const fichierImage = ref(null)
+const apercu = ref(null)
+const envoiEnCours = ref(false)
 
 const charger = async () => {
   try {
@@ -23,12 +29,30 @@ const charger = async () => {
   }
 }
 
+const choisirImage = (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+  fichierImage.value = file
+  apercu.value = URL.createObjectURL(file)
+}
+
 const update = async () => {
+  envoiEnCours.value = true
   try {
-    await api.put(`/realisations/${route.params.id}`, form.value)
+    let imagePath = form.value.image
+    if (fichierImage.value) {
+      imagePath = await uploadImage(fichierImage.value)
+    }
+
+    await api.put(`/realisations/${route.params.id}`, {
+      ...form.value,
+      image: imagePath
+    })
     router.push('/admin/realisations')
   } catch (err) {
     console.error(err)
+  } finally {
+    envoiEnCours.value = false
   }
 }
 
@@ -57,7 +81,13 @@ onMounted(charger)
 
     <div class="mb-3">
       <label class="form-label">Catégorie</label>
-      <input v-model="form.categorie" class="form-control" placeholder="Catégorie" />
+      <select v-model="form.categorie" class="form-select">
+        <option disabled value="">Choisir une catégorie</option>
+        <option>Forages Hydrauliques</option>
+        <option>Études Géophysiques</option>
+        <option>Assainissement</option>
+        <option>BTP & Génie Civil</option>
+      </select>
     </div>
 
     <div class="mb-3">
@@ -70,12 +100,21 @@ onMounted(charger)
       <input v-model="form.date_realisation" type="date" class="form-control" />
     </div>
 
+    <div class="mb-3">
+      <label class="form-label">Photo</label>
+      <input type="file" accept="image/*" class="form-control" @change="choisirImage" />
+      <img :src="apercu || getImageUrl(form.image)" v-if="apercu || form.image" class="img-thumbnail mt-3" style="max-height:180px;" />
+    </div>
+
     <div class="mb-4">
       <label class="form-label">Description</label>
       <textarea v-model="form.description" rows="5" class="form-control" placeholder="Description"></textarea>
     </div>
 
-    <button class="btn btn-primary btn-lg"><i class="bi bi-check-lg me-1"></i>Enregistrer les modifications</button>
+    <button class="btn btn-primary btn-lg" :disabled="envoiEnCours">
+      <span v-if="envoiEnCours" class="spinner-border spinner-border-sm me-2"></span>
+      <i v-else class="bi bi-check-lg me-1"></i>Enregistrer les modifications
+    </button>
 
   </form>
   </div>

@@ -1,7 +1,8 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../../services/api'
+import { uploadImage } from '../../utils/images'
 
 const router = useRouter()
 
@@ -10,14 +11,36 @@ const form = reactive({
     description: '',
     image: '',
     prix: '',
-    disponible: 1
+    disponible: 1,
+    categorie: 'Matériels de forage'
 })
+
+const fichierImage = ref(null)
+const apercu = ref(null)
+const envoiEnCours = ref(false)
+
+const choisirImage = (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+    fichierImage.value = file
+    apercu.value = URL.createObjectURL(file)
+}
 
 const enregistrer = async () => {
 
+    envoiEnCours.value = true
+
     try {
 
-        await api.post('/equipements', form)
+        let imagePath = null
+        if (fichierImage.value) {
+            imagePath = await uploadImage(fichierImage.value)
+        }
+
+        await api.post('/equipements', {
+            ...form,
+            image: imagePath
+        })
 
         router.push('/admin/equipements')
 
@@ -25,6 +48,8 @@ const enregistrer = async () => {
 
         console.error(error)
 
+    } finally {
+        envoiEnCours.value = false
     }
 
 }
@@ -76,12 +101,41 @@ const enregistrer = async () => {
         <div class="mb-3">
 
             <label class="form-label">
-                Image (URL)
+                Photo
             </label>
 
             <input
-                v-model="form.image"
-                class="form-control">
+                type="file"
+                accept="image/*"
+                class="form-control"
+                @change="choisirImage">
+
+            <img v-if="apercu" :src="apercu" class="img-thumbnail mt-3" style="max-height:180px;" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Catégorie
+            </label>
+
+            <select
+                v-model="form.categorie"
+                class="form-select">
+                <option>Pompes solaires</option>
+                <option>Pompes électriques</option>
+                <option>Pompes hybrides</option>
+                <option>Panneaux solaires</option>
+                <option>PVC hydrauliques</option>
+                <option>Équipements hydrauliques</option>
+                <option>Matériels de forage</option>
+                <option>Accessoires</option>
+            </select>
+
+            <small class="text-muted">
+                Toutes les catégories s'affichent sur la page "Vente de matériels", classées par filtre.
+            </small>
 
         </div>
 
@@ -115,9 +169,11 @@ const enregistrer = async () => {
         </div>
 
         <button
-            class="btn btn-primary btn-lg">
+            class="btn btn-primary btn-lg"
+            :disabled="envoiEnCours">
 
-            <i class="bi bi-check-lg me-1"></i>Enregistrer
+            <span v-if="envoiEnCours" class="spinner-border spinner-border-sm me-2"></span>
+            <i v-else class="bi bi-check-lg me-1"></i>Enregistrer
 
         </button>
 

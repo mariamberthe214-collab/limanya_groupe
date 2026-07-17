@@ -8,21 +8,22 @@
               <img src="../assets/logo.png" class="logo">
             </RouterLink>
           </div>
-          <p class="foot-text mb-4">Nous construisons vos rêves : BTP, forages hydrauliques, assainissement, énergies renouvelables et gestion immobilière.</p>
+          <p class="foot-text mb-4">Spécialiste des forages hydrauliques en Côte d'Ivoire : études géophysiques, assainissement, BTP et vente de matériels.</p>
           <div class="d-flex gap-2">
-            <a class="foot-social" href="https://wa.me/0564613584" target="_blank" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+            <a class="foot-social" :href="whatsappLink" target="_blank" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
             <a class="foot-social" href="https://www.facebook.com/limanyagroup" target="_blank" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-            <a class="foot-social" href="mailto:groupelimanya18@gmail.com" aria-label="Email"><i class="bi bi-envelope-fill"></i></a>
+            <a class="foot-social" href="mailto:contact@limanyagroupe.com" aria-label="Email"><i class="bi bi-envelope-fill"></i></a>
           </div>
         </div>
 
         <div class="col-6 col-lg-2">
           <h6 class="foot-title">Services</h6>
           <ul class="list-unstyled foot-links">
-            <li><router-link to="/btp">BTP</router-link></li>
-            <li><router-link to="/forage">Forage</router-link></li>
+            <li><router-link to="/forage">Forages Hydrauliques</router-link></li>
+            <li><router-link to="/etudes-geophysiques">Études Géophysiques</router-link></li>
             <li><router-link to="/assainissement">Assainissement</router-link></li>
-            <li><router-link to="/location">Location</router-link></li>
+            <li><router-link to="/btp">BTP & Génie Civil</router-link></li>
+            <li><router-link to="/materiels-de-forages">Vente de matériels</router-link></li>
           </ul>
         </div>
 
@@ -39,10 +40,11 @@
         <div class="col-lg-4">
           <h6 class="foot-title">Contact</h6>
           <ul class="list-unstyled foot-links">
-            <li><i class="bi bi-envelope me-2"></i>groupelimanya18@gmail.com</li>
-            <li><i class="bi bi-telephone me-2"></i>+225 07 07 17 21 72</li>
-            <li><i class="bi bi-telephone me-2"></i>+225 07 77 04 70 57</li>
-            <li><i class="bi bi-geo-alt me-2"></i>Côte d'Ivoire</li>
+            <li><i class="bi bi-envelope me-2"></i>contact@limanyagroupe.com</li>
+            <li><i class="bi bi-telephone me-2"></i>+225 21 50 04 33 27 (Fixe)</li>
+            <li><i class="bi bi-telephone me-2"></i>+225 07 77 04 70 57 (Standard)</li>
+            <li><i class="bi bi-whatsapp me-2"></i>+225 07 98 44 93 60 (Commercial)</li>
+            <li><i class="bi bi-geo-alt me-2"></i>Port-Bouët, Gonzagueville, Rue I2T, à 100m du goudron</li>
           </ul>
         </div>
       </div>
@@ -57,6 +59,9 @@
 
 <script setup>
 import logo from '../assets/logo.png'
+import { buildWhatsAppLink } from '../utils/whatsapp'
+
+const whatsappLink = buildWhatsAppLink('Bonjour LIMANYA Groupe, je souhaite avoir plus d\'informations.')
 </script>
 
 <style scoped>

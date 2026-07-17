@@ -25,21 +25,32 @@ class AuthController
         return;
     }
 
+    // Limitation anti-bruteforce : 5 tentatives max, blocage 5 minutes
+    $tentatives = $_SESSION['login_attempts'] ?? ['count' => 0, 'first' => time()];
+    if (time() - $tentatives['first'] > 300) {
+        $tentatives = ['count' => 0, 'first' => time()];
+    }
+    if ($tentatives['count'] >= 5) {
+        $this->sendJson([
+            'message' => 'Trop de tentatives. Réessayez dans quelques minutes.'
+        ], 429);
+        return;
+    }
+
     $user = $this->model->findByEmail($input['email']);
+    $motDePasseValide = $user && password_verify($input['password'], $user['password']);
 
-    if (!$user) {
+    if (!$motDePasseValide) {
+        $tentatives['count']++;
+        $_SESSION['login_attempts'] = $tentatives;
+
         $this->sendJson([
-            'message' => 'Utilisateur introuvable'
+            'message' => 'Email ou mot de passe incorrect'
         ], 401);
         return;
     }
 
-    if (!password_verify($input['password'], $user['password'])) {
-        $this->sendJson([
-            'message' => 'Mot de passe incorrect'
-        ], 401);
-        return;
-    }
+    unset($_SESSION['login_attempts']);
 
     $_SESSION['user'] = [
         'id' => $user['id'],

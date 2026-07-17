@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../services/api'
+import { getImageUrl } from '../utils/images'
 
 const posts = ref([])
 const formatDate = (date) => {
@@ -13,7 +14,7 @@ const formatDate = (date) => {
 
 const chargerActualites = async () => {
   try {
-    const response = await api.get('/actualites')
+    const response = await api.get('/actualites?statut=Publié')
     posts.value = response.data
   } catch (error) {
     console.error(error)
@@ -35,16 +36,21 @@ onMounted(() => {
       </div>
       <div class="row g-4">
         <div class="col-md-4" v-for="post in posts" :key="post.id">
-          <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
-            <span class="badge bg-primary mb-3">
-              {{ formatDate(post.date_publication) }}
-            </span>
+          <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+            <div class="ratio ratio-16x9 bg-secondary bg-opacity-10" v-if="post.image">
+              <img :src="getImageUrl(post.image)" :alt="post.titre" class="w-100 h-100 object-fit-cover">
+            </div>
+            <div class="p-4">
+              <span class="badge bg-primary mb-3">
+                {{ formatDate(post.date_publication) }}
+              </span>
 
-            <h5>{{ post.titre }}</h5>
+              <h5>{{ post.titre }}</h5>
 
-            <p class="text-muted">
-              {{ post.contenu }}
-            </p>
+              <p class="text-muted">
+                {{ post.contenu }}
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -127,56 +127,33 @@
 
               <div class="row">
 
-                <!-- BTP -->
+                <!-- FORAGES HYDRAULIQUES (activité principale) -->
 
-                <div class="col-lg-4">
-
-                  <h6 class="mega-title">
-                    <i class="bi bi-building"></i>
-                    BTP
-                  </h6>
-
-                  <RouterLink class="dropdown-item" to="/btp">
-                    Construction Bâtiment
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/btp">
-                    Génie Civil
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/btp">
-                    VRD
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/btp">
-                    Plans 2D / 3D
-                  </RouterLink>
-
-                </div>
-
-                <!-- Eau -->
-
-                <div class="col-lg-4">
+                <div class="col-lg-3">
 
                   <h6 class="mega-title">
                     <i class="bi bi-droplet-half"></i>
-                    Eau & Assainissement
+                    Forages Hydrauliques
                   </h6>
 
                   <RouterLink class="dropdown-item" to="/forage">
-                    Forages hydrauliques
+                    Forages villageois
                   </RouterLink>
 
-                  <RouterLink class="dropdown-item" to="/assainissement">
-                    Eau potable
+                  <RouterLink class="dropdown-item" to="/forage">
+                    Forages agricoles
                   </RouterLink>
 
-                  <RouterLink class="dropdown-item" to="/assainissement">
-                    Fosses biodigesteurs
+                  <RouterLink class="dropdown-item" to="/forage">
+                    Forages industriels
                   </RouterLink>
 
-                  <RouterLink class="dropdown-item" to="/assainissement">
-                    Châteaux d'eau
+                  <RouterLink class="dropdown-item" to="/forage">
+                    Essais de pompage
+                  </RouterLink>
+
+                  <RouterLink class="dropdown-item" to="/forage">
+                    Réhabilitation & maintenance
                   </RouterLink>
 
                 </div>
@@ -191,50 +168,73 @@
                   </h6>
 
                   <RouterLink class="dropdown-item" to="/etudes-geophysiques">
+                    Recherche d'eau
+                  </RouterLink>
+
+                  <RouterLink class="dropdown-item" to="/etudes-geophysiques">
                     Études géophysiques
                   </RouterLink>
 
                   <RouterLink class="dropdown-item" to="/etudes-geophysiques">
-                    Recherche d'eau souterraine
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/etudes-geophysiques">
-                    Expertise de terrain
+                    Implantation des forages
                   </RouterLink>
 
                 </div>
 
-                <!-- Energie -->
+                <!-- Assainissement -->
 
-                <div class="col-lg-4">
+                <div class="col-lg-3">
 
                   <h6 class="mega-title">
-                    <i class="bi bi-lightning-charge"></i>
-                    Énergies
+                    <i class="bi bi-recycle"></i>
+                    Assainissement
                   </h6>
 
-                  <RouterLink class="dropdown-item" to="/location">
-                    Pompes solaires
+                  <RouterLink class="dropdown-item" to="/assainissement">
+                    Réseaux d'assainissement
                   </RouterLink>
 
-                  <RouterLink class="dropdown-item" to="/location">
-                    Pompes hybrides
+                  <RouterLink class="dropdown-item" to="/assainissement">
+                    Gestion des eaux usées
                   </RouterLink>
 
-                  <RouterLink class="dropdown-item" to="/location">
-                    Installations solaires
+                  <RouterLink class="dropdown-item" to="/assainissement">
+                    Fosses septiques
                   </RouterLink>
 
-                  <RouterLink class="dropdown-item" to="/location">
-                    Location d'équipements
+                  <RouterLink class="dropdown-item" to="/assainissement">
+                    Fosses biodigesteurs
                   </RouterLink>
 
-                  <RouterLink class="dropdown-item" to="/location">
-                    Pompes électriques
+                </div>
+
+                <!-- BTP & Genie Civil -->
+
+                <div class="col-lg-3">
+
+                  <h6 class="mega-title">
+                    <i class="bi bi-building"></i>
+                    BTP & Génie Civil
+                  </h6>
+
+                  <RouterLink class="dropdown-item" to="/btp">
+                    Construction
                   </RouterLink>
 
-                  <RouterLink class="dropdown-item" to="/location">
-                    Énergies renouvelables
+                  <RouterLink class="dropdown-item" to="/btp">
+                    Génie civil
+                  </RouterLink>
+
+                  <RouterLink class="dropdown-item" to="/btp">
+                    VRD
+                  </RouterLink>
+
+                  <RouterLink class="dropdown-item" to="/btp">
+                    Travaux publics
+                  </RouterLink>
+
+                  <RouterLink class="dropdown-item" to="/materiels-de-forages">
+                    Vente de matériels
                   </RouterLink>
 
                 </div>

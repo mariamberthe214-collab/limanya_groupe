@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../../services/api'
+import { uploadImage } from '../../utils/images'
 
 const router = useRouter()
 
@@ -10,10 +11,27 @@ const contenu = ref('')
 const auteur = ref('Admin')
 const statut = ref('Publié')
 const date_publication = ref(new Date().toISOString().split('T')[0])
+const fichierImage = ref(null)
+const apercu = ref(null)
+const envoiEnCours = ref(false)
+
+const choisirImage = (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+    fichierImage.value = file
+    apercu.value = URL.createObjectURL(file)
+}
 
 const ajouterActualite = async () => {
 
+    envoiEnCours.value = true
+
     try {
+
+        let imagePath = null
+        if (fichierImage.value) {
+            imagePath = await uploadImage(fichierImage.value)
+        }
 
         await api.post('/actualites', {
 
@@ -21,12 +39,10 @@ const ajouterActualite = async () => {
             contenu: contenu.value,
             auteur: auteur.value,
             statut: statut.value,
-            image: null,
+            image: imagePath,
             date_publication: date_publication.value
 
         })
-
-        alert("Actualité ajoutée avec succès.")
 
         router.push('/admin/actualites')
 
@@ -35,6 +51,8 @@ const ajouterActualite = async () => {
         console.error(error)
         alert("Erreur lors de l'ajout.")
 
+    } finally {
+        envoiEnCours.value = false
     }
 
 }
@@ -121,9 +139,24 @@ const ajouterActualite = async () => {
 
         </div>
 
-        <button class="btn btn-primary btn-lg">
+        <div class="mb-4">
 
-            <i class="bi bi-check-lg me-1"></i>Enregistrer
+            <label class="form-label">Photo</label>
+
+            <input
+                type="file"
+                accept="image/*"
+                class="form-control"
+                @change="choisirImage">
+
+            <img v-if="apercu" :src="apercu" class="img-thumbnail mt-3" style="max-height:180px;" />
+
+        </div>
+
+        <button class="btn btn-primary btn-lg" :disabled="envoiEnCours">
+
+            <span v-if="envoiEnCours" class="spinner-border spinner-border-sm me-2"></span>
+            <i v-else class="bi bi-check-lg me-1"></i>Enregistrer
 
         </button>
 

@@ -1,7 +1,7 @@
-```vue
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import api from '../../services/api'
+import { getImageUrl } from '../../utils/images'
 import Breadcrumb from '../../components/admin/Breadcrumb.vue'
 import ConfirmModal from '../../components/admin/ConfirmModal.vue'
 import ToastNotification from '../../components/admin/ToastNotification.vue'
@@ -208,6 +208,8 @@ onMounted(() => {
 
                 <tr>
 
+                    <th style="width:70px">Photo</th>
+
                     <th style="width:80px">ID</th>
 
                     <th>Titre</th>
@@ -225,6 +227,15 @@ onMounted(() => {
                 <tr
                     v-for="item in actualitesAffichees"
                     :key="item.id">
+
+                    <td>
+                        <img
+                            v-if="item.image"
+                            :src="getImageUrl(item.image)"
+                            class="rounded"
+                            style="width:48px;height:48px;object-fit:cover;">
+                        <span v-else class="text-muted small">—</span>
+                    </td>
 
                     <td>{{ item.id }}</td>
 
@@ -354,4 +365,3 @@ onMounted(() => {
     @close="showToast = false"
 />
 </template>
-```

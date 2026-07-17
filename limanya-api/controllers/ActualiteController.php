@@ -14,7 +14,8 @@ class ActualiteController
     {
         $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 100;
         $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-        $items = $this->model->getAll($limit, $offset);
+        $statut = isset($_GET['statut']) ? (string)$_GET['statut'] : null;
+        $items = $this->model->getAll($limit, $offset, $statut);
         $this->sendJson($items);
     }
 

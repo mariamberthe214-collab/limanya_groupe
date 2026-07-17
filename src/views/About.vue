@@ -24,34 +24,29 @@ const values = [
 
 const services = [
   {
-    icon: "bi-building",
-    title: "BTP & Génie Civil",
-    text: "Construction de bâtiments, ouvrages de génie civil et réalisation d'infrastructures."
-  },
-  {
-    icon: "bi-droplet-half",
+    icon: "bi-droplet",
     title: "Forages Hydrauliques",
-    text: "Réalisation de forages d'eau potable pour les particuliers, entreprises et collectivités."
+    text: "Forages villageois, agricoles, industriels, essais de pompage, réhabilitation et maintenance."
   },
   {
     icon: "bi-globe-africa",
     title: "Études Géophysiques",
-    text: "Études géophysiques et géomorphologiques pour identifier les meilleures zones de forage."
+    text: "Recherche d'eau, études géophysiques et implantation des forages."
   },
   {
     icon: "bi-recycle",
     title: "Assainissement",
-    text: "Travaux d'assainissement, réseaux d'évacuation et gestion des eaux usées."
+    text: "Réseaux d'assainissement, gestion des eaux usées, fosses septiques et fosses biodigesteurs."
   },
   {
-    icon: "bi-house-check",
-    title: "Fosses Biodigesteurs",
-    text: "Conception et réalisation de fosses septiques biodigesteurs modernes et durables."
+    icon: "bi-building",
+    title: "BTP & Génie Civil",
+    text: "Construction, génie civil, VRD et travaux publics."
   },
   {
-    icon: "bi-truck",
-    title: "Location d'engins",
-    text: "Location de matériels et d'engins adaptés aux travaux de construction et de terrassement."
+    icon: "bi-lightning-charge",
+    title: "Vente de Matériels",
+    text: "Pompes solaires, électriques et hybrides, panneaux solaires, PVC hydrauliques et accessoires."
   }
 ]
 </script>
@@ -67,11 +62,17 @@ const services = [
           Construire aujourd'hui les infrastructures de demain.
           </h1>
           <p class="lead text-muted mt-4">
-            LIMANYA Groupe est une entreprise ivoirienne spécialisée dans les travaux de Bâtiment et Travaux Publics (BTP), les forages hydrauliques, les études géophysiques, l'assainissement, les fosses septiques biodigesteurs ainsi que les solutions techniques destinées aux particuliers, entreprises et institutions.
-          </p>          
+            LIMANYA Groupe est une entreprise ivoirienne spécialisée dans les forages hydrauliques, les études géophysiques, l'assainissement (fosses septiques biodigesteurs) ainsi que le Bâtiment et Travaux Publics (BTP), au service des particuliers, entreprises et institutions.
+          </p>
           <p>
            Grâce à une équipe expérimentée et des équipements performants, nous intervenons sur des projets de toutes dimensions avec un objectif constant : offrir des prestations de qualité, durables et conformes aux exigences de nos clients tout en respectant les normes de sécurité et les délais d'exécution.
-          </p>        </div>
+          </p>
+          <ul class="list-unstyled legal-list mt-4">
+            <li><i class="bi bi-patch-check-fill text-amber me-2"></i>Capital social de 6 000 000 F CFA</li>
+            <li><i class="bi bi-geo-alt-fill text-amber me-2"></i>Siège social à Gonzagueville, Port-Bouët</li>
+            <li><i class="bi bi-person-fill text-amber me-2"></i>Dirigée par M. N'DIAYE, Directeur Général</li>
+          </ul>
+        </div>
         <div class="col-lg-6">
           <div class="hero-media ratio ratio-4x3">
             <img src="/images/about-team.png" alt="Équipe d'ingénieurs Limanya sur un chantier" class="w-100 h-100 object-fit-cover" />
@@ -88,7 +89,7 @@ const services = [
           <div class="card border-0 shadow-sm h-100 p-4">
             <div class="service-icon mb-3"><i class="bi bi-bullseye"></i></div>
             <h3 class="h5">Notre mission</h3>
-            <p class="text-muted mb-0">Fournir des solutions techniques performantes dans les domaines du BTP, des forages hydrauliques, des études géophysiques et de l'assainissement, en garantissant la qualité des travaux, le respect des délais et la satisfaction de nos clients.</p>
+            <p class="text-muted mb-0">Fournir des solutions techniques performantes dans les domaines des forages hydrauliques, des études géophysiques, de l'assainissement et du BTP, en garantissant la qualité des travaux, le respect des délais et la satisfaction de nos clients.</p>
           </div>
         </div>
         <div class="col-lg-4">
@@ -103,7 +104,7 @@ const services = [
             <div class="service-icon mb-3"><i class="bi bi-diagram-3"></i></div>
             <h3 class="h5">Notre vision</h3>
             <p class="text-muted mb-0">
-             Être une référence nationale dans les domaines du BTP, des forages hydrauliques, de l'assainissement et des études géophysiques grâce à notre expertise et à notre capacité d'innovation.
+             Être une référence nationale dans les domaines des forages hydrauliques, des études géophysiques, de l'assainissement et du BTP grâce à notre expertise et à notre capacité d'innovation.
             </p>          
           </div>
         </div>
@@ -180,9 +181,9 @@ const services = [
 
         <div class="stat-card">
 
-          <h2>+50</h2>
+          <h2>15+</h2>
 
-          <p>Projets réalisés</p>
+          <p>Années d'expertise</p>
 
         </div>
 
@@ -192,9 +193,9 @@ const services = [
 
         <div class="stat-card">
 
-          <h2>+15</h2>
+          <h2>200+</h2>
 
-          <p>Localités couvertes</p>
+          <p>Projets livrés</p>
 
         </div>
 
@@ -262,6 +263,56 @@ const services = [
 
       </div>
     
+  </section>
+
+  <section class="py-5">
+    <div class="container">
+
+      <div class="text-center mb-5">
+        <span class="eyebrow">Notre engagement</span>
+        <h2 class="mt-3">Politique Qualité, Hygiène, Sécurité et Environnement (QHSE)</h2>
+        <p class="text-muted mx-auto" style="max-width:700px">
+          Sur chaque chantier, LIMANYA Groupe applique une politique QHSE rigoureuse, portée par la Direction Générale et communiquée à tous les niveaux de l'entreprise.
+        </p>
+      </div>
+
+      <div class="row g-4">
+
+        <div class="col-md-6 col-lg-3">
+          <div class="qhse-card">
+            <div class="qhse-icon"><i class="bi bi-droplet-half"></i></div>
+            <h5>Hygiène</h5>
+            <p>Conditions de travail propres et salubres sur tous les chantiers, avec des installations sanitaires conformes et entretenues.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="qhse-card">
+            <div class="qhse-icon"><i class="bi bi-shield-check"></i></div>
+            <h5>Sécurité</h5>
+            <p>Identification des risques, équipements de protection individuelle adaptés et formation régulière aux consignes de sécurité.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="qhse-card">
+            <div class="qhse-icon"><i class="bi bi-tree"></i></div>
+            <h5>Environnement</h5>
+            <p>Réduction des nuisances liées aux travaux, gestion responsable des déchets et préservation des ressources naturelles.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="qhse-card">
+            <div class="qhse-icon"><i class="bi bi-people-fill"></i></div>
+            <h5>Engagement collectif</h5>
+            <p>Chaque collaborateur est acteur de la démarche QHSE. Toute situation à risque est immédiatement signalée et traitée.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
   </section>
 </template>
 
@@ -376,5 +427,52 @@ const services = [
 
     font-size:30px;
 
+}
+
+.legal-list li{
+    margin-bottom:10px;
+    color:#443f34;
+    font-weight:600;
+    font-size:0.95rem;
+}
+
+.qhse-card{
+    background:#fff;
+    padding:30px 25px;
+    border-radius:20px;
+    height:100%;
+    box-shadow:0 12px 30px rgba(0,0,0,.06);
+    border:1px solid rgba(191,87,28,.08);
+    transition:.3s;
+}
+
+.qhse-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 40px rgba(0,0,0,.1);
+}
+
+.qhse-icon{
+    width:56px;
+    height:56px;
+    border-radius:14px;
+    background:#f6e7da;
+    color:#bf571c;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.qhse-card h5{
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.qhse-card p{
+    color:#666;
+    font-size:0.92rem;
+    line-height:1.6;
+    margin-bottom:0;
 }
 </style>

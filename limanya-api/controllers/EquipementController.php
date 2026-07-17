@@ -14,7 +14,8 @@ class EquipementController
     {
         $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 100;
         $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-        $items = $this->model->getAll($limit, $offset);
+        $categorie = isset($_GET['categorie']) ? (string)$_GET['categorie'] : null;
+        $items = $this->model->getAll($limit, $offset, $categorie);
         $this->sendJson($items);
     }
 

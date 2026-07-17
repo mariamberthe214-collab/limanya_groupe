@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import api from '../../services/api'
+import { getImageUrl } from '../../utils/images'
 import ConfirmModal from '../../components/admin/ConfirmModal.vue'
 
 
@@ -113,6 +114,7 @@ onMounted(chargerRealisations)
 
             <tr>
 
+                <th>Photo</th>
                 <th>ID</th>
                 <th>Titre</th>
                 <th>Catégorie</th>
@@ -129,6 +131,15 @@ onMounted(chargerRealisations)
             <tr
                 v-for="item in realisationsPaginees"
                 :key="item.id">
+
+                <td>
+                    <img
+                        v-if="item.image"
+                        :src="getImageUrl(item.image)"
+                        class="rounded"
+                        style="width:52px;height:52px;object-fit:cover;">
+                    <span v-else class="text-muted small">—</span>
+                </td>
 
                 <td>{{ item.id }}</td>
 

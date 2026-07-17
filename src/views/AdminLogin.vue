@@ -4,21 +4,27 @@ import { useRouter } from 'vue-router'
 import api from '../services/api'
 
 const router = useRouter()
+const erreur = ref('')
+const chargement = ref(false)
 
 const login = async () => {
+  erreur.value = ''
+  chargement.value = true
   try {
     const response = await api.post('/auth/login', {
       email: email.value,
       password: password.value
     })
 
-    alert(response.data.message)
+    localStorage.setItem('admin_user', JSON.stringify(response.data.user))
 
     router.push('/admin/dashboard')
 
   } catch (error) {
-    alert("Email ou mot de passe incorrect")
+    erreur.value = error.response?.data?.message || 'Email ou mot de passe incorrect'
     console.error(error)
+  } finally {
+    chargement.value = false
   }
 }
 
@@ -42,6 +48,10 @@ const password = ref('')
         <h2 class="login-title">Connexion administrateur</h2>
         <p class="login-subtitle">Accédez à votre espace de gestion</p>
 
+        <div v-if="erreur" class="alert alert-danger py-2 small" role="alert">
+            <i class="bi bi-exclamation-circle me-1"></i>{{ erreur }}
+        </div>
+
         <label class="login-label">Adresse email</label>
         <div class="input-group mb-3">
             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
@@ -49,6 +59,7 @@ const password = ref('')
                 v-model="email"
                 class="form-control"
                 placeholder="exemple@limanya.com"
+                @keyup.enter="login"
             >
         </div>
 
@@ -66,9 +77,11 @@ const password = ref('')
 
         <button
             class="btn btn-primary w-100 btn-lg"
+            :disabled="chargement"
             @click="login"
         >
-            Se connecter
+            <span v-if="chargement" class="spinner-border spinner-border-sm me-2"></span>
+            {{ chargement ? 'Connexion...' : 'Se connecter' }}
         </button>
 
     </div>

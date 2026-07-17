@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import api from '../../services/api'
+import { getImageUrl } from '../../utils/images'
 import ConfirmModal from '../../components/admin/ConfirmModal.vue'
 
 const equipements = ref([])
@@ -109,9 +110,13 @@ onMounted(chargerEquipements)
 
             <tr>
 
+                <th>Photo</th>
+
                 <th>ID</th>
 
                 <th>Nom</th>
+
+                <th>Catégorie</th>
 
                 <th>Prix</th>
 
@@ -129,9 +134,20 @@ onMounted(chargerEquipements)
                 v-for="item in equipementsPagine"
                 :key="item.id">
 
+                <td>
+                    <img
+                        v-if="item.image"
+                        :src="getImageUrl(item.image)"
+                        class="rounded"
+                        style="width:48px;height:48px;object-fit:cover;">
+                    <span v-else class="text-muted small">—</span>
+                </td>
+
                 <td>{{ item.id }}</td>
 
                 <td>{{ item.nom }}</td>
+
+                <td><span class="badge bg-secondary">{{ item.categorie || 'Matériels de forage' }}</span></td>
 
                 <td>{{ item.prix }} FCFA</td>
 

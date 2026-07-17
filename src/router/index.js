@@ -5,6 +5,7 @@ import Forage from '../views/Forage.vue'
 import Btp from '../views/Btp.vue'
 import Assainissement from '../views/Assainissement.vue'
 import Materiels from '../views/Materiels.vue'
+import EtudesGeophysiques from '../views/EtudesGeophysiques.vue'
 import Realisations from '../views/Realisations.vue'
 import Actualites from '../views/Actualites.vue'
 import Contact from '../views/Contact.vue'
@@ -36,6 +37,8 @@ const routes = [
   { path: '/forage', name: 'forage', component: Forage },
   { path: '/btp', name: 'btp', component: Btp },
   { path: '/assainissement', name: 'assainissement', component: Assainissement },
+  { path: '/etudes-geophysiques', name: 'etudes-geophysiques', component: EtudesGeophysiques },
+  { path: '/location', redirect: '/materiels-de-forages' },
   { path: '/actualites', name: 'actualites', component: Actualites },
   { path: '/admin/login', name: 'admin-login',component: AdminLogin},
  {

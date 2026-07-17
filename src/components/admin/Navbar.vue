@@ -1,11 +1,41 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import api from '../../services/api'
 
 const router = useRouter()
+const utilisateur = ref(null)
 
-const deconnexion = () => {
-  localStorage.removeItem('user')
-  router.push('/admin/login')
+const initiales = (nom) => {
+  if (!nom) return 'A'
+  return nom
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+}
+
+onMounted(() => {
+  const stocke = localStorage.getItem('admin_user')
+  if (stocke) {
+    try {
+      utilisateur.value = JSON.parse(stocke)
+    } catch (e) {
+      utilisateur.value = null
+    }
+  }
+})
+
+const deconnexion = async () => {
+  try {
+    await api.post('/auth/logout')
+  } catch (error) {
+    console.error(error)
+  } finally {
+    localStorage.removeItem('admin_user')
+    router.push('/admin/login')
+  }
 }
 </script>
 
@@ -17,8 +47,8 @@ const deconnexion = () => {
     <div class="right">
 
       <span class="admin-user">
-        <i class="bi bi-person-circle"></i>
-        Administrateur
+        <span class="avatar">{{ initiales(utilisateur?.nom) }}</span>
+        {{ utilisateur?.nom || 'Administrateur' }}
       </span>
 
       <button
@@ -70,16 +100,25 @@ const deconnexion = () => {
 
     display:flex;
     align-items:center;
-    gap:8px;
-    color:#6b6353;
-    font-weight:500;
+    gap:10px;
+    color:#443f34;
+    font-weight:600;
+    font-size:0.92rem;
 
 }
 
-.admin-user i{
+.avatar{
 
-    font-size:1.2rem;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#f6e7da;
     color:#bf571c;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:0.8rem;
 
 }
 

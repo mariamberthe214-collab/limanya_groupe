@@ -5,15 +5,23 @@ class Actualite extends BaseModel
 {
     protected string $table = 'actualites';
 
-    public function getAll(int $limit = 100, int $offset = 0): array
+    public function getAll(int $limit = 100, int $offset = 0, ?string $statut = null): array
     {
-        $stmt = $this->pdo->prepare("
-            SELECT *
-            FROM {$this->table}
-            ORDER BY date_publication DESC
-            LIMIT :limit OFFSET :offset
-        ");
+        $sql = "SELECT * FROM {$this->table}";
+        $params = [];
 
+        if ($statut !== null) {
+            $sql .= " WHERE statut = :statut";
+            $params[':statut'] = $statut;
+        }
+
+        $sql .= " ORDER BY date_publication DESC LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();

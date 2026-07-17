@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '../../services/api'
 import ConfirmModal from '../../components/admin/ConfirmModal.vue'
+import { buildWhatsAppReplyLink } from '../../utils/whatsapp'
 
 const route = useRoute()
 const router = useRouter()
@@ -26,6 +27,11 @@ const chargerContact = async () => {
     } catch (error) {
         console.error(error)
     }
+}
+
+const lienReponseWhatsApp = () => {
+    const message = `Bonjour ${contact.value.nom}, merci pour votre message concernant "${contact.value.sujet || 'votre demande'}". `
+    return buildWhatsAppReplyLink(contact.value.telephone, message)
 }
 
 const ouvrirConfirmation = () => {
@@ -108,6 +114,16 @@ onMounted(chargerContact)
                 <i class="bi bi-arrow-left me-1"></i>Retour
 
             </RouterLink>
+
+            <a
+                v-if="contact.telephone"
+                :href="lienReponseWhatsApp()"
+                target="_blank"
+                class="btn btn-success">
+
+                <i class="bi bi-whatsapp me-1"></i>Répondre via WhatsApp
+
+            </a>
 
             <button
                 class="btn btn-danger"

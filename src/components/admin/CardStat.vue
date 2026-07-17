@@ -41,6 +41,19 @@ defineProps({
 
 <style scoped>
 
+.card{
+
+    transition: transform .18s ease, box-shadow .18s ease;
+
+}
+
+.card:hover{
+
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0,0,0,.08) !important;
+
+}
+
 .icone{
 
     width:60px;

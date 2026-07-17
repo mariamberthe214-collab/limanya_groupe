@@ -5,9 +5,22 @@ class Equipement extends BaseModel
 {
     protected string $table = 'equipements';
 
-    public function getAll(int $limit = 100, int $offset = 0): array
+    public function getAll(int $limit = 100, int $offset = 0, ?string $categorie = null): array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} ORDER BY created_at DESC LIMIT :limit OFFSET :offset");
+        $sql = "SELECT * FROM {$this->table}";
+        $params = [];
+
+        if ($categorie !== null) {
+            $sql .= " WHERE categorie = :categorie";
+            $params[':categorie'] = $categorie;
+        }
+
+        $sql .= " ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->pdo->prepare($sql);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
@@ -26,9 +39,9 @@ class Equipement extends BaseModel
     {
         $stmt = $this->pdo->prepare("
             INSERT INTO {$this->table}
-            (nom, description, image, prix, disponible, created_at)
+            (nom, description, image, prix, disponible, categorie, created_at)
             VALUES
-            (:nom, :description, :image, :prix, :disponible, NOW())
+            (:nom, :description, :image, :prix, :disponible, :categorie, NOW())
         ");
 
         $stmt->execute([
@@ -37,6 +50,7 @@ class Equipement extends BaseModel
             ':image' => $data['image'] ?? null,
             ':prix' => $data['prix'] ?? null,
             ':disponible' => $data['disponible'] ?? 1,
+            ':categorie' => $data['categorie'] ?? 'Matériel de forage',
         ]);
 
         return (int)$this->pdo->lastInsertId();
@@ -51,7 +65,8 @@ class Equipement extends BaseModel
                 description = :description,
                 image = :image,
                 prix = :prix,
-                disponible = :disponible
+                disponible = :disponible,
+                categorie = :categorie
             WHERE id = :id
         ");
 
@@ -61,6 +76,7 @@ class Equipement extends BaseModel
             ':image' => $data['image'] ?? null,
             ':prix' => $data['prix'] ?? null,
             ':disponible' => $data['disponible'] ?? 1,
+            ':categorie' => $data['categorie'] ?? 'Matériel de forage',
             ':id' => $id,
         ]);
     }

@@ -1,8 +1,15 @@
 import api from '../services/api'
 
+// Identifiants Cloudinary de LIMANYA Groupe
+const CLOUDINARY_CLOUD_NAME = 'dwyibyy50'
+const CLOUDINARY_UPLOAD_PRESET = 'sxfwn8vq'
+const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`
+
 /**
- * Construit l'URL complète d'une image stockée sur le serveur (ex: "/uploads/img_123.jpg")
- * à partir du chemin relatif renvoyé par l'API.
+ * Construit l'URL complète d'une image/vidéo à afficher.
+ * - Si c'est déjà une URL Cloudinary (ou toute URL complète), on la retourne telle quelle.
+ * - Si c'est un ancien chemin local (ex: "/uploads/img_123.jpg"), on le préfixe avec l'API
+ *   (pour garder compatibles les médias déjà en place avant Cloudinary).
  * @param {string} path
  * @returns {string|null}
  */
@@ -10,24 +17,30 @@ export function getImageUrl(path) {
   if (!path) return null
   if (path.startsWith('http://') || path.startsWith('https://')) return path
 
-  // baseURL peut être "http://localhost/limanya_groupe/limanya-api/index.php"
-  // ou "http://localhost:8000" -> on retire "index.php" final pour obtenir la racine de l'API
   const base = (api.defaults.baseURL || '').replace(/index\.php\/?$/, '').replace(/\/$/, '')
   return `${base}${path}`
 }
 
 /**
- * Téléverse un fichier image vers le serveur.
+ * Téléverse un fichier (image ou vidéo) directement vers Cloudinary.
  * @param {File} file
- * @returns {Promise<string>} le chemin relatif de l'image (ex: "/uploads/img_123.jpg")
+ * @returns {Promise<string>} l'URL sécurisée (https) du fichier hébergé sur Cloudinary
  */
 export async function uploadImage(file) {
   const formData = new FormData()
   formData.append('file', file)
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
 
-  const response = await api.post('/upload', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+  const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+    method: 'POST',
+    body: formData,
   })
 
-  return response.data.path
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null)
+    throw new Error(errorData?.error?.message || "Erreur lors de l'envoi vers Cloudinary")
+  }
+
+  const data = await response.json()
+  return data.secure_url
 }

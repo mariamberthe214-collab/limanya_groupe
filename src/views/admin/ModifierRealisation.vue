@@ -18,6 +18,8 @@ const form = ref({
 
 const fichierImage = ref(null)
 const apercu = ref(null)
+const fichierVideo = ref(null)
+const nomVideo = ref('')
 const envoiEnCours = ref(false)
 
 const charger = async () => {
@@ -36,6 +38,13 @@ const choisirImage = (event) => {
   apercu.value = URL.createObjectURL(file)
 }
 
+const choisirVideo = (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+  fichierVideo.value = file
+  nomVideo.value = file.name
+}
+
 const update = async () => {
   envoiEnCours.value = true
   try {
@@ -44,9 +53,15 @@ const update = async () => {
       imagePath = await uploadImage(fichierImage.value)
     }
 
+    let videoPath = form.value.video
+    if (fichierVideo.value) {
+      videoPath = await uploadImage(fichierVideo.value)
+    }
+
     await api.put(`/realisations/${route.params.id}`, {
       ...form.value,
-      image: imagePath
+      image: imagePath,
+      video: videoPath
     })
     router.push('/admin/realisations')
   } catch (err) {
@@ -104,6 +119,14 @@ onMounted(charger)
       <label class="form-label">Photo</label>
       <input type="file" accept="image/*" class="form-control" @change="choisirImage" />
       <img :src="apercu || getImageUrl(form.image)" v-if="apercu || form.image" class="img-thumbnail mt-3" style="max-height:180px;" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Vidéo (optionnel)</label>
+      <input type="file" accept="video/mp4,video/quicktime,video/webm" class="form-control" @change="choisirVideo" />
+      <small class="text-muted" v-if="nomVideo">Nouveau fichier : {{ nomVideo }}</small>
+      <small class="text-muted d-block" v-else-if="form.video">Vidéo actuelle : {{ form.video.split('/').pop() }}</small>
+      <small class="text-muted d-block" v-else>Formats acceptés : MP4, MOV, WEBM (60 Mo max).</small>
     </div>
 
     <div class="mb-4">

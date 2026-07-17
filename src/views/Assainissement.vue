@@ -112,8 +112,14 @@ onMounted(chargerRealisations)
         <div class="col-md-6 col-lg-4" v-for="projet in realisations" :key="projet.id">
           <div class="card border-0 shadow-sm h-100 overflow-hidden">
             <div class="ratio ratio-4x3 bg-secondary bg-opacity-10">
+              <video
+                v-if="projet.video"
+                :src="getImageUrl(projet.video)"
+                :poster="projet.image ? getImageUrl(projet.image) : ''"
+                controls
+                class="w-100 h-100" style="object-fit:cover;"></video>
               <img
-                v-if="projet.image"
+                v-else-if="projet.image"
                 :src="getImageUrl(projet.image)"
                 :alt="projet.titre"
                 class="w-100 h-100 object-fit-cover">

@@ -16,6 +16,8 @@ const form = reactive({
 
 const fichierImage = ref(null)
 const apercu = ref(null)
+const fichierVideo = ref(null)
+const nomVideo = ref('')
 const envoiEnCours = ref(false)
 const erreur = ref('')
 
@@ -24,6 +26,13 @@ const choisirImage = (event) => {
     if (!file) return
     fichierImage.value = file
     apercu.value = URL.createObjectURL(file)
+}
+
+const choisirVideo = (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+    fichierVideo.value = file
+    nomVideo.value = file.name
 }
 
 const enregistrer = async () => {
@@ -36,9 +45,15 @@ const enregistrer = async () => {
             imagePath = await uploadImage(fichierImage.value)
         }
 
+        let videoPath = null
+        if (fichierVideo.value) {
+            videoPath = await uploadImage(fichierVideo.value)
+        }
+
         await api.post('/realisations', {
             ...form,
-            image: imagePath
+            image: imagePath,
+            video: videoPath
         })
 
         router.push('/admin/realisations')
@@ -114,6 +129,17 @@ const enregistrer = async () => {
                 class="form-control"
                 @change="choisirImage">
             <img v-if="apercu" :src="apercu" class="img-thumbnail mt-3" style="max-height:180px;" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Vidéo (optionnel)</label>
+            <input
+                type="file"
+                accept="video/mp4,video/quicktime,video/webm"
+                class="form-control"
+                @change="choisirVideo">
+            <small class="text-muted" v-if="nomVideo">Fichier sélectionné : {{ nomVideo }}</small>
+            <small class="text-muted d-block" v-else>Formats acceptés : MP4, MOV, WEBM (60 Mo max).</small>
         </div>
 
         <div class="mb-3">

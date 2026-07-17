@@ -37,12 +37,13 @@ class Realisation extends BaseModel
 
     public function create(array $data): int
     {
-        $stmt = $this->pdo->prepare("INSERT INTO {$this->table} (titre, description, categorie, image, lieu, date_realisation, created_at) VALUES (:titre, :description, :categorie, :image, :lieu, :date_realisation, NOW())");
+        $stmt = $this->pdo->prepare("INSERT INTO {$this->table} (titre, description, categorie, image, video, lieu, date_realisation, created_at) VALUES (:titre, :description, :categorie, :image, :video, :lieu, :date_realisation, NOW())");
         $stmt->execute([
             ':titre' => $data['titre'] ?? null,
             ':description' => $data['description'] ?? null,
             ':categorie' => $data['categorie'] ?? null,
             ':image' => $data['image'] ?? null,
+            ':video' => $data['video'] ?? null,
             ':lieu' => $data['lieu'] ?? null,
             ':date_realisation' => $data['date_realisation'] ?? null,
         ]);
@@ -51,12 +52,13 @@ class Realisation extends BaseModel
 
     public function update(int $id, array $data): bool
     {
-        $stmt = $this->pdo->prepare("UPDATE {$this->table} SET titre = :titre, description = :description, categorie = :categorie, image = :image, lieu = :lieu, date_realisation = :date_realisation WHERE id = :id");
+        $stmt = $this->pdo->prepare("UPDATE {$this->table} SET titre = :titre, description = :description, categorie = :categorie, image = :image, video = :video, lieu = :lieu, date_realisation = :date_realisation WHERE id = :id");
         return $stmt->execute([
             ':titre' => $data['titre'] ?? null,
             ':description' => $data['description'] ?? null,
             ':categorie' => $data['categorie'] ?? null,
             ':image' => $data['image'] ?? null,
+            ':video' => $data['video'] ?? null,
             ':lieu' => $data['lieu'] ?? null,
             ':date_realisation' => $data['date_realisation'] ?? null,
             ':id' => $id,

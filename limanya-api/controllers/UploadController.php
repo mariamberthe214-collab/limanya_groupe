@@ -3,7 +3,9 @@
 class UploadController
 {
     private $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-    private $maxSizeBytes = 5 * 1024 * 1024; // 5 Mo
+    private $allowedVideoTypes = ['video/mp4', 'video/quicktime', 'video/webm'];
+    private $maxSizeBytes = 5 * 1024 * 1024; // 5 Mo pour les images
+    private $maxVideoSizeBytes = 60 * 1024 * 1024; // 60 Mo pour les vidéos
 
     public function store()
     {
@@ -17,19 +19,24 @@ class UploadController
 
         $file = $_FILES['file'];
 
-        if ($file['size'] > $this->maxSizeBytes) {
-            http_response_code(400);
-            echo json_encode(['message' => "Le fichier dépasse la taille maximale autorisée (5 Mo)."]);
-            return;
-        }
-
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mime = finfo_file($finfo, $file['tmp_name']);
         finfo_close($finfo);
 
-        if (!in_array($mime, $this->allowedTypes, true)) {
+        $isVideo = in_array($mime, $this->allowedVideoTypes, true);
+        $isImage = in_array($mime, $this->allowedTypes, true);
+
+        if (!$isVideo && !$isImage) {
             http_response_code(400);
-            echo json_encode(['message' => "Type de fichier non autorisé. Formats acceptés : JPG, PNG, WEBP, GIF."]);
+            echo json_encode(['message' => "Type de fichier non autorisé. Formats acceptés : JPG, PNG, WEBP, GIF, MP4, MOV, WEBM."]);
+            return;
+        }
+
+        $maxSize = $isVideo ? $this->maxVideoSizeBytes : $this->maxSizeBytes;
+        if ($file['size'] > $maxSize) {
+            http_response_code(400);
+            $limite = $isVideo ? '60 Mo' : '5 Mo';
+            echo json_encode(['message' => "Le fichier dépasse la taille maximale autorisée ($limite)."]);
             return;
         }
 
@@ -38,6 +45,9 @@ class UploadController
             'image/png' => 'png',
             'image/webp' => 'webp',
             'image/gif' => 'gif',
+            'video/mp4' => 'mp4',
+            'video/quicktime' => 'mov',
+            'video/webm' => 'webm',
         ];
         $ext = $extensions[$mime];
 
@@ -58,6 +68,7 @@ class UploadController
         echo json_encode([
             'message' => 'Fichier téléversé avec succès.',
             'path' => '/uploads/' . $filename,
+            'type' => $isVideo ? 'video' : 'image',
         ]);
     }
 }

@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `realisations` (
   `description` TEXT,
   `categorie` VARCHAR(150) DEFAULT NULL,
   `image` VARCHAR(255) DEFAULT NULL,
+  `video` VARCHAR(255) DEFAULT NULL,
   `lieu` VARCHAR(255) DEFAULT NULL,
   `date_realisation` DATE DEFAULT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

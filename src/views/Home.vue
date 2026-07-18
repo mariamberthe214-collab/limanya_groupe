@@ -1,7 +1,27 @@
 <script setup>
+import { ref, onMounted } from 'vue'
+import api from '../services/api'
+import { getImageUrl } from '../utils/images'
 import { buildWhatsAppLink } from '../utils/whatsapp'
 
 const whatsappLink = buildWhatsAppLink('Bonjour LIMANYA Groupe, je souhaite un devis pour un projet.')
+
+const videos = ref([])
+const chargementVideos = ref(true)
+
+const chargerVideos = async () => {
+  chargementVideos.value = true
+  try {
+    const response = await api.get('/realisations')
+    videos.value = response.data.filter((r) => r.video).slice(0, 3)
+  } catch (error) {
+    console.error(error)
+  } finally {
+    chargementVideos.value = false
+  }
+}
+
+onMounted(chargerVideos)
 
 const stats = [
   { value: '15+', label: "Années d'expertise" },
@@ -159,6 +179,33 @@ const highlights = [
             <span class="depth-marker">03 · Exécution</span>
             <h5 class="mt-2">Forage & mise en service</h5>
             <p class="text-muted small mb-0">Foration, équipement et essais de pompage.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDÉOS DE CHANTIER -->
+  <section class="py-5 my-4" v-if="!chargementVideos && videos.length > 0">
+    <div class="container">
+      <div class="text-center mb-5" v-reveal>
+        <span class="eyebrow">Sur le terrain</span>
+        <h2 class="mt-3">Nos chantiers en vidéo</h2>
+        <p class="text-muted mx-auto" style="max-width:640px">Un aperçu direct de nos interventions, filmées sur nos sites de forage et d'assainissement.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4" v-for="(v, i) in videos" :key="v.id" v-reveal="i * 100">
+          <div class="video-card">
+            <video
+              :src="getImageUrl(v.video)"
+              :poster="v.image ? getImageUrl(v.image) : ''"
+              controls
+              preload="metadata"
+              class="w-100"></video>
+            <div class="video-caption">
+              <strong>{{ v.titre }}</strong>
+              <span v-if="v.lieu" class="text-muted small d-block">{{ v.lieu }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -412,5 +459,26 @@ const highlights = [
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.video-card {
+  background: var(--lg-surface);
+  border: 1px solid var(--lg-line);
+  border-radius: 1.1rem;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.video-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(23, 20, 15, 0.1);
+}
+.video-card video {
+  display: block;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #000;
+}
+.video-caption {
+  padding: 1rem 1.1rem;
 }
 </style>

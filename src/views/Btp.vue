@@ -117,7 +117,7 @@ onMounted(chargerRealisations)
                 v-else-if="projet.image"
                 :src="getImageUrl(projet.image)"
                 :alt="projet.titre"
-                class="w-100 h-100 object-fit-cover">
+                class="w-100 h-100 object-fit-contain p-2 bg-white">
               <div v-else class="d-flex align-items-center justify-content-center text-muted">
                 <i class="bi bi-image fs-1"></i>
               </div>

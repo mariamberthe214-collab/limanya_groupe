@@ -1,5 +1,6 @@
 <script setup>
 import { inject } from 'vue'
+import logo from '../../assets/logo.png'
 
 const sidebarOpen = inject('sidebarOpen')
 const closeSidebar = inject('closeSidebar')
@@ -8,8 +9,7 @@ const closeSidebar = inject('closeSidebar')
 <template>
   <aside class="sidebar" :class="{ 'sidebar-open': sidebarOpen }">
     <div class="logo">
-      <span class="logo-mark">L</span>
-      <span class="logo-text">LIMANYA</span>
+      <img :src="logo" alt="Limanya Groupe" class="logo-img" />
 
       <button class="sidebar-close d-lg-none" @click="closeSidebar" aria-label="Fermer le menu">
         <i class="bi bi-x-lg"></i>
@@ -92,24 +92,9 @@ const closeSidebar = inject('closeSidebar')
   padding: 0 6px;
 }
 
-.logo-mark {
-  width: 38px;
-  height: 38px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  background: #bf571c;
-  color: #fff;
-  font-weight: 800;
-  font-size: 1.1rem;
-}
-
-.logo-text {
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  font-size: 1.05rem;
-  color: #f4f1e9;
+.logo-img {
+  max-width: 168px;
+  height: auto;
 }
 
 .sidebar-nav {

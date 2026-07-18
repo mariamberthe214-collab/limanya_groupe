@@ -1,10 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../../services/api'
 
 const router = useRouter()
 const utilisateur = ref(null)
+const toggleSidebar = inject('toggleSidebar')
 
 const initiales = (nom) => {
   if (!nom) return 'A'
@@ -42,21 +43,26 @@ const deconnexion = async () => {
 <template>
   <nav class="navbar-admin">
 
-    <h4>Espace administration</h4>
+    <div class="left">
+      <button class="burger d-lg-none" @click="toggleSidebar" aria-label="Ouvrir le menu">
+        <i class="bi bi-list"></i>
+      </button>
+      <h4>Espace administration</h4>
+    </div>
 
     <div class="right">
 
       <span class="admin-user">
         <span class="avatar">{{ initiales(utilisateur?.nom) }}</span>
-        {{ utilisateur?.nom || 'Administrateur' }}
+        <span class="admin-name">{{ utilisateur?.nom || 'Administrateur' }}</span>
       </span>
 
       <button
         class="btn btn-outline-danger btn-sm"
         @click="deconnexion">
 
-        <i class="bi bi-box-arrow-right me-1"></i>
-        Déconnexion
+        <i class="bi bi-box-arrow-right me-lg-1"></i>
+        <span class="deco-label">Déconnexion</span>
 
       </button>
 
@@ -76,6 +82,32 @@ const deconnexion = async () => {
     align-items:center;
     padding:0 30px;
     border-bottom:1px solid #ece7dd;
+    gap:12px;
+
+}
+
+.left{
+
+    display:flex;
+    align-items:center;
+    gap:14px;
+    min-width:0;
+
+}
+
+.burger{
+
+    background:transparent;
+    border:1px solid #ece7dd;
+    border-radius:10px;
+    width:38px;
+    height:38px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.3rem;
+    color:#2c281f;
+    flex-shrink:0;
 
 }
 
@@ -85,6 +117,9 @@ const deconnexion = async () => {
     font-size:1.1rem;
     font-weight:700;
     color:#2c281f;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 
 }
 
@@ -119,6 +154,31 @@ const deconnexion = async () => {
     justify-content:center;
     font-weight:700;
     font-size:0.8rem;
+    flex-shrink:0;
+
+}
+
+@media (max-width: 991px) {
+
+    .navbar-admin{
+        padding:0 16px;
+    }
+
+    .navbar-admin h4{
+        font-size:0.95rem;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .admin-name{
+        display:none;
+    }
+
+    .deco-label{
+        display:none;
+    }
 
 }
 

@@ -29,7 +29,7 @@ onMounted(() => {
 <template>
   <section class="page-section py-5 bg-light">
     <div class="container">
-      <div class="text-center mb-5">
+      <div class="text-center mb-5" v-reveal>
         <span class="eyebrow text-uppercase">Actualités</span>
         <h1 class="display-6 fw-bold mt-3">Les dernières nouvelles de LIMANYA Groupe</h1>
         <p class="text-muted mt-3">Suivez nos projets récents, nos chantiers en cours et nos initiatives en énergie renouvelable.</p>

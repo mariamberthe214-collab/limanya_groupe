@@ -287,7 +287,7 @@ const advantages = [
 
   <div class="container">
 
-    <div class="text-center mb-5">
+    <div class="text-center mb-5" v-reveal>
 
       <span class="section-tag">
         Notre méthode
@@ -452,7 +452,7 @@ const advantages = [
 
   <div class="container">
 
-    <div class="text-center mb-5">
+    <div class="text-center mb-5" v-reveal>
       <span class="eyebrow">Nos réalisations</span>
       <h2 class="mt-3">Forages et ouvrages hydrauliques réalisés</h2>
     </div>

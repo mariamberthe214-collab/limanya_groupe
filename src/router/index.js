@@ -29,18 +29,18 @@ import AdminUtilisateurs from '../views/admin/AdminUtilisateurs.vue'
 
 const routes = [
 
-  { path: '/', name: 'home', component: Home },
-  { path: '/realisations-btp-services-de-construction', name: 'realisations', component: Realisations },
-  { path: '/materiels-de-forages', name: 'materiels', component: Materiels },
-  { path: '/contacts', name: 'contacts', component: Contact },
-  { path: '/apropos', name: 'about', component: About },
-  { path: '/forage', name: 'forage', component: Forage },
-  { path: '/btp', name: 'btp', component: Btp },
-  { path: '/assainissement', name: 'assainissement', component: Assainissement },
-  { path: '/etudes-geophysiques', name: 'etudes-geophysiques', component: EtudesGeophysiques },
+  { path: '/', name: 'home', component: Home, meta: { title: 'LIMANYA GROUPE — Forages Hydrauliques en Côte d\'Ivoire' } },
+  { path: '/realisations-btp-services-de-construction', name: 'realisations', component: Realisations, meta: { title: 'Nos Réalisations — LIMANYA GROUPE' } },
+  { path: '/materiels-de-forages', name: 'materiels', component: Materiels, meta: { title: 'Vente de Matériels — LIMANYA GROUPE' } },
+  { path: '/contacts', name: 'contacts', component: Contact, meta: { title: 'Contact — LIMANYA GROUPE' } },
+  { path: '/apropos', name: 'about', component: About, meta: { title: 'À propos — LIMANYA GROUPE' } },
+  { path: '/forage', name: 'forage', component: Forage, meta: { title: 'Forages Hydrauliques — LIMANYA GROUPE' } },
+  { path: '/btp', name: 'btp', component: Btp, meta: { title: 'BTP & Génie Civil — LIMANYA GROUPE' } },
+  { path: '/assainissement', name: 'assainissement', component: Assainissement, meta: { title: 'Assainissement — LIMANYA GROUPE' } },
+  { path: '/etudes-geophysiques', name: 'etudes-geophysiques', component: EtudesGeophysiques, meta: { title: 'Études Géophysiques — LIMANYA GROUPE' } },
   { path: '/location', redirect: '/materiels-de-forages' },
-  { path: '/actualites', name: 'actualites', component: Actualites },
-  { path: '/admin/login', name: 'admin-login',component: AdminLogin},
+  { path: '/actualites', name: 'actualites', component: Actualites, meta: { title: 'Actualités — LIMANYA GROUPE' } },
+  { path: '/admin/login', name: 'admin-login',component: AdminLogin, meta: { title: 'Connexion admin — LIMANYA GROUPE' }},
  {
   path: '/admin',
   component: AdminLayout,
@@ -109,6 +109,10 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+})
+
+router.afterEach((to) => {
+  document.title = to.meta?.title || 'LIMANYA GROUPE'
 })
 
 export default router

@@ -115,7 +115,7 @@ const services = [
   <section class="py-5">
     <div class="container">
 
-      <div class="text-center mb-5">
+      <div class="text-center mb-5" v-reveal>
         <span class="eyebrow">Nos domaines d'intervention</span>
         <h2 class="mt-3">
           Des solutions complètes pour tous vos projets
@@ -161,7 +161,7 @@ const services = [
   <section class="py-5 bg-light">
   <div class="container">
 
-    <div class="text-center mb-5">
+    <div class="text-center mb-5" v-reveal>
 
       <span class="eyebrow">Notre expérience</span>
 
@@ -232,7 +232,7 @@ const services = [
 
   <section class="py-5 bg-light">
     <div class="container">
-      <div class="text-center mb-5">
+      <div class="text-center mb-5" v-reveal>
         <span class="eyebrow">Pourquoi choisir Limanya Groupe</span>
         <h2 class="mt-3">Des solutions locales avec une expertise technique forte</h2>
       </div>
@@ -268,7 +268,7 @@ const services = [
   <section class="py-5">
     <div class="container">
 
-      <div class="text-center mb-5">
+      <div class="text-center mb-5" v-reveal>
         <span class="eyebrow">Notre engagement</span>
         <h2 class="mt-3">Politique Qualité, Hygiène, Sécurité et Environnement (QHSE)</h2>
         <p class="text-muted mx-auto" style="max-width:700px">

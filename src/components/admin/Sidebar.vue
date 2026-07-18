@@ -1,42 +1,53 @@
+<script setup>
+import { inject } from 'vue'
+
+const sidebarOpen = inject('sidebarOpen')
+const closeSidebar = inject('closeSidebar')
+</script>
+
 <template>
-  <aside class="sidebar">
+  <aside class="sidebar" :class="{ 'sidebar-open': sidebarOpen }">
     <div class="logo">
       <span class="logo-mark">L</span>
       <span class="logo-text">LIMANYA</span>
+
+      <button class="sidebar-close d-lg-none" @click="closeSidebar" aria-label="Fermer le menu">
+        <i class="bi bi-x-lg"></i>
+      </button>
     </div>
 
     <nav class="sidebar-nav">
-      <RouterLink to="/admin/dashboard">
+      <RouterLink to="/admin/dashboard" @click="closeSidebar">
         <i class="bi bi-grid-1x2-fill"></i>
         <span>Dashboard</span>
       </RouterLink>
 
-      <RouterLink to="/admin/actualites">
+      <RouterLink to="/admin/actualites" @click="closeSidebar">
         <i class="bi bi-newspaper"></i>
         <span>Actualités</span>
       </RouterLink>
 
-      <RouterLink to="/admin/realisations">
+      <RouterLink to="/admin/realisations" @click="closeSidebar">
         <i class="bi bi-building"></i>
         <span>Réalisations</span>
       </RouterLink>
 
-      <RouterLink to="/admin/equipements">
+      <RouterLink to="/admin/equipements" @click="closeSidebar">
         <i class="bi bi-truck"></i>
         <span>Équipements</span>
       </RouterLink>
 
-      <RouterLink to="/admin/devis">
+      <RouterLink to="/admin/devis" @click="closeSidebar">
         <i class="bi bi-file-earmark-text"></i>
         <span>Devis</span>
       </RouterLink>
 
-      <RouterLink to="/admin/contacts" class="nav-link">
+      <RouterLink to="/admin/contacts" class="nav-link" @click="closeSidebar">
         <i class="bi bi-envelope"></i>
         <span>Messages</span>
       </RouterLink>
 
-      <RouterLink to="/admin/utilisateurs">
+      <RouterLink to="/admin/utilisateurs" @click="closeSidebar">
         <i class="bi bi-person"></i>
         <span>Utilisateurs</span>
       </RouterLink>
@@ -60,6 +71,17 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  flex-shrink: 0;
+}
+
+.sidebar-close {
+  margin-left: auto;
+  background: transparent;
+  border: 0;
+  color: #e9e3d7;
+  font-size: 1.1rem;
+  padding: 6px;
+  line-height: 1;
 }
 
 .logo {
@@ -149,6 +171,34 @@ a:hover {
 .sidebar-footer-link:hover {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
+}
+
+.sidebar-close {
+  display: none;
+}
+
+@media (max-width: 991px) {
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    width: 82vw;
+    max-width: 300px;
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.25);
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-close {
+    display: inline-flex;
+  }
+
 }
 
 </style>

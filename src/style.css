@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
 
 /* ==========================================================================
    LIMANYA GROUPE — Thème global
@@ -7,23 +7,27 @@
 
 :root {
   /* Couleurs de marque */
-  --lg-cream: #f4f1e9;
-  --lg-cream-2: #ece7db;
+  --lg-cream: #f0ede4;
+  --lg-cream-2: #e8e3d5;
   --lg-surface: #ffffff;
-  --lg-ink: #17140f;
+  --lg-ink: #14110d;
   --lg-ink-soft: #2c281f;
   --lg-muted: #6f685a;
-  --lg-line: #e2dccd;
+  --lg-line: #ddd7c6;
   --lg-amber: #bf571c;
   --lg-amber-dark: #9d4514;
   --lg-amber-soft: #f6e7da;
+  --lg-water: #1d6fa5;
+  --lg-water-dark: #14507a;
+  --lg-water-soft: #dfeaf2;
+  --lg-growth: #2e8b4f;
 
   /* Bootstrap overrides */
   --bs-primary: #bf571c;
   --bs-primary-rgb: 191, 87, 28;
   --bs-body-color: #2c281f;
-  --bs-body-bg: #f4f1e9;
-  --bs-border-color: #e2dccd;
+  --bs-body-bg: #f0ede4;
+  --bs-border-color: #ddd7c6;
   --bs-font-sans-serif: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
 
   font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
@@ -119,6 +123,18 @@ a:hover {
   overflow: hidden;
   background: linear-gradient(135deg, #17140f 0%, #2c281f 100%);
   color: #f4f1e9;
+}
+
+.page-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.16;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.5' stroke-width='1.2'%3E%3Cpath d='M-50 80 C 150 20, 300 140, 450 60 S 700 40, 820 100'/%3E%3Cpath d='M-50 160 C 150 100, 300 220, 450 140 S 700 120, 820 180'/%3E%3Cpath d='M-50 240 C 150 180, 300 300, 450 220 S 700 200, 820 260'/%3E%3Cpath d='M-50 320 C 150 260, 300 380, 450 300 S 700 280, 820 340'/%3E%3Cpath d='M-50 400 C 150 340, 300 460, 450 380 S 700 360, 820 420'/%3E%3Cpath d='M-50 480 C 150 420, 300 540, 450 460 S 700 440, 820 500'/%3E%3Cpath d='M-50 560 C 150 500, 300 620, 450 540 S 700 520, 820 580'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 700px 700px;
+  pointer-events: none;
 }
 
 .page-hero::before {
@@ -538,4 +554,75 @@ textarea:focus {
 ::selection {
   background: var(--lg-amber);
   color: #fff;
+}
+
+/* ==========================================================================
+   Signature — Motif topographique (courbes de niveau)
+   Clin d'œil direct à l'étude géophysique et aux relevés de terrain.
+   Utilisé en fond de section, jamais au premier plan.
+   ========================================================================== */
+.contour-field {
+  position: relative;
+  isolation: isolate;
+}
+
+.contour-field::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'%3E%3Cg fill='none' stroke='%23bf571c' stroke-opacity='0.09' stroke-width='1.4'%3E%3Cpath d='M-50 80 C 150 20, 300 140, 450 60 S 700 40, 820 100'/%3E%3Cpath d='M-50 160 C 150 100, 300 220, 450 140 S 700 120, 820 180'/%3E%3Cpath d='M-50 240 C 150 180, 300 300, 450 220 S 700 200, 820 260'/%3E%3Cpath d='M-50 320 C 150 260, 300 380, 450 300 S 700 280, 820 340'/%3E%3Cpath d='M-50 400 C 150 340, 300 460, 450 380 S 700 360, 820 420'/%3E%3Cpath d='M-50 480 C 150 420, 300 540, 450 460 S 700 440, 820 500'/%3E%3Cpath d='M-50 560 C 150 500, 300 620, 450 540 S 700 520, 820 580'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 600px 600px;
+}
+
+.contour-field-dark::before {
+  opacity: 0.14;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.5' stroke-width='1.2'%3E%3Cpath d='M-50 80 C 150 20, 300 140, 450 60 S 700 40, 820 100'/%3E%3Cpath d='M-50 160 C 150 100, 300 220, 450 140 S 700 120, 820 180'/%3E%3Cpath d='M-50 240 C 150 180, 300 300, 450 220 S 700 200, 820 260'/%3E%3Cpath d='M-50 320 C 150 260, 300 380, 450 300 S 700 280, 820 340'/%3E%3Cpath d='M-50 400 C 150 340, 300 460, 450 380 S 700 360, 820 420'/%3E%3Cpath d='M-50 480 C 150 420, 300 540, 450 460 S 700 440, 820 500'/%3E%3Cpath d='M-50 560 C 150 500, 300 620, 450 540 S 700 520, 820 580'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 700px 700px;
+}
+
+/* ---------- Repères techniques (profondeurs, données) ---------- */
+.depth-marker {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--lg-water);
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* ---------- Accent eau ---------- */
+.text-water {
+  color: var(--lg-water) !important;
+}
+
+.bg-water-soft {
+  background: var(--lg-water-soft) !important;
+}
+
+/* ==========================================================================
+   Révélation au défilement (discrète, respecte prefers-reduced-motion)
+   ========================================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

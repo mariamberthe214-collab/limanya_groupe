@@ -61,7 +61,7 @@ onMounted(chargerRealisations)
 
     <div class="container">
 
-      <div class="text-center mb-5">
+      <div class="text-center mb-5" v-reveal>
         <span class="section-tag">Notre méthode</span>
         <h2 class="mt-3">Les étapes de notre étude géophysique</h2>
         <p class="method-intro">
@@ -116,7 +116,7 @@ onMounted(chargerRealisations)
   <section class="py-5 bg-light">
     <div class="container">
 
-      <div class="text-center mb-5">
+      <div class="text-center mb-5" v-reveal>
         <span class="eyebrow">Nos réalisations</span>
         <h2 class="mt-3">Études géophysiques réalisées</h2>
       </div>

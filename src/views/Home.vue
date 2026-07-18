@@ -53,32 +53,41 @@ const highlights = [
 
 <template>
   <!-- HERO -->
-  <section class="home-hero d-flex align-items-center text-white">
+  <section class="home-hero contour-field-dark d-flex align-items-center text-white">
     <div class="overlay"></div>
     <div class="container py-5 position-relative">
       <div class="row align-items-center g-5">
         <div class="col-lg-7">
-          <span class="hero-eyebrow">Forages Hydrauliques • Études Géophysiques • Assainissement • BTP</span>
-          <h1 class="hero-title mt-4">L'eau, notre <span class="text-amber">expertise</span></h1>
-          <p class="lead text-white-75 mt-4">LIMANYA Groupe réalise vos forages hydrauliques, villageois, agricoles et industriels, en Côte d'Ivoire. Nous accompagnons aussi vos projets d'études géophysiques, d'assainissement, de BTP et de vente d'équipements.</p>
-          <div class="d-flex flex-column flex-sm-row gap-3 mt-4">
+          <span class="hero-eyebrow" v-reveal>Forages Hydrauliques • Études Géophysiques • Assainissement • BTP</span>
+          <h1 class="hero-title mt-4" v-reveal="80">L'eau, notre <span class="text-amber">expertise</span></h1>
+          <p class="lead text-white-75 mt-4" v-reveal="160">LIMANYA Groupe réalise vos forages hydrauliques, villageois, agricoles et industriels, en Côte d'Ivoire. Nous accompagnons aussi vos projets d'études géophysiques, d'assainissement, de BTP et de vente d'équipements.</p>
+          <div class="d-flex flex-column flex-sm-row gap-3 mt-4" v-reveal="240">
             <router-link to="/contacts" class="btn btn-primary btn-lg">Demander un devis</router-link>
             <a :href="whatsappLink" target="_blank" class="btn btn-outline-light btn-lg"><i class="bi bi-whatsapp me-2"></i>WhatsApp</a>
           </div>
-          <div class="d-flex align-items-center gap-2 mt-4">
-            <span class="text-warning fs-5">★★★★★</span>
-            <span class="text-white-75">Satisfaction garantie sur chaque projet</span>
-          </div>
         </div>
         <div class="col-lg-5 d-none d-lg-block">
-          <div class="hero-panel p-4">
-            <h3 class="h5 mb-4 text-white">Nos expertises</h3>
-            <ul class="list-unstyled mb-0 hero-list">
-              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>Forages Hydrauliques</li>
-              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>Études Géophysiques</li>
-              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>Assainissement</li>
-              <li><i class="bi bi-check-circle-fill text-amber me-2"></i>BTP & Génie Civil</li>
-            </ul>
+          <div class="hero-panel p-4" v-reveal="200">
+            <h3 class="h6 mb-1 text-white">Nos forages descendent jusqu'à</h3>
+            <p class="depth-caption mb-4">Profondeurs réelles de nos derniers chantiers</p>
+            <div class="depth-scale">
+              <div class="depth-scale-line"></div>
+              <div class="depth-row">
+                <span class="depth-marker">0 m</span>
+                <span class="depth-track"><span class="depth-fill" style="width:0%"></span></span>
+                <span class="depth-place">Surface</span>
+              </div>
+              <div class="depth-row">
+                <span class="depth-marker">51 m</span>
+                <span class="depth-track"><span class="depth-fill" style="width:85%"></span></span>
+                <span class="depth-place">Songon</span>
+              </div>
+              <div class="depth-row">
+                <span class="depth-marker">60 m</span>
+                <span class="depth-track"><span class="depth-fill" style="width:100%"></span></span>
+                <span class="depth-place">Blolequin</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -89,7 +98,7 @@ const highlights = [
   <section class="stats-bar bg-ink">
     <div class="container">
       <div class="row text-center py-4">
-        <div class="col-6 col-md-3 py-3" v-for="stat in stats" :key="stat.label">
+        <div class="col-6 col-md-3 py-3" v-for="(stat, i) in stats" :key="stat.label" v-reveal="i * 80">
           <div class="stat-value">{{ stat.value }}</div>
           <div class="stat-label">{{ stat.label }}</div>
         </div>
@@ -101,7 +110,7 @@ const highlights = [
   <section class="py-5 my-4">
     <div class="container">
       <div class="row gy-5 align-items-center">
-        <div class="col-lg-6">
+        <div class="col-lg-6" v-reveal>
           <span class="eyebrow">Notre savoir-faire</span>
           <h2 class="mt-3">Une expertise complète autour du forage hydraulique</h2>
           <p class="text-muted mt-3">Spécialiste des forages hydrauliques, LIMANYA GROUPE maîtrise l'ensemble de la chaîne de valeur : de l'étude géophysique à la mise en service, en passant par l'assainissement et le BTP.</p>
@@ -113,9 +122,43 @@ const highlights = [
           </ul>
           <router-link to="/apropos" class="btn btn-outline-primary mt-3">En savoir plus sur nous</router-link>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6" v-reveal="150">
           <div class="expertise-img rounded-4 overflow-hidden shadow">
             <img src="/images/hero-construction.png" alt="Chantier de construction Limanya Groupe" class="w-100 h-100" style="object-fit: cover;" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE : LA COURBE DU SOUS-SOL -->
+  <section class="py-5 my-4 contour-field">
+    <div class="container">
+      <div class="text-center mb-5" v-reveal>
+        <span class="eyebrow">Notre méthode</span>
+        <h2 class="mt-3">Nous lisons le sous-sol avant de forer</h2>
+        <p class="text-muted mx-auto" style="max-width:640px">Chaque forage commence par une étude géophysique : nous cartographions les fractures et les nappes avant la première rotation de foret.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4" v-reveal>
+          <div class="method-mini">
+            <span class="depth-marker">01 · Terrain</span>
+            <h5 class="mt-2">Relevés géophysiques</h5>
+            <p class="text-muted small mb-0">Mesures électriques et sismiques sur le site.</p>
+          </div>
+        </div>
+        <div class="col-md-4" v-reveal="120">
+          <div class="method-mini">
+            <span class="depth-marker">02 · Analyse</span>
+            <h5 class="mt-2">Recherche de fracture</h5>
+            <p class="text-muted small mb-0">Identification précise des zones porteuses d'eau.</p>
+          </div>
+        </div>
+        <div class="col-md-4" v-reveal="240">
+          <div class="method-mini">
+            <span class="depth-marker">03 · Exécution</span>
+            <h5 class="mt-2">Forage & mise en service</h5>
+            <p class="text-muted small mb-0">Foration, équipement et essais de pompage.</p>
           </div>
         </div>
       </div>
@@ -216,11 +259,57 @@ const highlights = [
   border-radius: 1.25rem;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  animation: fadeUp 0.9s ease both;
 }
-.hero-list li {
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 0.85rem;
+.depth-caption {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.82rem;
+}
+.depth-scale {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.depth-row {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr 5rem;
+  align-items: center;
+  gap: 0.85rem;
+}
+.depth-row .depth-marker {
+  color: #f6e7da;
+}
+.depth-track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+.depth-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--lg-amber), #f0a15c);
+  animation: fillBar 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes fillBar {
+  from { width: 0 !important; }
+}
+.depth-place {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: right;
+}
+.method-mini {
+  background: var(--lg-surface);
+  border: 1px solid var(--lg-line);
+  border-radius: 1.1rem;
+  padding: 1.75rem;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.method-mini:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(23, 20, 15, 0.08);
 }
 
 /* Stats */

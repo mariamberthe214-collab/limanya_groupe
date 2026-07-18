@@ -1,7 +1,7 @@
 <template>
   <section class="py-5">
     <div class="container">
-      <div class="text-center mb-5">
+      <div class="text-center mb-5" v-reveal>
         <span class="eyebrow text-uppercase">Services & Réalisations</span>
         <h1 class="display-6 fw-bold mt-3">Forages Hydrauliques, Études Géophysiques, Assainissement et BTP</h1>
         <p class="text-muted mt-3">Spécialiste des forages hydrauliques en Côte d'Ivoire, LIMANYA Groupe accompagne aussi vos projets d'études géophysiques, d'assainissement, de BTP et de vente d'équipements.</p>

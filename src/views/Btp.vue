@@ -70,11 +70,11 @@ onMounted(chargerRealisations)
 
   <section class="py-5">
     <div class="container">
-      <div class="text-center mb-5">
+      <div class="text-center mb-5" v-reveal>
         <span class="eyebrow">Nos expertises</span>
         <h2 class="mt-3">Un savoir-faire complet du gros œuvre à la livraison</h2>
       </div>
-      <div class="row g-4">
+      <div class="row g-4" v-reveal>
         <div class="col-md-6" v-for="service in services" :key="service.title">
           <div class="card border-0 shadow-sm h-100 p-4">
             <div class="service-icon mb-3"><i :class="['bi', service.icon]"></i></div>
@@ -89,7 +89,7 @@ onMounted(chargerRealisations)
   <section class="py-5 bg-light">
     <div class="container">
 
-      <div class="text-center mb-5">
+      <div class="text-center mb-5" v-reveal>
         <span class="eyebrow">Nos réalisations</span>
         <h2 class="mt-3">Projets BTP réalisés par LIMANYA Groupe</h2>
       </div>

@@ -49,17 +49,18 @@ const submitContact = async () => {
 
 <template>
   <section class="contact-hero py-5 text-white text-center">
+    <span class="hero-halo" aria-hidden="true"></span>
     <div class="container">
-      <span class="eyebrow" style="color: #f6e7da;">Parlons de votre projet</span>
-      <h1 class="display-5 fw-bold text-white mt-3">Contactez-nous</h1>
-      <p class="lead text-white-75 mt-3">contact@limanyagroupe.com &nbsp;•&nbsp; +225 21 50 04 33 27 &nbsp;•&nbsp; +225 07 77 04 70 57</p>
+      <span class="eyebrow" style="color: #f6e7da;" v-reveal>Parlons de votre projet</span>
+      <h1 class="display-5 fw-bold text-white mt-3" v-reveal="80">Contactez-nous</h1>
+      <p class="lead text-white-75 mt-3" v-reveal="160">contact@limanyagroupe.com &nbsp;•&nbsp; +225 21 50 04 33 27 &nbsp;•&nbsp; +225 07 77 04 70 57</p>
     </div>
   </section>
 
   <section class="py-5 bg-light">
     <div class="container">
       <div class="row gy-4">
-        <div class="col-lg-5">
+        <div class="col-lg-5" v-reveal>
           <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
             <h2>Réseaux sociaux</h2>
             <p class="text-muted">Suivez-nous et contactez-nous via WhatsApp ou Facebook.</p>
@@ -78,7 +79,7 @@ const submitContact = async () => {
             </div>
           </div>
         </div>
-        <div class="col-lg-7">
+        <div class="col-lg-7" v-reveal="120">
           <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
             <h2>Formulaire de contact</h2>
             <form @submit.prevent="submitContact">
@@ -142,5 +143,21 @@ const submitContact = async () => {
 .contact-hero .container {
   position: relative;
   z-index: 1;
+}
+.hero-halo {
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 460px;
+  height: 460px;
+  background: radial-gradient(circle, rgba(191, 87, 28, 0.4), transparent 68%);
+  filter: blur(6px);
+  animation: haloFloat 9s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes haloFloat {
+  0%, 100% { transform: translate(-50%, 0); opacity: 0.85; }
+  50% { transform: translate(-50%, 26px); opacity: 1; }
 }
 </style>

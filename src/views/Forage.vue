@@ -168,11 +168,9 @@ const advantages = [
         <div class="services-list">
 
 
-          <div class="service-item">
+          <div class="service-item" v-reveal>
 
-            <div class="icon">
-              💧
-            </div>
+            <div class="icon"><i class="bi bi-house-heart"></i></div>
 
             <div>
               <h4>Forages villageois</h4>
@@ -185,11 +183,9 @@ const advantages = [
           </div>
 
 
-          <div class="service-item">
+          <div class="service-item" v-reveal="80">
 
-            <div class="icon">
-              🌾
-            </div>
+            <div class="icon"><i class="bi bi-flower1"></i></div>
 
             <div>
               <h4>Forages agricoles</h4>
@@ -202,11 +198,9 @@ const advantages = [
           </div>
 
 
-          <div class="service-item">
+          <div class="service-item" v-reveal="160">
 
-            <div class="icon">
-              🏭
-            </div>
+            <div class="icon"><i class="bi bi-building-gear"></i></div>
 
             <div>
               <h4>Forages industriels</h4>
@@ -219,11 +213,9 @@ const advantages = [
           </div>
 
 
-          <div class="service-item">
+          <div class="service-item" v-reveal="240">
 
-            <div class="icon">
-              📊
-            </div>
+            <div class="icon"><i class="bi bi-graph-up-arrow"></i></div>
 
             <div>
               <h4>Essais de pompage</h4>
@@ -236,11 +228,9 @@ const advantages = [
           </div>
 
 
-          <div class="service-item">
+          <div class="service-item" v-reveal="320">
 
-            <div class="icon">
-              🌍
-            </div>
+            <div class="icon"><i class="bi bi-globe-europe-africa"></i></div>
 
             <div>
               <h4>Études géophysiques</h4>
@@ -253,11 +243,9 @@ const advantages = [
           </div>
 
 
-          <div class="service-item">
+          <div class="service-item" v-reveal="400">
 
-            <div class="icon">
-              🛠️
-            </div>
+            <div class="icon"><i class="bi bi-tools"></i></div>
 
             <div>
               <h4>Réhabilitation & maintenance</h4>
@@ -308,7 +296,7 @@ const advantages = [
     <div class="steps-container">
 
 
-      <div class="step-item">
+      <div class="step-item" v-reveal>
 
         <div class="step-number">
           01
@@ -316,9 +304,7 @@ const advantages = [
 
         <div class="step-content">
 
-          <div class="step-icon">
-            🌍
-          </div>
+          <div class="step-icon"><i class="bi bi-globe-europe-africa"></i></div>
 
           <h4>
             Étude du terrain
@@ -335,7 +321,7 @@ const advantages = [
 
 
 
-      <div class="step-item">
+      <div class="step-item" v-reveal="100">
 
         <div class="step-number">
           02
@@ -343,9 +329,7 @@ const advantages = [
 
         <div class="step-content">
 
-          <div class="step-icon">
-            🔎
-          </div>
+          <div class="step-icon"><i class="bi bi-search"></i></div>
 
           <h4>
             Recherche d'eau
@@ -362,7 +346,7 @@ const advantages = [
 
 
 
-      <div class="step-item">
+      <div class="step-item" v-reveal="200">
 
         <div class="step-number">
           03
@@ -370,9 +354,7 @@ const advantages = [
 
         <div class="step-content">
 
-          <div class="step-icon">
-            🛠️
-          </div>
+          <div class="step-icon"><i class="bi bi-tools"></i></div>
 
           <h4>
             Réalisation du forage
@@ -389,7 +371,7 @@ const advantages = [
 
 
 
-      <div class="step-item">
+      <div class="step-item" v-reveal="300">
 
         <div class="step-number">
           04
@@ -397,9 +379,7 @@ const advantages = [
 
         <div class="step-content">
 
-          <div class="step-icon">
-            ⚡
-          </div>
+          <div class="step-icon"><i class="bi bi-lightning-charge"></i></div>
 
           <h4>
             Installation du pompage
@@ -416,7 +396,7 @@ const advantages = [
 
 
 
-      <div class="step-item">
+      <div class="step-item" v-reveal="400">
 
         <div class="step-number">
           05
@@ -424,9 +404,7 @@ const advantages = [
 
         <div class="step-content">
 
-          <div class="step-icon">
-            ✅
-          </div>
+          <div class="step-icon"><i class="bi bi-check2-circle"></i></div>
 
           <h4>
             Mise en service & suivi
@@ -467,7 +445,7 @@ const advantages = [
     </div>
 
     <div v-else class="row g-4">
-      <div class="col-md-6 col-lg-4" v-for="projet in realisations" :key="projet.id">
+      <div class="col-md-6 col-lg-4" v-for="(projet, i) in realisations" :key="projet.id" v-reveal="i * 90">
         <div class="card border-0 shadow-sm h-100 overflow-hidden">
           <div class="ratio ratio-4x3 bg-secondary bg-opacity-10">
             <video

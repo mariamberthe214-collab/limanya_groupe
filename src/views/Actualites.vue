@@ -152,6 +152,9 @@ onMounted(chargerActualites)
                 </div>
                 <h2 class="feature-title">{{ aLaUne.titre }}</h2>
                 <p class="feature-excerpt">{{ aLaUne.contenu }}</p>
+                <router-link :to="`/actualites/${aLaUne.id}`" class="read-more-link">
+                  Lire l'article complet <i class="bi bi-arrow-right"></i>
+                </router-link>
               </div>
             </div>
           </div>
@@ -204,6 +207,9 @@ onMounted(chargerActualites)
                 <span v-if="post.auteur" class="news-author">
                   <i class="bi bi-person-circle me-1"></i>{{ post.auteur }}
                 </span>
+                <router-link :to="`/actualites/${post.id}`" class="read-more-link">
+                  Lire la suite <i class="bi bi-arrow-right"></i>
+                </router-link>
               </div>
             </article>
           </div>
@@ -635,5 +641,15 @@ onMounted(chargerActualites)
   .feature-body {
     padding: 1.75rem;
   }
+}.read-more-link {
+  display: inline-block;
+  margin-top: 0.9rem;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--lg-amber, #bf571c);
+  text-decoration: none;
+}
+.read-more-link:hover {
+  text-decoration: underline;
 }
 </style>

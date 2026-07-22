@@ -8,6 +8,7 @@ import Materiels from '../views/Materiels.vue'
 import EtudesGeophysiques from '../views/EtudesGeophysiques.vue'
 import Realisations from '../views/Realisations.vue'
 import Actualites from '../views/Actualites.vue'
+import ActualiteDetail from '../views/ActualiteDetail.vue'
 import Contact from '../views/Contact.vue'
 import AdminLogin from '../views/AdminLogin.vue'
 import Dashboard from '../views/admin/Dashboard.vue'
@@ -40,6 +41,7 @@ const routes = [
   { path: '/etudes-geophysiques', name: 'etudes-geophysiques', component: EtudesGeophysiques, meta: { title: 'Études Géophysiques — LIMANYA GROUPE' } },
   { path: '/location', redirect: '/materiels-de-forages' },
   { path: '/actualites', name: 'actualites', component: Actualites, meta: { title: 'Actualités — LIMANYA GROUPE' } },
+  { path: '/actualites/:id', name: 'actualite-detail', component: ActualiteDetail, meta: { title: 'Article — LIMANYA GROUPE' } },
   { path: '/admin/login', name: 'admin-login',component: AdminLogin, meta: { title: 'Connexion admin — LIMANYA GROUPE' }},
  {
   path: '/admin',

@@ -9,6 +9,18 @@ const whatsappLink = buildWhatsAppLink('Bonjour LIMANYA Groupe, je souhaite un d
 const videos = ref([])
 const chargementVideos = ref(true)
 
+const lightbox = ref(null) // { type: 'image'|'video', src, titre }
+
+const ouvrirLightboxVideo = (v) => {
+  lightbox.value = { type: 'video', src: getImageUrl(v.video), titre: v.titre }
+  document.body.style.overflow = 'hidden'
+}
+
+const fermerLightbox = () => {
+  lightbox.value = null
+  document.body.style.overflow = ''
+}
+
 const chargerVideos = async () => {
   chargementVideos.value = true
   try {
@@ -195,11 +207,10 @@ const highlights = [
       </div>
       <div class="row g-4">
         <div class="col-md-4" v-for="(v, i) in videos" :key="v.id" v-reveal="i * 100">
-          <div class="video-card">
+          <div class="video-card media-clickable" @click="ouvrirLightboxVideo(v)">
             <video
               :src="getImageUrl(v.video)"
               :poster="v.image ? getImageUrl(v.image) : ''"
-              controls
               preload="metadata"
               class="w-100"></video>
             <div class="video-caption">
@@ -267,6 +278,26 @@ const highlights = [
       </div>
     </div>
   </section>
+
+  <!-- LIGHTBOX -->
+  <transition name="lb-fade">
+    <div v-if="lightbox" class="lightbox" @click="fermerLightbox">
+      <button class="lightbox-close" @click="fermerLightbox" aria-label="Fermer">
+        <i class="bi bi-x-lg"></i>
+      </button>
+      <div class="lightbox-inner" @click.stop>
+        <video
+          v-if="lightbox.type === 'video'"
+          :src="lightbox.src"
+          controls
+          autoplay
+          class="lightbox-media"
+        ></video>
+        <img v-else :src="lightbox.src" :alt="lightbox.titre" class="lightbox-media" />
+        <p class="lightbox-caption">{{ lightbox.titre }}</p>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <style scoped>
@@ -480,5 +511,64 @@ const highlights = [
 }
 .video-caption {
   padding: 1rem 1.1rem;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(15, 13, 9, 0.92);
+  backdrop-filter: blur(6px);
+}
+.lightbox-inner {
+  max-width: 960px;
+  width: 100%;
+  text-align: center;
+  animation: lbZoom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lightbox-media {
+  max-width: 100%;
+  max-height: 78vh;
+  border-radius: 1rem;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+}
+.lightbox-caption {
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 1rem;
+  font-weight: 500;
+}
+.lightbox-close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.lightbox-close:hover {
+  background: var(--lg-amber);
+  transform: rotate(90deg);
+}
+@keyframes lbZoom {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.lb-fade-enter-active,
+.lb-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.lb-fade-enter-from,
+.lb-fade-leave-to {
+  opacity: 0;
 }
 </style>

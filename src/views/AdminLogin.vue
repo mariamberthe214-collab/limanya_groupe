@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../services/api'
+import logo from '../assets/logo.png'
 
 const router = useRouter()
 const erreur = ref('')
@@ -41,8 +42,7 @@ const password = ref('')
     <div class="login-card">
 
         <div class="login-brand">
-            <span class="login-mark">L</span>
-            <span class="login-name">LIMANYA GROUPE</span>
+            <img :src="logo" alt="Limanya Groupe" class="login-logo" />
         </div>
 
         <h2 class="login-title">Connexion administrateur</h2>
@@ -117,22 +117,9 @@ const password = ref('')
   margin-bottom: 24px;
 }
 
-.login-mark {
-  width: 40px;
-  height: 40px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 11px;
-  background: #bf571c;
-  color: #fff;
-  font-weight: 800;
-}
-
-.login-name {
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #2c281f;
+.login-logo {
+  max-width: 210px;
+  height: auto;
 }
 
 .login-title {

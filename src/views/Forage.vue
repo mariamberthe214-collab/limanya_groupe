@@ -18,6 +18,33 @@ const lastWhatsAppLink = ref('')
 const realisations = ref([])
 const chargementRealisations = ref(true)
 
+const lightbox = ref(null) // { type: 'image'|'video', src, titre }
+
+const estVideo = (url) => {
+  if (!url) return false
+  return /\/video\//.test(url) || /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(url)
+}
+
+const ouvrirLightbox = (projet) => {
+  if (projet.video) {
+    lightbox.value = { type: 'video', src: getImageUrl(projet.video), titre: projet.titre }
+  } else if (projet.image) {
+    lightbox.value = {
+      type: estVideo(projet.image) ? 'video' : 'image',
+      src: getImageUrl(projet.image),
+      titre: projet.titre,
+    }
+  } else {
+    return
+  }
+  document.body.style.overflow = 'hidden'
+}
+
+const fermerLightbox = () => {
+  lightbox.value = null
+  document.body.style.overflow = ''
+}
+
 const formatDate = (date) => {
   if (!date) return ''
   return new Date(date).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
@@ -447,7 +474,7 @@ const advantages = [
     <div v-else class="row g-4">
       <div class="col-md-6 col-lg-4" v-for="(projet, i) in realisations" :key="projet.id" v-reveal="i * 90">
         <div class="card border-0 shadow-sm h-100 overflow-hidden">
-          <div class="ratio ratio-4x3 bg-secondary bg-opacity-10">
+          <div class="ratio ratio-4x3 bg-secondary bg-opacity-10 media-clickable" @click="ouvrirLightbox(projet)">
             <video
               v-if="projet.video"
               :src="getImageUrl(projet.video)"
@@ -540,6 +567,26 @@ const advantages = [
   </div>
 
 </section>
+
+  <!-- LIGHTBOX -->
+  <transition name="lb-fade">
+    <div v-if="lightbox" class="lightbox" @click="fermerLightbox">
+      <button class="lightbox-close" @click="fermerLightbox" aria-label="Fermer">
+        <i class="bi bi-x-lg"></i>
+      </button>
+      <div class="lightbox-inner" @click.stop>
+        <video
+          v-if="lightbox.type === 'video'"
+          :src="lightbox.src"
+          controls
+          autoplay
+          class="lightbox-media"
+        ></video>
+        <img v-else :src="lightbox.src" :alt="lightbox.titre" class="lightbox-media" />
+        <p class="lightbox-caption">{{ lightbox.titre }}</p>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <style scoped>
@@ -903,5 +950,63 @@ const advantages = [
 
     background:#f8f8f8;
 
+}
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(15, 13, 9, 0.92);
+  backdrop-filter: blur(6px);
+}
+.lightbox-inner {
+  max-width: 960px;
+  width: 100%;
+  text-align: center;
+  animation: lbZoom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lightbox-media {
+  max-width: 100%;
+  max-height: 78vh;
+  border-radius: 1rem;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+}
+.lightbox-caption {
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 1rem;
+  font-weight: 500;
+}
+.lightbox-close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.lightbox-close:hover {
+  background: var(--lg-amber);
+  transform: rotate(90deg);
+}
+@keyframes lbZoom {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.lb-fade-enter-active,
+.lb-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.lb-fade-enter-from,
+.lb-fade-leave-to {
+  opacity: 0;
 }
 </style>

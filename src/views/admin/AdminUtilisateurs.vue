@@ -11,6 +11,7 @@ const showModal = ref(false)
 const utilisateurASupprimer = ref(null)
 const nouveauUtilisateur = ref({ nom: '', email: '', password: '', role: 'admin' })
 const showForm = ref(false)
+const idEnEdition = ref(null)
 
 const chargerUtilisateurs = async () => {
   try {
@@ -54,11 +55,40 @@ const supprimer = async () => {
   }
 }
 
-const ajouterUtilisateur = async () => {
+const ouvrirAjout = () => {
+  idEnEdition.value = null
+  nouveauUtilisateur.value = { nom: '', email: '', password: '', role: 'admin' }
+  showForm.value = true
+}
+
+const ouvrirEdition = (item) => {
+  idEnEdition.value = item.id
+  nouveauUtilisateur.value = {
+    nom: item.nom || '',
+    email: item.email || '',
+    password: '',
+    role: item.role || 'admin',
+  }
+  showForm.value = true
+}
+
+const annulerForm = () => {
+  showForm.value = false
+  idEnEdition.value = null
+  nouveauUtilisateur.value = { nom: '', email: '', password: '', role: 'admin' }
+}
+
+const enregistrerUtilisateur = async () => {
   try {
-    await api.post('/users', nouveauUtilisateur.value)
-    nouveauUtilisateur.value = { nom: '', email: '', password: '', role: 'admin' }
-    showForm.value = false
+    if (idEnEdition.value) {
+      // En modification : n'envoie le mot de passe que s'il a été renseigné
+      const data = { ...nouveauUtilisateur.value }
+      if (!data.password) delete data.password
+      await api.put(`/users/${idEnEdition.value}`, data)
+    } else {
+      await api.post('/users', nouveauUtilisateur.value)
+    }
+    annulerForm()
     chargerUtilisateurs()
   } catch (error) {
     console.error(error)
@@ -76,12 +106,12 @@ onMounted(chargerUtilisateurs)
   <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-1">
       <h2 class="fw-bold mb-0"><i class="bi bi-people text-amber me-2"></i>Gestion des utilisateurs</h2>
-      <button class="btn btn-primary" @click="showForm = !showForm"><i class="bi bi-person-plus me-1"></i>Ajouter un utilisateur</button>
+      <button class="btn btn-primary" @click="ouvrirAjout"><i class="bi bi-person-plus me-1"></i>Ajouter un utilisateur</button>
     </div>
     <p class="text-muted mb-4">Gérez les comptes ayant accès à l'administration.</p>
 
     <div v-if="showForm" class="card p-3 mb-4">
-      <h5 class="mb-3">Nouvel utilisateur</h5>
+      <h5 class="mb-3">{{ idEnEdition ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur' }}</h5>
       <div class="row g-3">
         <div class="col-md-4">
           <input v-model="nouveauUtilisateur.nom" class="form-control" placeholder="Nom" />
@@ -90,7 +120,11 @@ onMounted(chargerUtilisateurs)
           <input v-model="nouveauUtilisateur.email" class="form-control" placeholder="Email" />
         </div>
         <div class="col-md-2">
-          <input v-model="nouveauUtilisateur.password" type="password" class="form-control" placeholder="Mot de passe" />
+          <input
+            v-model="nouveauUtilisateur.password"
+            type="password"
+            class="form-control"
+            :placeholder="idEnEdition ? 'Laisser vide pour ne pas changer' : 'Mot de passe'" />
         </div>
         <div class="col-md-2">
           <select v-model="nouveauUtilisateur.role" class="form-select">
@@ -99,8 +133,9 @@ onMounted(chargerUtilisateurs)
           </select>
         </div>
       </div>
-      <div class="mt-3">
-        <button class="btn btn-success" @click="ajouterUtilisateur">Enregistrer</button>
+      <div class="mt-3 d-flex gap-2">
+        <button class="btn btn-success" @click="enregistrerUtilisateur">Enregistrer</button>
+        <button class="btn btn-outline-secondary" @click="annulerForm">Annuler</button>
       </div>
     </div>
 
@@ -135,6 +170,7 @@ onMounted(chargerUtilisateurs)
           </td>
           <td>{{ formatDate(item.created_at) }}</td>
           <td>
+            <button class="btn btn-outline-primary btn-sm me-2" @click="ouvrirEdition(item)"><i class="bi bi-pencil"></i></button>
             <button class="btn btn-danger btn-sm" @click="ouvrirConfirmation(item.id)"><i class="bi bi-trash"></i></button>
           </td>
         </tr>

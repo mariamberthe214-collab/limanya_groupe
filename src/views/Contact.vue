@@ -118,6 +118,23 @@ const submitContact = async () => {
           </div>
         </div>
       </div>
+
+      <div class="row mt-4">
+        <div class="col-12" v-reveal="160">
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <iframe
+              title="Localisation LIMANYA Groupe"
+              src="https://www.google.com/maps?q=LIMANYA+GROUPE%2C+Port-Bou%C3%ABt%2C+C%C3%B4te+d%27Ivoire&output=embed"
+              width="100%"
+              height="380"
+              style="border:0;"
+              allowfullscreen="true"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </template>

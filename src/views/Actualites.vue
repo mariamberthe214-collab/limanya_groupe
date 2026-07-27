@@ -16,12 +16,6 @@ const formatDate = (date) => {
   })
 }
 
-// Détecte si un média Cloudinary est une vidéo (resource_type video ou extension connue)
-const estVideo = (url) => {
-  if (!url) return false
-  return /\/video\//.test(url) || /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(url)
-}
-
 const chargerActualites = async () => {
   chargement.value = true
   try {
@@ -41,11 +35,12 @@ const aLaUne = computed(() => posts.value[0] || null)
 const autresPosts = computed(() => posts.value.slice(1))
 
 const ouvrirLightbox = (post) => {
-  if (!post.image) return
-  lightbox.value = {
-    type: estVideo(post.image) ? 'video' : 'image',
-    src: getImageUrl(post.image),
-    titre: post.titre,
+  if (post.video) {
+    lightbox.value = { type: 'video', src: getImageUrl(post.video), titre: post.titre }
+  } else if (post.image) {
+    lightbox.value = { type: 'image', src: getImageUrl(post.image), titre: post.titre }
+  } else {
+    return
   }
   document.body.style.overflow = 'hidden'
 }
@@ -112,27 +107,27 @@ onMounted(chargerActualites)
             <div class="col-lg-7">
               <div
                 class="feature-media"
-                :class="{ 'is-clickable': aLaUne.image }"
+                :class="{ 'is-clickable': aLaUne.image || aLaUne.video }"
                 @click="ouvrirLightbox(aLaUne)"
               >
-                <template v-if="aLaUne.image">
+                <template v-if="aLaUne.video">
                   <video
-                    v-if="estVideo(aLaUne.image)"
-                    :src="getImageUrl(aLaUne.image)"
+                    :src="getImageUrl(aLaUne.video)"
+                    :poster="aLaUne.image ? getImageUrl(aLaUne.image) : ''"
                     controls
                     preload="metadata"
                     class="feature-video"
                     @click.stop
                   ></video>
-                  <template v-else>
-                    <img
-                      :src="getImageUrl(aLaUne.image)"
-                      :alt="aLaUne.titre"
-                      class="feature-img"
-                      loading="lazy"
-                    />
-                    <span class="media-zoom"><i class="bi bi-arrows-fullscreen"></i></span>
-                  </template>
+                </template>
+                <template v-else-if="aLaUne.image">
+                  <img
+                    :src="getImageUrl(aLaUne.image)"
+                    :alt="aLaUne.titre"
+                    class="feature-img"
+                    loading="lazy"
+                  />
+                  <span class="media-zoom"><i class="bi bi-arrows-fullscreen"></i></span>
                 </template>
                 <div v-else class="feature-noimg">
                   <i class="bi bi-image"></i>
@@ -171,30 +166,29 @@ onMounted(chargerActualites)
             <article class="news-card h-100">
               <div
                 class="news-media"
-                :class="{ 'is-clickable': post.image }"
+                :class="{ 'is-clickable': post.image || post.video }"
                 @click="ouvrirLightbox(post)"
               >
-                <template v-if="post.image">
-                  <template v-if="estVideo(post.image)">
-                    <video
-                      :src="getImageUrl(post.image)"
-                      preload="metadata"
-                      class="news-img"
-                      muted
-                    ></video>
-                    <span class="media-badge"><i class="bi bi-play-fill"></i></span>
-                    <span class="media-play"><i class="bi bi-play-circle-fill"></i></span>
-                  </template>
-                  <template v-else>
-                    <img
-                      :src="getImageUrl(post.image)"
-                      :alt="post.titre"
-                      class="news-img"
-                      loading="lazy"
-                    />
-                    <span class="media-badge"><i class="bi bi-camera-fill"></i></span>
-                    <span class="media-zoom"><i class="bi bi-arrows-fullscreen"></i></span>
-                  </template>
+                <template v-if="post.video">
+                  <video
+                    :src="getImageUrl(post.video)"
+                    :poster="post.image ? getImageUrl(post.image) : ''"
+                    preload="metadata"
+                    class="news-img"
+                    muted
+                  ></video>
+                  <span class="media-badge"><i class="bi bi-play-fill"></i></span>
+                  <span class="media-play"><i class="bi bi-play-circle-fill"></i></span>
+                </template>
+                <template v-else-if="post.image">
+                  <img
+                    :src="getImageUrl(post.image)"
+                    :alt="post.titre"
+                    class="news-img"
+                    loading="lazy"
+                  />
+                  <span class="media-badge"><i class="bi bi-camera-fill"></i></span>
+                  <span class="media-zoom"><i class="bi bi-arrows-fullscreen"></i></span>
                 </template>
                 <div v-else class="news-noimg"><i class="bi bi-image"></i></div>
               </div>
@@ -343,6 +337,8 @@ onMounted(chargerActualites)
   cursor: pointer;
 }
 .feature-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -352,6 +348,8 @@ onMounted(chargerActualites)
   transform: scale(1.06);
 }
 .feature-video {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -436,6 +434,8 @@ onMounted(chargerActualites)
   cursor: pointer;
 }
 .news-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;

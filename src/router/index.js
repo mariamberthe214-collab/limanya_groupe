@@ -111,6 +111,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    // Navigation avec le bouton précédent/suivant du navigateur : on restaure la position
+    if (savedPosition) {
+      return savedPosition
+    }
+    // Ancre dans l'URL (ex: #section) : on scroll jusqu'à l'élément visé
+    if (to.hash) {
+      return { el: to.hash, behavior: 'smooth' }
+    }
+    // Dans tous les autres cas (clic sur un lien, changement de page) : retour en haut
+    return { top: 0 }
+  },
 })
 
 router.afterEach((to) => {

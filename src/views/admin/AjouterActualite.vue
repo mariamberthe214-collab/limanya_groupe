@@ -11,15 +11,25 @@ const contenu = ref('')
 const auteur = ref('Admin')
 const statut = ref('Publié')
 const date_publication = ref(new Date().toISOString().split('T')[0])
-const fichierImage = ref(null)
-const apercu = ref(null)
 const envoiEnCours = ref(false)
 
-const choisirImage = (event) => {
-    const file = event.target.files[0]
-    if (!file) return
-    fichierImage.value = file
-    apercu.value = URL.createObjectURL(file)
+// Galerie : liste de { file, url (aperçu local), type }
+const galerie = ref([])
+
+const choisirFichiers = (event) => {
+    const fichiers = Array.from(event.target.files || [])
+    for (const file of fichiers) {
+        galerie.value.push({
+            file,
+            url: URL.createObjectURL(file),
+            type: file.type.startsWith('video/') ? 'video' : 'image',
+        })
+    }
+    event.target.value = '' // permet de resélectionner le même fichier plus tard
+}
+
+const retirerMedia = (index) => {
+    galerie.value.splice(index, 1)
 }
 
 const ajouterActualite = async () => {
@@ -28,10 +38,16 @@ const ajouterActualite = async () => {
 
     try {
 
-        let imagePath = null
-        if (fichierImage.value) {
-            imagePath = await uploadImage(fichierImage.value)
+        // Envoie chaque fichier vers Cloudinary, dans l'ordre
+        const mediasEnvoyes = []
+        for (const item of galerie.value) {
+            const url = await uploadImage(item.file)
+            mediasEnvoyes.push({ type: item.type, url })
         }
+
+        // La couverture (affichée dans les listes) = premier média de la galerie
+        const couvertureImage = mediasEnvoyes.find((m) => m.type === 'image')?.url || null
+        const couvertureVideo = mediasEnvoyes.find((m) => m.type === 'video')?.url || null
 
         await api.post('/actualites', {
 
@@ -39,7 +55,9 @@ const ajouterActualite = async () => {
             contenu: contenu.value,
             auteur: auteur.value,
             statut: statut.value,
-            image: imagePath,
+            image: couvertureImage,
+            video: couvertureVideo,
+            medias: mediasEnvoyes,
             date_publication: date_publication.value
 
         })
@@ -141,15 +159,35 @@ const ajouterActualite = async () => {
 
         <div class="mb-4">
 
-            <label class="form-label">Photo</label>
+            <label class="form-label">Photos et/ou vidéos</label>
 
             <input
                 type="file"
-                accept="image/*"
+                accept="image/*,video/mp4,video/quicktime,video/webm"
                 class="form-control"
-                @change="choisirImage">
+                multiple
+                @change="choisirFichiers">
+            <small class="text-muted d-block mt-1">
+                Vous pouvez sélectionner plusieurs photos et vidéos à la fois (JPG, PNG, WEBP, GIF, MP4, MOV, WEBM — 60 Mo max par vidéo).
+                La première photo ajoutée sert de couverture dans les listes.
+            </small>
 
-            <img v-if="apercu" :src="apercu" class="img-thumbnail mt-3" style="max-height:180px;" />
+            <div v-if="galerie.length" class="row g-3 mt-2">
+                <div class="col-4 col-md-3" v-for="(item, index) in galerie" :key="index">
+                    <div class="position-relative">
+                        <video v-if="item.type === 'video'" :src="item.url" class="w-100 rounded" style="height:100px;object-fit:cover;" muted></video>
+                        <img v-else :src="item.url" class="w-100 rounded" style="height:100px;object-fit:cover;" />
+                        <span v-if="item.type === 'video'" class="position-absolute top-0 start-0 m-1 badge bg-dark"><i class="bi bi-camera-video-fill"></i></span>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 py-0 px-1"
+                            @click="retirerMedia(index)"
+                            title="Retirer">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
         </div>
 

@@ -229,12 +229,21 @@ onMounted(() => {
                     :key="item.id">
 
                     <td>
-                        <img
-                            v-if="item.image"
-                            :src="getImageUrl(item.image)"
-                            class="rounded"
-                            style="width:48px;height:48px;object-fit:cover;">
-                        <span v-else class="text-muted small">—</span>
+                        <div class="position-relative d-inline-block">
+                            <img
+                                v-if="item.image"
+                                :src="getImageUrl(item.image)"
+                                class="rounded"
+                                style="width:48px;height:48px;object-fit:cover;">
+                            <span v-else class="text-muted small">—</span>
+                            <span
+                                v-if="item.video"
+                                class="position-absolute top-0 start-100 translate-middle d-inline-flex align-items-center justify-content-center rounded-circle bg-dark text-white"
+                                style="width:18px;height:18px;font-size:0.6rem;"
+                                title="Vidéo jointe">
+                                <i class="bi bi-play-fill"></i>
+                            </span>
+                        </div>
                     </td>
 
                     <td>{{ item.id }}</td>

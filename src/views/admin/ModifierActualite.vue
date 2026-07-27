@@ -14,10 +14,11 @@ const contenu = ref('')
 const auteur = ref('')
 const statut = ref('Publié')
 const date_publication = ref('')
-const image = ref(null)
-const fichierImage = ref(null)
-const apercu = ref(null)
 const envoiEnCours = ref(false)
+
+// Médias déjà enregistrés : { type, url, existant: true }
+// Nouveaux médias ajoutés : { type, url (aperçu local), file, existant: false }
+const galerie = ref([])
 
 const chargerActualite = async () => {
     try {
@@ -29,18 +30,35 @@ const chargerActualite = async () => {
         auteur.value = response.data.auteur
         statut.value = response.data.statut
         date_publication.value = response.data.date_publication ? response.data.date_publication.slice(0, 10) : ''
-        image.value = response.data.image
+
+        if (Array.isArray(response.data.medias) && response.data.medias.length) {
+            galerie.value = response.data.medias.map((m) => ({ ...m, url: getImageUrl(m.url), existant: true }))
+        } else if (response.data.image || response.data.video) {
+            // Compatibilité avec les actualités créées avant l'ajout de la galerie
+            if (response.data.image) galerie.value.push({ type: 'image', url: getImageUrl(response.data.image), existant: true })
+            if (response.data.video) galerie.value.push({ type: 'video', url: getImageUrl(response.data.video), existant: true })
+        }
 
     } catch (error) {
         console.error(error)
     }
 }
 
-const choisirImage = (event) => {
-    const file = event.target.files[0]
-    if (!file) return
-    fichierImage.value = file
-    apercu.value = URL.createObjectURL(file)
+const choisirFichiers = (event) => {
+    const fichiers = Array.from(event.target.files || [])
+    for (const file of fichiers) {
+        galerie.value.push({
+            file,
+            url: URL.createObjectURL(file),
+            type: file.type.startsWith('video/') ? 'video' : 'image',
+            existant: false,
+        })
+    }
+    event.target.value = ''
+}
+
+const retirerMedia = (index) => {
+    galerie.value.splice(index, 1)
 }
 
 const modifierActualite = async () => {
@@ -49,10 +67,19 @@ const modifierActualite = async () => {
 
     try {
 
-        let imagePath = image.value
-        if (fichierImage.value) {
-            imagePath = await uploadImage(fichierImage.value)
+        const mediasFinaux = []
+        for (const item of galerie.value) {
+            if (item.existant) {
+                // Le url a été résolu en URL complète pour l'aperçu : on retrouve le chemin d'origine
+                mediasFinaux.push({ type: item.type, url: item.url })
+            } else {
+                const url = await uploadImage(item.file)
+                mediasFinaux.push({ type: item.type, url })
+            }
         }
+
+        const couvertureImage = mediasFinaux.find((m) => m.type === 'image')?.url || null
+        const couvertureVideo = mediasFinaux.find((m) => m.type === 'video')?.url || null
 
         await api.put(`/actualites/${id}`, {
 
@@ -60,7 +87,9 @@ const modifierActualite = async () => {
             contenu: contenu.value,
             auteur: auteur.value,
             statut: statut.value,
-            image: imagePath,
+            image: couvertureImage,
+            video: couvertureVideo,
+            medias: mediasFinaux,
             date_publication: date_publication.value
 
         })
@@ -164,15 +193,35 @@ onMounted(() => {
 
         <div class="mb-4">
 
-            <label class="form-label">Photo</label>
+            <label class="form-label">Photos et/ou vidéos</label>
 
             <input
                 type="file"
-                accept="image/*"
+                accept="image/*,video/mp4,video/quicktime,video/webm"
                 class="form-control"
-                @change="choisirImage">
+                multiple
+                @change="choisirFichiers">
+            <small class="text-muted d-block mt-1">
+                Ajoutez une ou plusieurs photos/vidéos. La première photo sert de couverture dans les listes.
+            </small>
 
-            <img :src="apercu || getImageUrl(image)" v-if="apercu || image" class="img-thumbnail mt-3" style="max-height:180px;" />
+            <div v-if="galerie.length" class="row g-3 mt-2">
+                <div class="col-4 col-md-3" v-for="(item, index) in galerie" :key="index">
+                    <div class="position-relative">
+                        <video v-if="item.type === 'video'" :src="item.url" class="w-100 rounded" style="height:100px;object-fit:cover;" muted></video>
+                        <img v-else :src="item.url" class="w-100 rounded" style="height:100px;object-fit:cover;" />
+                        <span v-if="item.type === 'video'" class="position-absolute top-0 start-0 m-1 badge bg-dark"><i class="bi bi-camera-video-fill"></i></span>
+                        <span v-if="!item.existant" class="position-absolute bottom-0 start-0 m-1 badge bg-success">Nouveau</span>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 py-0 px-1"
+                            @click="retirerMedia(index)"
+                            title="Retirer">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
         </div>
 

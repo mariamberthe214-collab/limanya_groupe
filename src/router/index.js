@@ -18,6 +18,7 @@ import ModifierActualite from '../views/admin/ModifierActualite.vue'
 import AdminLayout from '../layouts/AdminLayout.vue'
 import AdminContact from '../views/admin/AdminContact.vue'
 import VoirContact from '../views/admin/VoirContact.vue'
+import VoirDevis from '../views/admin/VoirDevis.vue'
 import AdminRealisations from '../views/admin/AdminRealisations.vue'
 import AjouterRealisation from '../views/admin/AjouterRealisation.vue'
 import ModifierRealisation from '../views/admin/ModifierRealisation.vue'
@@ -99,6 +100,10 @@ const routes = [
     {
       path: 'devis',
       component: AdminDevis
+    },
+    {
+      path: 'devis/:id',
+      component: VoirDevis
     },
     {
       path: 'utilisateurs',

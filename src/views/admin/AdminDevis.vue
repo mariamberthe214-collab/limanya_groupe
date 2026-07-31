@@ -96,26 +96,29 @@ onMounted(chargerDevis)
         <tr>
           <th>ID</th>
           <th>Nom</th>
-          <th>Email</th>
+          <th>Téléphone</th>
           <th>Service</th>
+          <th>Message</th>
           <th>Statut</th>
           <th>Date</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in devisPagine" :key="item.id">
+        <tr v-for="item in devisPagine" :key="item.id" style="cursor:pointer" @click="$router.push(`/admin/devis/${item.id}`)">
           <td>{{ item.id }}</td>
           <td>{{ item.nom }}</td>
-          <td>{{ item.email }}</td>
+          <td>{{ item.telephone || '—' }}</td>
           <td>{{ item.service }}</td>
+          <td class="text-truncate" style="max-width:220px;">{{ item.message || '—' }}</td>
           <td>
             <span class="badge" :class="item.statut === 'nouveau' ? 'bg-warning text-dark' : 'bg-success'">
               {{ item.statut || 'nouveau' }}
             </span>
           </td>
           <td>{{ formatDate(item.created_at) }}</td>
-          <td>
+          <td @click.stop>
+            <RouterLink :to="`/admin/devis/${item.id}`" class="btn btn-outline-primary btn-sm me-2"><i class="bi bi-eye"></i></RouterLink>
             <button class="btn btn-outline-success btn-sm me-2" @click="changerStatut(item)"><i class="bi bi-arrow-repeat me-1"></i>Statut</button>
             <button class="btn btn-danger btn-sm" @click="ouvrirConfirmation(item.id)"><i class="bi bi-trash"></i></button>
           </td>

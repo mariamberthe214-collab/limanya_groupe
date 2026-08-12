@@ -77,7 +77,7 @@ onMounted(chargerRealisations)
         </div>
         <div class="col-lg-6">
           <div class="hero-media ratio ratio-4x3">
-            <img src="/images/service-forage.png" alt="Étude géophysique et recherche d'eau" class="w-100 h-100 object-fit-cover" />
+            <img :src="getImageUrl('/uploads/etude_geophysique_terrain.jpg')" alt="Étude géophysique et recherche d'eau" class="w-100 h-100 object-fit-cover" />
           </div>
         </div>
       </div>
@@ -238,7 +238,7 @@ onMounted(chargerRealisations)
   left:8%;
   right:8%;
   height:3px;
-  background:#bf571c;
+  background: var(--lg-amber);
 }
 .step-item{
   flex:1;
@@ -248,7 +248,7 @@ onMounted(chargerRealisations)
 .step-number{
   width:90px;
   height:90px;
-  background:#bf571c;
+  background: var(--lg-amber);
   color:white;
   border-radius:50%;
   display:flex;

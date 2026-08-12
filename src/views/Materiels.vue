@@ -98,7 +98,7 @@ onMounted(chargerEquipements)
         <div class="col-lg-5">
           <div class="mat-hero-media" v-reveal="200">
             <img
-              src="/images/service-materiel.png"
+              :src="getImageUrl('/uploads/materiel_livraison_pvc_1.jpg')"
               alt="Matériel et pompes de forage"
               loading="lazy"
             />

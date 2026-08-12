@@ -1,7 +1,18 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import api from '../services/api'
 import { getImageUrl } from '../utils/images'
+
+const slides = [
+  getImageUrl('/uploads/btp_odienne_1.jpg'),
+  getImageUrl('/uploads/btp_odienne_2.jpg'),
+  getImageUrl('/uploads/btp_odienne_3.jpg'),
+  getImageUrl('/uploads/btp_odienne_4.jpg'),
+  getImageUrl('/uploads/btp_odienne_5.jpg'),
+  getImageUrl('/uploads/btp_odienne_6.jpg'),
+]
+const activeSlide = ref(0)
+let slideTimer = null
 
 const services = [
   {
@@ -73,22 +84,46 @@ const chargerRealisations = async () => {
   }
 }
 
-onMounted(chargerRealisations)
+const startSlides = () => {
+  slideTimer = setInterval(() => {
+    activeSlide.value = (activeSlide.value + 1) % slides.length
+  }, 4000)
+}
+
+const stopSlides = () => {
+  if (slideTimer) {
+    clearInterval(slideTimer)
+    slideTimer = null
+  }
+}
+
+onMounted(() => {
+  chargerRealisations()
+  startSlides()
+})
+
+onUnmounted(stopSlides)
 </script>
 
 <template>
-  <section class="page-hero py-5">
-    <div class="container py-4">
-      <div class="row align-items-center gy-4">
-        <div class="col-lg-6">
-          <span class="eyebrow">BTP &amp; Génie Civil</span>
-          <h1 class="display-5 fw-bold mt-3">Construction, génie civil et travaux publics</h1>
-          <p class="lead mt-4">LIMANYA GROUPE accompagne les projets de construction, rénovation et travaux publics avec une expertise terrain solide et une gestion de chantier professionnelle.</p>
-          <router-link to="/contacts" class="btn btn-primary btn-lg mt-3">Démarrer un projet</router-link>
-        </div>
-        <div class="col-lg-6">
-          <div class="hero-media ratio ratio-4x3">
-            <img src="/images/service-btp.png" alt="Chantier de construction BTP" class="w-100 h-100 object-fit-cover" />
+  <section class="page-hero btp-hero py-5">
+    <div class="hero-slideshow">
+      <div
+        class="hero-slide"
+        v-for="(slide, index) in slides"
+        :key="slide"
+        :class="{ 'hero-slide--active': index === activeSlide }"
+      >
+        <img :src="slide" alt="Photo BTP Limanya Groupe" class="hero-slide-img" />
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="container py-4">
+        <div class="row align-items-center min-vh-50 gy-4">
+          <div class="col-lg-7">
+            <span class="eyebrow">BTP &amp; Génie Civil</span>
+            <h1 class="display-5 fw-bold mt-3">Construction, génie civil et travaux publics</h1>
+            <p class="lead mt-4">LIMANYA GROUPE accompagne les projets de construction, rénovation et travaux publics avec une expertise terrain solide et une gestion de chantier professionnelle.</p>
+            <router-link to="/contacts" class="btn btn-primary btn-lg mt-3">Démarrer un projet</router-link>
           </div>
         </div>
       </div>

@@ -4,6 +4,8 @@ import api from '../services/api'
 import { buildWhatsAppLink } from '../utils/whatsapp'
 import { getImageUrl } from '../utils/images'
 
+const heroBackground = getImageUrl('/uploads/forage_blolequin_2.jpg')
+
 const form = reactive({
   name: '',
   email: '',
@@ -111,7 +113,7 @@ const advantages = [
 </script>
 
 <template>
-  <section class="forage-hero">
+  <section class="forage-hero" :style="{ backgroundImage: `url(${heroBackground})` }">
 
     <div class="overlay"></div>
 
@@ -647,7 +649,7 @@ const advantages = [
 
     height:3px;
 
-    background:#bf571c;
+    background: var(--lg-amber);
 
 }
 
@@ -671,7 +673,7 @@ const advantages = [
 
     height:90px;
 
-    background:#bf571c;
+    background: var(--lg-amber);
 
     color:white;
 
@@ -761,7 +763,7 @@ const advantages = [
 
     display:inline-block;
 
-    background:#bf571c;
+    background: var(--lg-amber);
 
     color:white;
 
@@ -817,7 +819,7 @@ const advantages = [
 
     background:#fafafa;
 
-    border-left:4px solid #bf571c;
+    border-left:4px solid var(--lg-amber);
 
     border-radius:12px;
 
@@ -892,7 +894,7 @@ const advantages = [
 
     display:inline-block;
 
-    background:#bf571c;
+    background: var(--lg-amber);
 
     color:#fff;
 
@@ -928,7 +930,7 @@ const advantages = [
 
 .btn-warning{
 
-    background:#bf571c;
+    background: var(--lg-amber);
 
     border:none;
 
@@ -936,7 +938,7 @@ const advantages = [
 
 .btn-warning:hover{
 
-    background:#a64815;
+    background: var(--lg-amber-dark);
 
 }
 

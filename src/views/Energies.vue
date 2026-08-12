@@ -56,7 +56,7 @@ onMounted(chargerProduits)
         </div>
         <div class="col-lg-6">
           <div class="hero-media ratio ratio-4x3">
-            <img src="/images/service-materiel.png" alt="Panneaux solaires, pompes et équipements hydrauliques" class="w-100 h-100 object-fit-cover" />
+            <img :src="getImageUrl('/uploads/materiel_pompe_solaire.jpg')" alt="Panneaux solaires, pompes et équipements hydrauliques" class="w-100 h-100 object-fit-cover" />
           </div>
         </div>
       </div>

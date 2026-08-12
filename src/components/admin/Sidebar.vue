@@ -125,12 +125,12 @@ a:hover {
 }
 
 .router-link-active {
-  background: #bf571c;
+  background: var(--lg-amber);
   color: #fff;
 }
 
 .router-link-active:hover {
-  background: #a94a15;
+  background: var(--lg-amber-dark);
   color: #fff;
 }
 

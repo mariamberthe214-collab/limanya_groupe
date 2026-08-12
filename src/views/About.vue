@@ -1,4 +1,43 @@
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import { getImageUrl } from '../utils/images'
+
+const currentSlide = ref(0)
+let slideInterval = null
+
+const heroImages = [
+  {
+    src: '/images/btp3.png',
+    alt: 'BTP - LIMANYA Groupe'
+  },
+  {
+    src: '/images/assainisement.png',
+    alt: 'Installation d\'assainissement - LIMANYA Groupe'
+  },
+  {
+    src: '/images/service-forage.png',
+    alt: 'Forage hydraulique - LIMANYA Groupe'
+  }
+]
+
+onMounted(() => {
+  slideInterval = setInterval(() => {
+    currentSlide.value = (currentSlide.value + 1) % heroImages.length
+  }, 5000)
+})
+
+onUnmounted(() => {
+  if (slideInterval) clearInterval(slideInterval)
+})
+
+const goToSlide = (index) => {
+  currentSlide.value = index
+  clearInterval(slideInterval)
+  slideInterval = setInterval(() => {
+    currentSlide.value = (currentSlide.value + 1) % heroImages.length
+  }, 5000)
+}
+
 const values = [
   {
     icon: 'bi-droplet-fill',
@@ -26,27 +65,32 @@ const services = [
   {
     icon: "bi-droplet",
     title: "Forages Hydrauliques",
-    text: "Forages villageois, agricoles, industriels, essais de pompage, réhabilitation et maintenance."
+    text: "Forages villageois, agricoles, industriels, essais de pompage, réhabilitation et maintenance.",
+    image: getImageUrl('/uploads/forage_songon.jpg')
   },
   {
     icon: "bi-globe-africa",
     title: "Études Géophysiques",
-    text: "Recherche d'eau, études géophysiques et implantation des forages."
+    text: "Recherche d'eau, études géophysiques et implantation des forages.",
+    image: getImageUrl('/uploads/etude_geophysique_terrain.jpg')
   },
   {
     icon: "bi-recycle",
     title: "Assainissement",
-    text: "Réseaux d'assainissement, gestion des eaux usées, fosses septiques et fosses biodigesteurs."
+    text: "Réseaux d'assainissement, gestion des eaux usées, fosses septiques et fosses biodigesteurs.",
+    image: getImageUrl('/uploads/assainissement_angre_2.jpg')
   },
   {
     icon: "bi-building",
     title: "BTP & Génie Civil",
-    text: "Construction, génie civil, VRD et travaux publics."
+    text: "Construction, génie civil, VRD et travaux publics.",
+    image: getImageUrl('/uploads/btp_odienne_1.jpg')
   },
   {
     icon: "bi-lightning-charge",
     title: "Vente de Matériels",
-    text: "Pompes solaires, électriques et hybrides, panneaux solaires, PVC hydrauliques et accessoires."
+    text: "Pompes solaires, électriques et hybrides, panneaux solaires, PVC hydrauliques et accessoires.",
+    image: "/images/service-materiel.png"
   }
 ]
 </script>
@@ -74,8 +118,27 @@ const services = [
           </ul>
         </div>
         <div class="col-lg-6">
-          <div class="hero-media ratio ratio-4x3">
-            <img src="/images/about-team.png" alt="Équipe d'ingénieurs Limanya sur un chantier" class="w-100 h-100 object-fit-cover" />
+          <div class="hero-carousel ratio ratio-4x3">
+            <div class="carousel-container">
+              <transition name="fade" mode="out-in">
+                <img 
+                  :key="currentSlide" 
+                  :src="heroImages[currentSlide].src" 
+                  :alt="heroImages[currentSlide].alt" 
+                  class="carousel-image w-100 h-100 object-fit-cover"
+                />
+              </transition>
+              
+              <div class="carousel-controls">
+                <button 
+                  v-for="(image, index) in heroImages" 
+                  :key="index"
+                  :class="['carousel-dot', { active: currentSlide === index }]"
+                  @click="goToSlide(index)"
+                  :aria-label="`Slide ${index + 1}`"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -87,21 +150,21 @@ const services = [
       <div class="row gx-4 gy-4">
         <div class="col-lg-4">
           <div class="card border-0 shadow-sm h-100 p-4">
-            <div class="service-icon mb-3"><i class="bi bi-bullseye"></i></div>
+            <div class="icon-badge mb-3"><i class="bi bi-bullseye"></i></div>
             <h3 class="h5">Notre mission</h3>
             <p class="text-muted mb-0">Fournir des solutions techniques performantes dans les domaines des forages hydrauliques, des études géophysiques, de l'assainissement et du BTP, en garantissant la qualité des travaux, le respect des délais et la satisfaction de nos clients.</p>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="card border-0 shadow-sm h-100 p-4">
-            <div class="service-icon mb-3"><i class="bi bi-gem"></i></div>
+            <div class="icon-badge mb-3"><i class="bi bi-gem"></i></div>
             <h3 class="h5">Nos valeurs</h3>
             <p class="text-muted mb-0">Fiabilité, transparence, engagement et professionnalisme guident chacune de nos interventions.</p>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="card border-0 shadow-sm h-100 p-4">
-            <div class="service-icon mb-3"><i class="bi bi-diagram-3"></i></div>
+            <div class="icon-badge mb-3"><i class="bi bi-diagram-3"></i></div>
             <h3 class="h5">Notre vision</h3>
             <p class="text-muted mb-0">
              Être une référence nationale dans les domaines des forages hydrauliques, des études géophysiques, de l'assainissement et du BTP grâce à notre expertise et à notre capacité d'innovation.
@@ -137,18 +200,22 @@ const services = [
           :key="service.title"
         >
 
-          <div class="card border-0 shadow-sm h-100 p-4 service-card">
+          <div
+            class="card border-0 shadow-sm h-100 service-card"
+            :style="{ backgroundImage: `url(${service.image})` }"
+          >
+            <div class="service-overlay"></div>
+            <div class="service-content">
+              <div class="service-icon mb-4">
+                <i :class="['bi', service.icon]"></i>
+              </div>
 
-            <div class="service-icon mb-4">
-              <i :class="['bi', service.icon]"></i>
+              <h4>{{ service.title }}</h4>
+
+              <p class="mb-0">
+                {{ service.text }}
+              </p>
             </div>
-
-            <h4>{{ service.title }}</h4>
-
-            <p class="text-muted mb-0">
-              {{ service.text }}
-            </p>
-
           </div>
 
         </div>
@@ -181,7 +248,7 @@ const services = [
 
         <div class="stat-card">
 
-          <h2>15+</h2>
+          <h2>10+</h2>
 
           <p>Années d'expertise</p>
 
@@ -193,7 +260,7 @@ const services = [
 
         <div class="stat-card">
 
-          <h2>200+</h2>
+          <h2>300+</h2>
 
           <p>Projets livrés</p>
 
@@ -328,16 +395,75 @@ const services = [
     border:1px solid rgba(191,87,28,.08);
 }
 
-.why-card:hover{
-    transform:translateY(-10px);
-    box-shadow:0 22px 45px rgba(0,0,0,.12);
+.service-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+    padding: 0;
+    border: 0;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    display: flex;
+    align-items: flex-end;
+    transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.service-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 10, 6, 0.15) 0%, rgba(15, 10, 6, 0.82) 100%);
+    z-index: 0;
+}
+
+.service-content {
+    position: relative;
+    z-index: 1;
+    padding: 24px;
+    width: 100%;
+}
+
+.service-card:hover{
+    transform: translateY(-10px);
+    box-shadow:0 20px 45px rgba(0,0,0,.16)!important;
+}
+
+.service-card h4 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.service-card p {
+    color: rgba(255,255,255,.92);
+    line-height: 1.7;
+}
+
+.icon-badge,
+.why-icon,
+.service-icon,
+.qhse-icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    line-height:1;
+}
+
+.icon-badge{
+    width:56px;
+    height:56px;
+    border-radius:16px;
+    background:var(--lg-amber);
+    color:#fff;
+    font-size:24px;
+    box-shadow:0 10px 24px rgba(191,87,28,0.25);
 }
 
 .why-icon{
     width:70px;
     height:70px;
     border-radius:18px;
-    background:#bf571c;
+    background:var(--lg-amber);
     color:#fff;
     display:flex;
     align-items:center;
@@ -380,7 +506,7 @@ const services = [
 
 .stat-card h2{
 
-    color:#bf571c;
+    color:var(--lg-amber);
 
     font-size:3rem;
 
@@ -397,36 +523,82 @@ const services = [
     font-weight:600;
 
 }
-.service-card{
-    transition:.35s;
-    border-radius:20px;
+
+/* Carousel styles */
+.hero-carousel {
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  position: relative;
 }
 
-.service-card:hover{
-    transform:translateY(-10px);
-    box-shadow:0 20px 45px rgba(0,0,0,.12)!important;
+.carousel-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
+.carousel-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.carousel-dot:hover {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.carousel-dot.active {
+  background: var(--lg-amber);
+  width: 32px;
+  border-radius: 6px;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.8s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
 .service-icon{
-
     width:70px;
-
     height:70px;
-
     border-radius:18px;
-
-    background:#bf571c;
-
+    background:rgba(255,255,255,0.16);
     color:white;
-
-    display:flex;
-
+    display:inline-flex;
     align-items:center;
-
     justify-content:center;
-
     font-size:30px;
-
+    border:1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(4px);
+    position: relative;
+    z-index: 1;
 }
 
 .legal-list li{
@@ -456,7 +628,7 @@ const services = [
     height:56px;
     border-radius:14px;
     background:#f6e7da;
-    color:#bf571c;
+    color:var(--lg-amber);
     display:flex;
     align-items:center;
     justify-content:center;

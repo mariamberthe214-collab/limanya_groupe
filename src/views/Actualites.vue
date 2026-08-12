@@ -646,7 +646,7 @@ onMounted(chargerActualites)
   margin-top: 0.9rem;
   font-weight: 600;
   font-size: 0.88rem;
-  color: var(--lg-amber, #bf571c);
+  color: var(--lg-amber);
   text-decoration: none;
 }
 .read-more-link:hover {

@@ -93,7 +93,7 @@ onMounted(chargerRealisations)
         </div>
         <div class="col-lg-6">
           <div class="hero-media ratio ratio-4x3">
-            <img src="/images/service-assainissement.png" alt="Chantier d'assainissement et de drainage" class="w-100 h-100 object-fit-cover" />
+            <img :src="getImageUrl('/uploads/assainissement_angre_2.jpg')" alt="Chantier d'assainissement et de drainage" class="w-100 h-100 object-fit-cover" />
           </div>
         </div>
       </div>

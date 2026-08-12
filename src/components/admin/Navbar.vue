@@ -148,7 +148,7 @@ const deconnexion = async () => {
     height:34px;
     border-radius:50%;
     background:#f6e7da;
-    color:#bf571c;
+    color: var(--lg-amber);
     display:inline-flex;
     align-items:center;
     justify-content:center;

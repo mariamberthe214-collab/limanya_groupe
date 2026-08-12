@@ -447,7 +447,7 @@ display:none;
 }
 
 .nav-link:hover{
-  color:#bf571c;
+  color: var(--lg-amber);
 }
 
 .nav-link::after{
@@ -464,7 +464,7 @@ display:none;
 
   height:2px;
 
-  background:#bf571c;
+  background: var(--lg-amber);
 
   transition:.3s;
 
@@ -478,10 +478,9 @@ display:none;
 
 .router-link-active{
 
-  color:#bf571c !important;
+  color: var(--lg-amber) !important;
 
 }
-
 .router-link-active::after{
 
   width:calc(100% - 36px);
@@ -538,7 +537,7 @@ transform:translateY(0);
 
 .dropdown-item:hover{
 
-  background:#bf571c;
+  background: var(--lg-amber);
 
   color:#fff;
 
@@ -546,9 +545,7 @@ transform:translateY(0);
 
 .devis-btn{
 
-  background:#bf571c;
-
-  color:#fff;
+  background: var(--lg-amber);
 
   padding:13px 28px;
 

@@ -126,6 +126,8 @@ onMounted(chargerActualites)
                     :alt="aLaUne.titre"
                     class="feature-img"
                     loading="lazy"
+                    crossorigin="anonymous"
+                    referrerpolicy="no-referrer"
                   />
                   <span class="media-zoom"><i class="bi bi-arrows-fullscreen"></i></span>
                 </template>
@@ -186,6 +188,8 @@ onMounted(chargerActualites)
                     :alt="post.titre"
                     class="news-img"
                     loading="lazy"
+                    crossorigin="anonymous"
+                    referrerpolicy="no-referrer"
                   />
                   <span class="media-badge"><i class="bi bi-camera-fill"></i></span>
                   <span class="media-zoom"><i class="bi bi-arrows-fullscreen"></i></span>
@@ -226,7 +230,7 @@ onMounted(chargerActualites)
           autoplay
           class="lightbox-media"
         ></video>
-        <img v-else :src="lightbox.src" :alt="lightbox.titre" class="lightbox-media" />
+        <img v-else :src="lightbox.src" :alt="lightbox.titre" class="lightbox-media" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <p class="lightbox-caption">{{ lightbox.titre }}</p>
       </div>
     </div>

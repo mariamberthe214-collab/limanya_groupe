@@ -115,7 +115,10 @@ onMounted(charger)
                 v-else
                 :src="getImageUrl(article.image)"
                 :alt="article.titre"
-                class="w-100 rounded-4" />
+                class="w-100 rounded-4"
+                loading="lazy"
+                crossorigin="anonymous"
+                referrerpolicy="no-referrer" />
             </div>
 
             <div v-if="galerieRestante.length" class="gallery-strip mb-5" v-reveal="80">
@@ -125,7 +128,7 @@ onMounted(charger)
                 :key="i"
                 @click="ouvrirLightbox(m)">
                 <video v-if="m.type === 'video'" :src="getImageUrl(m.url)" muted preload="metadata"></video>
-                <img v-else :src="getImageUrl(m.url)" :alt="article.titre" />
+                <img v-else :src="getImageUrl(m.url)" :alt="article.titre" loading="lazy" crossorigin="anonymous" referrerpolicy="no-referrer" />
                 <span v-if="m.type === 'video'" class="gallery-play"><i class="bi bi-play-circle-fill"></i></span>
               </div>
             </div>
@@ -157,7 +160,10 @@ onMounted(charger)
                       v-if="post.image"
                       :src="getImageUrl(post.image)"
                       :alt="post.titre"
-                      class="w-100 h-100 object-fit-cover">
+                      class="w-100 h-100 object-fit-cover"
+                      loading="lazy"
+                      crossorigin="anonymous"
+                      referrerpolicy="no-referrer">
                     <div v-else class="d-flex align-items-center justify-content-center text-muted">
                       <i class="bi bi-newspaper fs-2"></i>
                     </div>

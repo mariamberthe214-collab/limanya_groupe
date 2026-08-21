@@ -15,10 +15,23 @@ const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOU
  */
 export function getImageUrl(path) {
   if (!path) return null
-  if (path.startsWith('http://') || path.startsWith('https://')) return path
 
-  const base = (api.defaults.baseURL || '').replace(/index\.php\/?$/, '').replace(/\/$/, '')
-  return `${base}${path}`
+  // URL complète : Cloudinary ou autre serveur externe
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path
+  }
+
+  // Média local ancien : on passe par le proxy Vite en développement
+  if (path.startsWith('/uploads/')) {
+    return `/limanya-api${path}`
+  }
+
+  // Au cas où la BDD contient "uploads/xxx.jpg" sans le "/"
+  if (path.startsWith('uploads/')) {
+    return `/limanya-api/${path}`
+  }
+
+  return path
 }
 
 /**

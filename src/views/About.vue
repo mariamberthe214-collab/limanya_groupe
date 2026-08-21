@@ -126,6 +126,9 @@ const services = [
                   :src="heroImages[currentSlide].src" 
                   :alt="heroImages[currentSlide].alt" 
                   class="carousel-image w-100 h-100 object-fit-cover"
+                  crossorigin="anonymous"
+                  referrerpolicy="no-referrer"
+                  loading="lazy"
                 />
               </transition>
               

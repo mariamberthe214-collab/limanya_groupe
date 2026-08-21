@@ -114,7 +114,7 @@ onUnmounted(stopSlides)
         :key="slide"
         :class="{ 'hero-slide--active': index === activeSlide }"
       >
-        <img :src="slide" alt="Photo BTP Limanya Groupe" class="hero-slide-img" />
+        <img :src="slide" alt="Photo BTP Limanya Groupe" class="hero-slide-img" crossorigin="anonymous" referrerpolicy="no-referrer" loading="lazy" />
       </div>
       <div class="hero-overlay"></div>
       <div class="container py-4">
@@ -179,7 +179,10 @@ onUnmounted(stopSlides)
                 v-else-if="projet.image"
                 :src="getImageUrl(projet.image)"
                 :alt="projet.titre"
-                class="w-100 h-100 object-fit-contain p-2 bg-white">
+                class="w-100 h-100 object-fit-contain p-2 bg-white"
+                crossorigin="anonymous"
+                referrerpolicy="no-referrer"
+                loading="lazy">
               <div v-else class="d-flex align-items-center justify-content-center text-muted">
                 <i class="bi bi-image fs-1"></i>
               </div>

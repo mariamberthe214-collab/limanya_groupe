@@ -1,71 +1,46 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import api from '../services/api'
 import { getImageUrl } from '../utils/images'
 import { buildWhatsAppLink } from '../utils/whatsapp'
 
-const whatsappLink = buildWhatsAppLink('Bonjour LIMANYA Groupe, je souhaite un devis pour un projet.')
-
-const projets = ref([])
-const videos = ref([])
-const chargement = ref(true)
-const chargementVideos = ref(true)
+const whatsappLink = buildWhatsAppLink(
+  'Bonjour LIMANYA Groupe, je souhaite un devis pour un projet.'
+)
 
 const portfolioExamples = [
   {
     categorie: 'Forage hydraulique',
     titre: 'Forage villageois & agricole',
     lieu: 'Abidjan / Intérieur du pays',
-    image: '/images/hero-construction.png',
+    image: getImageUrl('/uploads/forage_songon.jpg'),
     action: '/forage',
   },
   {
     categorie: 'Études géophysiques',
     titre: 'Recherche d’eau & implantation',
     lieu: 'Sites industriels et agricoles',
-    image: '/images/hero-chateau-eau.jpg',
+    image: getImageUrl('/uploads/etude_geophysique_terrain.jpg'),
     action: '/etudes-geophysiques',
   },
   {
     categorie: 'Assainissement',
     titre: 'Réseaux & gestion des eaux usées',
     lieu: 'Zones urbaines et rurales',
-    image: '/images/assainisement.png',
+    image: getImageUrl('/uploads/assainissement_angre_2.jpg'),
     action: '/assainissement',
   },
   {
     categorie: 'BTP & génie civil',
     titre: 'Construction & ouvrages publics',
     lieu: 'Chantiers civils',
-    image: '/images/btp3.png',
+    image: getImageUrl('/uploads/btp_odienne_1.jpg'),
     action: '/btp',
   },
 ]
 
-const chargerDonnees = async () => {
-  chargement.value = true
-  chargementVideos.value = true
 
-  try {
-    const response = await api.get('/realisations')
-
-    const data = Array.isArray(response.data)
-      ? response.data
-      : []
-
-    projets.value = data
-    videos.value = data.filter((r) => r.video).slice(0, 3)
-  } catch (error) {
-    console.error('Erreur lors du chargement des réalisations :', error)
-    projets.value = []
-    videos.value = []
-  } finally {
-    chargement.value = false
-    chargementVideos.value = false
-  }
-}
-
-onMounted(chargerDonnees)
+// ==============================
+// STATISTIQUES
+// ==============================
 
 const stats = [
   { value: '15+', label: "Années d'expertise" },
@@ -74,44 +49,79 @@ const stats = [
   { value: '24/7', label: 'Accompagnement' },
 ]
 
+
+// ==============================
+// NOS EXPERTISES
+// ==============================
+
 const categories = [
   {
     icon: 'bi-water',
     title: 'Forages Hydrauliques',
-    description: 'Forages villageois, agricoles, industriels, essais de pompage, réhabilitation et maintenance.',
+    description:
+      'Forages villageois, agricoles, industriels, essais de pompage, réhabilitation et maintenance.',
     action: '/forage',
   },
   {
     icon: 'bi-globe2',
     title: 'Études Géophysiques',
-    description: "Recherche d'eau, études géophysiques et implantation des forages avant tout chantier.",
+    description:
+      "Recherche d'eau, études géophysiques et implantation des forages avant tout chantier.",
     action: '/etudes-geophysiques',
   },
   {
     icon: 'bi-recycle',
     title: 'Assainissement',
-    description: 'Réseaux d\u2019assainissement, gestion des eaux usées, fosses septiques et fosses biodigesteurs.',
+    description:
+      'Réseaux d’assainissement, gestion des eaux usées, fosses septiques et fosses biodigesteurs.',
     action: '/assainissement',
   },
   {
     icon: 'bi-building',
     title: 'BTP & Génie Civil',
-    description: 'Construction, génie civil, VRD et travaux publics.',
+    description:
+      'Construction, génie civil, VRD et travaux publics.',
     action: '/btp',
   },
   {
     icon: 'bi-tools',
     title: 'Vente de Matériels',
-    description: 'Pompes solaires, électriques et hybrides, panneaux solaires, PVC hydrauliques, matériels de forage et accessoires.',
+    description:
+      'Pompes solaires, électriques et hybrides, panneaux solaires, PVC hydrauliques, matériels de forage et accessoires.',
     action: '/materiels-de-forages',
   },
 ]
 
+
+// ==============================
+// POURQUOI LIMANYA
+// ==============================
+
 const highlights = [
-  { icon: 'bi-patch-check', title: 'Spécialiste du forage', text: "Forages hydrauliques, villageois, agricoles et industriels, réalisés avec rigueur." },
-  { icon: 'bi-diagram-3', title: 'Solutions complètes', text: 'Études géophysiques, assainissement, BTP et vente de matériels réunis.' },
-  { icon: 'bi-clock-history', title: 'Respect des délais', text: 'Engagement qualité rigoureux sur chaque chantier.' },
-  { icon: 'bi-tree', title: 'Approche durable', text: 'Bâtir un avenir solide et respectueux de l’environnement.' },
+  {
+    icon: 'bi-patch-check',
+    title: 'Spécialiste du forage',
+    text:
+      'Forages hydrauliques, villageois, agricoles et industriels, réalisés avec rigueur.',
+  },
+  {
+    icon: 'bi-diagram-3',
+    title: 'Solutions complètes',
+    text:
+      'Études géophysiques, assainissement, BTP et vente de matériels réunis.',
+  },
+  {
+    icon: 'bi-clock-history',
+    title: 'Respect des délais',
+    text:
+      'Engagement qualité rigoureux sur chaque chantier.',
+  },
+  {
+    icon: 'bi-tree',
+    title: 'Approche durable',
+    text:
+      'Bâtir un avenir solide et respectueux de l’environnement.',
+  },
 ]
 </script>
 
@@ -121,7 +131,7 @@ const highlights = [
   <section class="home-hero">
     <div class="home-hero-bg">
       <img
-        src="/images/hero-construction.png"
+        :src="getImageUrl('/uploads/btp_odienne_4.jpg')"
         alt="Projet de forage et travaux de construction LIMANYA Groupe"
         class="home-hero-image"
       />
@@ -650,6 +660,12 @@ const highlights = [
             <img :src="projet.image" :alt="projet.titre" loading="lazy" />
             <div class="featured-project-overlay"></div>
 
+            <span class="project-index">0{{ index + 1 }}</span>
+
+            <span class="project-open" aria-hidden="true">
+              <i class="bi bi-arrow-up-right"></i>
+            </span>
+
             <div class="featured-project-content">
               <span class="project-category">{{ projet.categorie }}</span>
               <h3>{{ projet.titre }}</h3>
@@ -660,31 +676,6 @@ const highlights = [
             </div>
           </div>
         </router-link>
-      </div>
-
-      <div class="projects-videos mt-4" v-if="!chargementVideos && videos.length">
-        <div class="row g-4">
-          <div
-            v-for="(video, index) in videos"
-            :key="video.id"
-            class="col-md-4"
-            v-reveal="index * 100"
-          >
-            <div class="project-video-card">
-              <video
-                :src="getImageUrl(video.video)"
-                :poster="video.image ? getImageUrl(video.image) : ''"
-                preload="metadata"
-                controls
-                class="w-100"
-              ></video>
-              <div class="project-video-caption">
-                <strong>{{ video.titre }}</strong>
-                <span v-if="video.lieu" class="d-block">{{ video.lieu }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="projects-footer" v-reveal="300">
@@ -1291,6 +1282,40 @@ const highlights = [
       rgba(0, 0, 0, 0.05) 25%,
       rgba(0, 0, 0, 0.8) 100%
     );
+}
+
+.project-index,
+.project-open {
+  position: absolute;
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.project-index {
+  top: 1.5rem;
+  left: 1.5rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.project-open {
+  top: 1.25rem;
+  right: 1.25rem;
+  display: grid;
+  width: 2.7rem;
+  height: 2.7rem;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  background: rgba(23, 20, 15, 0.28);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.featured-project:hover .project-open {
+  background: var(--lg-amber);
+  transform: translate(0.15rem, -0.15rem);
 }
 
 
@@ -2908,9 +2933,6 @@ const highlights = [
 }
 .home-hero {
   min-height: 92vh;
-  background-image: linear-gradient(120deg, rgba(23, 20, 15, 0.85) 0%, rgba(23, 20, 15, 0.55) 60%, rgba(23, 20, 15, 0.4) 100%), url('/images/hero-construction.png');
-  background-size: cover;
-  background-position: center;
   position: relative;
 }
 .home-hero .position-relative {
@@ -3062,41 +3084,6 @@ const highlights = [
   background: var(--lg-ink);
   color: #fff;
   font-size: 1.3rem;
-}
-
-/* Vidéos du portfolio */
-.projects-videos {
-  margin-top: 1.5rem;
-}
-.project-video-card {
-  background: var(--lg-surface);
-  border: 1px solid var(--lg-line);
-  border-radius: 1.1rem;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.project-video-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(23, 20, 15, 0.1);
-}
-.project-video-card video {
-  display: block;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  background: #000;
-}
-.project-video-caption {
-  padding: 1rem 1.1rem;
-}
-.project-video-caption strong {
-  display: block;
-  color: var(--lg-ink);
-  font-size: 1rem;
-}
-.project-video-caption span {
-  margin-top: 0.25rem;
-  color: var(--lg-muted);
-  font-size: 0.8rem;
 }
 
 /* CTA */

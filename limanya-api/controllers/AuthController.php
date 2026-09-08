@@ -51,6 +51,7 @@ class AuthController
     }
 
     unset($_SESSION['login_attempts']);
+    session_regenerate_id(true);
 
     $_SESSION['user'] = [
         'id' => $user['id'],

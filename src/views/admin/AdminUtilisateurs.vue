@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import api from '../../services/api'
 import ConfirmModal from '../../components/admin/ConfirmModal.vue'
 
@@ -12,6 +12,11 @@ const utilisateurASupprimer = ref(null)
 const nouveauUtilisateur = ref({ nom: '', email: '', password: '', role: 'admin' })
 const showForm = ref(false)
 const idEnEdition = ref(null)
+const erreur = ref('')
+
+watch(recherche, () => {
+  page.value = 1
+})
 
 const chargerUtilisateurs = async () => {
   try {
@@ -19,6 +24,7 @@ const chargerUtilisateurs = async () => {
     utilisateurs.value = response.data
   } catch (error) {
     console.error(error)
+    erreur.value = error.response?.data?.message || 'Impossible de charger les utilisateurs.'
   }
 }
 
@@ -103,12 +109,15 @@ onMounted(chargerUtilisateurs)
 </script>
 
 <template>
-  <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-1">
+  <div class="container py-4 admin-users-page">
+    <div class="admin-page-header mb-1">
       <h2 class="fw-bold mb-0"><i class="bi bi-people text-amber me-2"></i>Gestion des utilisateurs</h2>
       <button class="btn btn-primary" @click="ouvrirAjout"><i class="bi bi-person-plus me-1"></i>Ajouter un utilisateur</button>
     </div>
     <p class="text-muted mb-4">Gérez les comptes ayant accès à l'administration.</p>
+    <div v-if="erreur" class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>{{ erreur }}
+    </div>
 
     <div v-if="showForm" class="card p-3 mb-4">
       <h5 class="mb-3">{{ idEnEdition ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur' }}</h5>
@@ -129,7 +138,6 @@ onMounted(chargerUtilisateurs)
         <div class="col-md-2">
           <select v-model="nouveauUtilisateur.role" class="form-select">
             <option value="admin">Admin</option>
-            <option value="user">User</option>
           </select>
         </div>
       </div>
@@ -193,3 +201,37 @@ onMounted(chargerUtilisateurs)
     @cancel="showModal = false"
   />
 </template>
+
+<style scoped>
+.admin-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-users-page .table {
+  min-width: 680px;
+}
+
+@media (max-width: 767.98px) {
+  .admin-page-header {
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .admin-users-page h2 {
+    font-size: 1.45rem;
+    line-height: 1.2;
+  }
+
+  .admin-users-page .admin-page-header .btn {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    padding: 0.55rem 0.75rem;
+  }
+
+  .admin-users-page .card .row > [class*='col-'] {
+    width: 100%;
+  }
+}
+</style>

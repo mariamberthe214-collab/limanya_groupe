@@ -15,7 +15,7 @@ class User extends BaseModel
 
     public function getAll(): array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} ORDER BY created_at DESC");
+        $stmt = $this->pdo->prepare("SELECT id, nom, prenom, email, telephone, photo, role, created_at FROM {$this->table} ORDER BY created_at DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

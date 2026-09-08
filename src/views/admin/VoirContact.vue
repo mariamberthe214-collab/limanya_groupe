@@ -63,7 +63,7 @@ onMounted(chargerContact)
 
 <template>
 
-<div class="container py-5" style="max-width: 760px;">
+<div class="container py-5 admin-detail-page" style="max-width: 760px;">
 
     <RouterLink to="/admin/contacts" class="text-muted d-inline-flex align-items-center mb-3" style="gap:6px;">
         <i class="bi bi-arrow-left"></i> Retour aux messages
@@ -106,7 +106,7 @@ onMounted(chargerContact)
                 <p class="mb-0">{{ contact.message }}</p>
             </div>
 
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-2 detail-actions">
             <RouterLink
                 to="/admin/contacts"
                 class="btn btn-secondary">
@@ -119,6 +119,7 @@ onMounted(chargerContact)
                 v-if="contact.telephone"
                 :href="lienReponseWhatsApp()"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="btn btn-success">
 
                 <i class="bi bi-whatsapp me-1"></i>Répondre via WhatsApp
@@ -158,3 +159,46 @@ onMounted(chargerContact)
 />
 
 </template>
+
+<style scoped>
+.detail-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #6f685a;
+    margin-bottom: 0.2rem;
+}
+
+.detail-value {
+    font-size: 1rem;
+    color: #2c281f;
+    overflow-wrap: anywhere;
+}
+
+.message-box {
+    background: #f6f4ee;
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+}
+
+@media (max-width: 767.98px) {
+    .admin-detail-page {
+        padding-top: 1.25rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    .admin-detail-page h2 {
+        font-size: 1.45rem;
+        line-height: 1.2;
+    }
+
+    .detail-actions {
+        flex-direction: column;
+    }
+
+    .detail-actions .btn {
+        width: 100%;
+    }
+}
+</style>

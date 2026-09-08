@@ -7,9 +7,11 @@ import Assainissement from '../views/Assainissement.vue'
 import Materiels from '../views/Materiels.vue'
 import EtudesGeophysiques from '../views/EtudesGeophysiques.vue'
 import Realisations from '../views/Realisations.vue'
+import RealisationDetail from '../views/RealisationDetail.vue'
 import Actualites from '../views/Actualites.vue'
 import ActualiteDetail from '../views/ActualiteDetail.vue'
 import Contact from '../views/Contact.vue'
+import NotFound from '../views/NotFound.vue'
 import AdminLogin from '../views/AdminLogin.vue'
 import Dashboard from '../views/admin/Dashboard.vue'
 import AdminActualites from '../views/admin/AdminActualites.vue'
@@ -33,6 +35,7 @@ const routes = [
 
   { path: '/', name: 'home', component: Home, meta: { title: 'LIMANYA GROUPE — Forages Hydrauliques en Côte d\'Ivoire' } },
   { path: '/realisations-btp-services-de-construction', name: 'realisations', component: Realisations, meta: { title: 'Nos Réalisations — LIMANYA GROUPE' } },
+  { path: '/realisations/:id', name: 'realisation-detail', component: RealisationDetail, meta: { title: 'Réalisation — LIMANYA GROUPE' } },
   { path: '/materiels-de-forages', name: 'materiels', component: Materiels, meta: { title: 'Vente de Matériels — LIMANYA GROUPE' } },
   { path: '/contacts', name: 'contacts', component: Contact, meta: { title: 'Contact — LIMANYA GROUPE' } },
   { path: '/apropos', name: 'about', component: About, meta: { title: 'À propos — LIMANYA GROUPE' } },
@@ -47,6 +50,7 @@ const routes = [
  {
   path: '/admin',
   component: AdminLayout,
+  meta: { requiresAdmin: true },
   children: [
     {
       path: 'dashboard',
@@ -110,7 +114,13 @@ const routes = [
       component: AdminUtilisateurs
     }
   ]
-}
+},
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: NotFound,
+    meta: { title: 'Page introuvable — LIMANYA GROUPE' },
+  }
 ]
 
 const router = createRouter({
@@ -132,6 +142,27 @@ const router = createRouter({
 
 router.afterEach((to) => {
   document.title = to.meta?.title || 'LIMANYA GROUPE'
+})
+
+router.beforeEach((to) => {
+  let adminConnecte = false
+  try {
+    const utilisateur = JSON.parse(localStorage.getItem('admin_user') || 'null')
+    adminConnecte = utilisateur?.role === 'admin'
+  } catch {
+    localStorage.removeItem('admin_user')
+  }
+
+  if (to.meta.requiresAdmin && !adminConnecte) {
+    return {
+      name: 'admin-login',
+      query: { redirect: to.fullPath },
+    }
+  }
+
+  if (to.name === 'admin-login' && adminConnecte) {
+    return { name: 'dashboard' }
+  }
 })
 
 export default router

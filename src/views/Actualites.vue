@@ -5,6 +5,7 @@ import { getImageUrl } from '../utils/images'
 
 const posts = ref([])
 const chargement = ref(true)
+const erreur = ref('')
 const lightbox = ref(null) // { type: 'image'|'video', src, titre }
 
 const formatDate = (date) => {
@@ -26,6 +27,7 @@ const chargerActualites = async () => {
     )
   } catch (error) {
     console.error(error)
+    erreur.value = 'Impossible de charger les actualités pour le moment.'
   } finally {
     chargement.value = false
   }
@@ -94,6 +96,10 @@ onMounted(chargerActualites)
       </div>
 
       <!-- ÉTAT VIDE -->
+      <div v-else-if="erreur" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>{{ erreur }}
+      </div>
+
       <div v-else-if="posts.length === 0" class="empty-state text-center py-5" v-reveal>
         <div class="empty-icon mb-3"><i class="bi bi-newspaper"></i></div>
         <h4>Aucune actualité pour le moment</h4>
@@ -396,6 +402,7 @@ onMounted(chargerActualites)
   color: var(--lg-muted);
   line-height: 1.7;
   display: -webkit-box;
+  line-clamp: 5;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -528,6 +535,7 @@ onMounted(chargerActualites)
   line-height: 1.65;
   flex-grow: 1;
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;

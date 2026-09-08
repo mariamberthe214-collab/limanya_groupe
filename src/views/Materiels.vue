@@ -13,6 +13,7 @@ const atouts = [
 
 const equipements = ref([])
 const chargement = ref(true)
+const erreur = ref('')
 const filtreActif = ref(null)
 const lightbox = ref(null) // { src, titre }
 
@@ -50,6 +51,7 @@ const chargerEquipements = async () => {
     equipements.value = response.data
   } catch (error) {
     console.error(error)
+    erreur.value = 'Impossible de charger le catalogue pour le moment.'
   } finally {
     chargement.value = false
   }
@@ -153,6 +155,10 @@ onMounted(chargerEquipements)
       </div>
 
       <!-- ÉTAT VIDE -->
+      <div v-else-if="erreur" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>{{ erreur }}
+      </div>
+
       <div v-else-if="equipementsFiltres.length === 0" class="empty-state text-center py-5" v-reveal>
         <div class="empty-icon mb-3"><i class="bi bi-box-seam"></i></div>
         <h4>Catalogue en cours de mise à jour</h4>
@@ -208,7 +214,7 @@ onMounted(chargerEquipements)
                 <a
                   :href="demanderPrix(equip.nom)"
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                   class="btn-whatsapp"
                 >
                   <i class="bi bi-whatsapp me-1"></i>Demander

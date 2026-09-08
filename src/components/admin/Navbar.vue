@@ -172,6 +172,14 @@ const deconnexion = async () => {
 
 @media (max-width: 576px) {
 
+  .navbar-admin {
+    height: 62px;
+  }
+
+  .right {
+    gap: 8px;
+  }
+
     .admin-name{
         display:none;
     }

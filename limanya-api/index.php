@@ -174,6 +174,7 @@ switch ($resource) {
         $ctrl = new DashboardController();
 
         if ($method === 'GET') {
+            requireAdmin();
             $ctrl->stats();
         }
 

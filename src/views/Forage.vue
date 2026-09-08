@@ -16,6 +16,8 @@ const form = reactive({
 
 const submitted = ref(false)
 const lastWhatsAppLink = ref('')
+const erreur = ref('')
+const envoiEnCours = ref(false)
 
 const realisations = ref([])
 const chargementRealisations = ref(true)
@@ -78,6 +80,11 @@ const buildRecapMessage = (data) => {
 }
 
 const submitForm = async () => {
+  if (envoiEnCours.value) return
+
+  erreur.value = ''
+  envoiEnCours.value = true
+
   try {
     const recapMessage = buildRecapMessage(form)
 
@@ -100,7 +107,9 @@ const submitForm = async () => {
     form.message = ''
   } catch (error) {
     console.error(error)
-    alert('Une erreur est survenue lors de l’envoi de votre demande. Veuillez réessayer.')
+    erreur.value = error.response?.data?.message || 'Une erreur est survenue lors de l’envoi de votre demande. Veuillez réessayer.'
+  } finally {
+    envoiEnCours.value = false
   }
 }
 
@@ -500,6 +509,9 @@ const advantages = [
               <i class="bi bi-calendar3 me-1" v-if="projet.date_realisation"></i>{{ formatDate(projet.date_realisation) }}
             </p>
             <p class="text-muted">{{ projet.description }}</p>
+            <RouterLink :to="`/realisations/${projet.id}`" class="btn btn-outline-primary btn-sm mt-2">
+              Voir le projet <i class="bi bi-arrow-right ms-1"></i>
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -550,12 +562,18 @@ const advantages = [
               <label class="form-label">Message</label>
               <textarea v-model="form.message" rows="4" class="form-control" placeholder="Décrivez votre projet"></textarea>
             </div>
-            <button type="submit" class="btn btn-warning btn-lg mt-4">Envoyer ma demande</button>
+            <button type="submit" class="btn btn-warning btn-lg mt-4" :disabled="envoiEnCours">
+              <span v-if="envoiEnCours" class="spinner-border spinner-border-sm me-2"></span>
+              {{ envoiEnCours ? 'Envoi en cours...' : 'Envoyer ma demande' }}
+            </button>
+            <div v-if="erreur" class="alert alert-danger mt-3 mb-0" role="alert">
+              <i class="bi bi-exclamation-triangle me-2"></i>{{ erreur }}
+            </div>
           </form>
 
           <div v-if="submitted" class="alert alert-success mt-4" role="alert">
             <p class="mb-3">Merci ! Votre demande a bien été envoyée. Nous revenons vers vous rapidement.</p>
-            <a :href="lastWhatsAppLink" target="_blank" class="btn btn-success btn-sm">
+            <a :href="lastWhatsAppLink" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-sm">
               <i class="bi bi-whatsapp me-1"></i>Continuer la conversation sur WhatsApp
             </a>
           </div>
@@ -899,6 +917,25 @@ const advantages = [
     color:#fff;
 
     padding:10px 22px;
+  @media (max-width: 767.98px) {
+    .forage-hero {
+      min-height: auto;
+      padding: 6rem 0 4rem;
+    }
+
+    .forage-hero h1 {
+      font-size: clamp(2.1rem, 10vw, 3rem);
+      line-height: 1.08;
+    }
+
+    .forage-hero .lead {
+      font-size: 1rem;
+    }
+
+    .forage-hero .btn {
+      width: 100%;
+    }
+  }
 
     border-radius:50px;
 

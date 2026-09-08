@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import api from '../../services/api'
 import { getImageUrl } from '../../utils/images'
@@ -13,6 +13,10 @@ const parPage = 10
 
 const showModal = ref(false)
 const idASupprimer = ref(null)
+
+watch(recherche, () => {
+    page.value = 1
+})
 
 const chargerEquipements = async () => {
     try {
@@ -78,7 +82,7 @@ onMounted(chargerEquipements)
 
 <template>
 
-<div class="container py-4">
+<div class="container py-4 admin-equipment-page">
 
     <div class="d-flex justify-content-between align-items-center mb-1">
 
@@ -228,3 +232,26 @@ onMounted(chargerEquipements)
 </div>
 
 </template>
+
+<style scoped>
+.admin-equipment-page .table {
+    min-width: 820px;
+}
+
+@media (max-width: 767.98px) {
+    .admin-equipment-page h2 {
+        font-size: 1.45rem;
+        line-height: 1.2;
+    }
+
+    .admin-equipment-page > .d-flex:first-child {
+        align-items: flex-start !important;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .admin-equipment-page > .d-flex:first-child .btn {
+        width: 100%;
+    }
+}
+</style>

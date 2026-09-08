@@ -24,19 +24,11 @@
 
       <div class="top-social">
 
-        <a href="#" target="_blank">
-          <i class="bi bi-linkedin"></i>
-        </a>
-
-        <a href="https://www.facebook.com/limanyagroup" target="_blank">
+        <a href="https://www.facebook.com/limanyagroup" target="_blank" rel="noopener noreferrer" aria-label="Facebook LIMANYA Groupe">
           <i class="bi bi-facebook"></i>
         </a>
 
-        <a href="#" target="_blank">
-          <i class="bi bi-instagram"></i>
-        </a>
-
-        <a href="https://www.tiktok.com/@limanya.groupe8?_r=1&_t=ZS-97rV14EWJVc" target="_blank">
+        <a href="https://www.tiktok.com/@limanya.groupe8?_r=1&_t=ZS-97rV14EWJVc" target="_blank" rel="noopener noreferrer" aria-label="TikTok LIMANYA Groupe">
           <i class="bi bi-tiktok"></i>
         </a>
 
@@ -51,13 +43,17 @@
     <div class="container">
 
       <RouterLink class="navbar-brand" to="/">
-        <img src="../assets/logo.png" class="logo">
+        <img src="../assets/logo.png" class="logo" alt="LIMANYA Groupe">
       </RouterLink>
 
       <button
+        type="button"
         class="navbar-toggler"
         data-bs-toggle="collapse"
-        data-bs-target="#navbarNav">
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Ouvrir le menu de navigation">
 
         <i class="bi bi-list"></i>
 
@@ -270,7 +266,21 @@
 </template>
 
 <script setup>
+import { watch } from 'vue'
+import { useRoute } from 'vue-router'
 import logo from '../assets/logo.png'
+
+const route = useRoute()
+
+const fermerMenuMobile = () => {
+  const menu = document.getElementById('navbarNav')
+  const toggler = document.querySelector('[data-bs-target="#navbarNav"]')
+  if (!menu || !toggler || !menu.classList.contains('show')) return
+
+  toggler.click()
+}
+
+watch(() => route.fullPath, fermerMenuMobile)
 </script>
 
 <style scoped>
@@ -640,7 +650,7 @@ import logo from '../assets/logo.png'
   width: 44px;
   height: 44px;
 
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
 
@@ -675,6 +685,10 @@ import logo from '../assets/logo.png'
 ========================================================= */
 
 @media (max-width: 991.98px) {
+
+  .navbar-toggler {
+    display: flex;
+  }
 
   .top-bar {
     display: none;

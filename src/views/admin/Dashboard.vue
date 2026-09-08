@@ -1,5 +1,5 @@
 <template>
-  <div class="container py-4">
+  <div class="container py-4 admin-dashboard-page">
 
     <Breadcrumb titre="Tableau de bord" page="Dashboard" />
     <p class="text-muted mb-4 mt-n3">Bienvenue dans l'administration de LIMANYA GROUPE.</p>
@@ -138,6 +138,28 @@
 
   </div>
 </template>
+
+<style scoped>
+.admin-dashboard-page .table {
+  min-width: 620px;
+}
+
+@media (max-width: 767.98px) {
+  .admin-dashboard-page {
+    padding-top: 1.25rem !important;
+  }
+
+  .admin-dashboard-page .card-header {
+    align-items: flex-start !important;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .admin-dashboard-page .card-header h5 {
+    font-size: 1rem;
+  }
+}
+</style>
 
 <script setup>
 import { ref, onMounted } from 'vue'

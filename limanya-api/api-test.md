@@ -110,13 +110,11 @@ curl -X POST http://localhost:8000/auth/logout
 
 ---
 
-## 6) Authentification administrateur (plan)
-- Endpoints proposés:
-  - POST /auth/login  => body: email, password -> renvoie JWT
-  - POST /auth/logout => invalide token côté serveur (optionnel)
-  - Middleware vérifie JWT et rôle `admin` pour routes protégées
-- Utiliser `firebase/php-jwt` pour JWT.
-- Stocker `users` (table fournie). Passwords hachés via `password_hash()`.
+## 6) Authentification administrateur
+- `POST /auth/login` avec `{email, password}` ouvre une session PHP.
+- `POST /auth/logout` ferme la session PHP.
+- Les routes protégées vérifient la session et le rôle `admin`.
+- Les mots de passe sont hachés avec `password_hash()` et vérifiés avec `password_verify()`.
 
 ### Créer un utilisateur administrateur
 

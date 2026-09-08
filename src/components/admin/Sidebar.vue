@@ -54,7 +54,7 @@ const closeSidebar = inject('closeSidebar')
     </nav>
 
     <div class="sidebar-footer">
-      <a href="/" target="_blank" class="sidebar-footer-link">
+      <a href="/" target="_blank" rel="noopener noreferrer" class="sidebar-footer-link">
         <i class="bi bi-box-arrow-up-right"></i>
         <span>Voir le site public</span>
       </a>

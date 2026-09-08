@@ -16,10 +16,7 @@ const form = ref({
   image: null
 })
 
-const fichierImage = ref(null)
-const apercu = ref(null)
-const fichierVideo = ref(null)
-const nomVideo = ref('')
+const medias = ref([])
 const envoiEnCours = ref(false)
 
 const charger = async () => {
@@ -31,37 +28,29 @@ const charger = async () => {
   }
 }
 
-const choisirImage = (event) => {
-  const file = event.target.files[0]
-  if (!file) return
-  fichierImage.value = file
-  apercu.value = URL.createObjectURL(file)
-}
-
-const choisirVideo = (event) => {
-  const file = event.target.files[0]
-  if (!file) return
-  fichierVideo.value = file
-  nomVideo.value = file.name
+const choisirMedias = (event) => {
+  medias.value = Array.from(event.target.files || []).map((file) => ({
+    file,
+    url: URL.createObjectURL(file),
+    type: file.type.startsWith('video/') ? 'video' : 'image',
+  }))
 }
 
 const update = async () => {
   envoiEnCours.value = true
   try {
-    let imagePath = form.value.image
-    if (fichierImage.value) {
-      imagePath = await uploadImage(fichierImage.value)
-    }
-
-    let videoPath = form.value.video
-    if (fichierVideo.value) {
-      videoPath = await uploadImage(fichierVideo.value)
+    const mediasUploades = medias.value.length
+      ? []
+      : (form.value.medias || [])
+    for (const media of medias.value) {
+      mediasUploades.push({ url: await uploadImage(media.file), type: media.type })
     }
 
     await api.put(`/realisations/${route.params.id}`, {
       ...form.value,
-      image: imagePath,
-      video: videoPath
+      image: mediasUploades.find((media) => media.type === 'image')?.url || form.value.image || null,
+      video: mediasUploades.find((media) => media.type === 'video')?.url || form.value.video || null,
+      medias: mediasUploades,
     })
     router.push('/admin/realisations')
   } catch (err) {
@@ -75,7 +64,7 @@ onMounted(charger)
 </script>
 
 <template>
-<div class="container py-5" style="max-width: 820px;">
+<div class="container py-5 admin-form-page" style="max-width: 820px;">
 
   <RouterLink to="/admin/realisations" class="text-muted d-inline-flex align-items-center mb-3" style="gap:6px;">
     <i class="bi bi-arrow-left"></i> Retour aux réalisations
@@ -116,17 +105,15 @@ onMounted(charger)
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Photo</label>
-      <input type="file" accept="image/*" class="form-control" @change="choisirImage" />
-      <img :src="apercu || getImageUrl(form.image)" v-if="apercu || form.image" class="img-thumbnail mt-3" style="max-height:180px;" />
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Vidéo (optionnel)</label>
-      <input type="file" accept="video/mp4,video/quicktime,video/webm" class="form-control" @change="choisirVideo" />
-      <small class="text-muted" v-if="nomVideo">Nouveau fichier : {{ nomVideo }}</small>
-      <small class="text-muted d-block" v-else-if="form.video">Vidéo actuelle : {{ form.video.split('/').pop() }}</small>
-      <small class="text-muted d-block" v-else>Formats acceptés : MP4, MOV, WEBM (60 Mo max).</small>
+      <label class="form-label">Photos et vidéos</label>
+      <input type="file" accept="image/*,video/mp4,video/quicktime,video/webm" multiple class="form-control" @change="choisirMedias" />
+      <small class="text-muted d-block mt-1">Sélectionner de nouveaux fichiers remplace la galerie actuelle.</small>
+      <div v-if="medias.length || form.medias?.length" class="row g-2 mt-2">
+        <div v-for="(media, index) in (medias.length ? medias : form.medias)" :key="index" class="col-4 col-md-3">
+          <video v-if="media.type === 'video'" :src="media.url || getImageUrl(media.url)" class="w-100 rounded" style="height:90px;object-fit:cover;" muted></video>
+          <img v-else :src="media.url || getImageUrl(media.url)" class="w-100 rounded" style="height:90px;object-fit:cover;" alt="Aperçu du média" />
+        </div>
+      </div>
     </div>
 
     <div class="mb-4">
@@ -144,3 +131,25 @@ onMounted(charger)
 
 </div>
 </template>
+
+<style scoped>
+@media (max-width: 767.98px) {
+  .admin-form-page {
+    padding-top: 1.25rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  .admin-form-page h2 {
+    font-size: 1.45rem;
+    line-height: 1.2;
+  }
+
+  .admin-form-page .card {
+    padding: 1.25rem !important;
+  }
+
+  .admin-form-page form > .btn {
+    width: 100%;
+  }
+}
+</style>

@@ -16,6 +16,8 @@ mysql -u root -p < database/limanya_db.sql
 
 Éditez `config/database.php` et renseignez vos identifiants MySQL.
 
+Si la base existe déjà, exécutez aussi `database/migration_medias_realisations.sql` pour activer les galeries de photos et vidéos des réalisations.
+
 3) Lancer le serveur PHP interne (pour tests)
 
 ```bash
@@ -68,5 +70,7 @@ curl -X POST http://localhost:8000/devis -H 'Content-Type: application/json' -d 
 ```
 
 Notes de sécurité:
-- CORS est ouvert à toutes origines pour le développement. Restreindre en production.
-- Ajouter validation, authentification (tokens), et gestion d'upload sécurisée avant mise en production.
+- CORS est limité aux origines déclarées dans `index.php`.
+- Les routes d'administration utilisent une session PHP et le rôle `admin`.
+- Les routes publiques de création de contacts et de devis restent accessibles sans connexion.
+- En production, remplacez les origines localhost par le domaine réel et utilisez HTTPS.

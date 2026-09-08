@@ -54,7 +54,7 @@ onMounted(chargerDevis)
 
 <template>
 
-<div class="container py-5" style="max-width: 760px;">
+<div class="container py-5 admin-detail-page" style="max-width: 760px;">
 
     <RouterLink to="/admin/devis" class="text-muted d-inline-flex align-items-center mb-3" style="gap:6px;">
         <i class="bi bi-arrow-left"></i> Retour aux devis
@@ -93,8 +93,8 @@ onMounted(chargerDevis)
                 <div class="col-sm-6">
                     <div class="detail-label">Statut</div>
                     <div class="detail-value">
-                        <span class="badge" :class="devisItem.statut === 'nouveau' ? 'bg-warning text-dark' : 'bg-success'">
-                            {{ devisItem.statut || 'nouveau' }}
+                        <span class="badge" :class="['nouveau', 'En attente', 'en attente'].includes(devisItem.statut) ? 'bg-warning text-dark' : 'bg-success'">
+                            {{ devisItem.statut || 'En attente' }}
                         </span>
                     </div>
                 </div>
@@ -105,7 +105,7 @@ onMounted(chargerDevis)
                 <p class="mb-0">{{ devisItem.message || 'Aucun message renseigné.' }}</p>
             </div>
 
-            <div class="d-flex flex-wrap gap-2">
+            <div class="d-flex flex-wrap gap-2 detail-actions">
             <RouterLink
                 to="/admin/devis"
                 class="btn btn-secondary">
@@ -118,6 +118,7 @@ onMounted(chargerDevis)
                 v-if="devisItem.telephone"
                 :href="lienReponseWhatsApp()"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="btn btn-success">
 
                 <i class="bi bi-whatsapp me-1"></i>Répondre via WhatsApp
@@ -128,7 +129,7 @@ onMounted(chargerDevis)
                 class="btn btn-outline-primary"
                 @click="marquerTraite">
 
-                <i class="bi bi-arrow-repeat me-1"></i>Marquer {{ devisItem.statut === 'nouveau' ? 'traité' : 'nouveau' }}
+                <i class="bi bi-arrow-repeat me-1"></i>Marquer {{ ['nouveau', 'En attente', 'en attente'].includes(devisItem.statut) ? 'traité' : 'nouveau' }}
 
             </button>
 
@@ -178,10 +179,31 @@ onMounted(chargerDevis)
 .detail-value {
     font-size: 1rem;
     color: #2c281f;
+    overflow-wrap: anywhere;
 }
 .message-box {
     background: #f6f4ee;
     border-radius: 0.75rem;
     padding: 1.25rem 1.5rem;
+}
+
+@media (max-width: 767.98px) {
+    .admin-detail-page {
+        padding-top: 1.25rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    .admin-detail-page h2 {
+        font-size: 1.45rem;
+        line-height: 1.2;
+    }
+
+    .detail-actions {
+        flex-direction: column;
+    }
+
+    .detail-actions .btn {
+        width: 100%;
+    }
 }
 </style>

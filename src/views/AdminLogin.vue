@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import api from '../services/api'
 import logo from '../assets/logo.png'
 
 const router = useRouter()
+const route = useRoute()
 const erreur = ref('')
 const chargement = ref(false)
 
@@ -19,7 +20,12 @@ const login = async () => {
 
     localStorage.setItem('admin_user', JSON.stringify(response.data.user))
 
-    router.push('/admin/dashboard')
+    const destination = typeof route.query.redirect === 'string'
+      && route.query.redirect.startsWith('/admin/')
+      ? route.query.redirect
+      : '/admin/dashboard'
+
+    router.push(destination)
 
   } catch (error) {
     erreur.value = error.response?.data?.message || 'Email ou mot de passe incorrect'
@@ -52,25 +58,32 @@ const password = ref('')
             <i class="bi bi-exclamation-circle me-1"></i>{{ erreur }}
         </div>
 
-        <label class="login-label">Adresse email</label>
+        <label class="login-label" for="admin-email">Adresse email</label>
         <div class="input-group mb-3">
             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
             <input
+              id="admin-email"
                 v-model="email"
+              type="email"
                 class="form-control"
                 placeholder="exemple@limanya.com"
+              autocomplete="username"
+              required
                 @keyup.enter="login"
             >
         </div>
 
-        <label class="login-label">Mot de passe</label>
+        <label class="login-label" for="admin-password">Mot de passe</label>
         <div class="input-group mb-4">
             <span class="input-group-text"><i class="bi bi-lock"></i></span>
             <input
+              id="admin-password"
                 type="password"
                 v-model="password"
                 class="form-control"
                 placeholder="Mot de passe"
+              autocomplete="current-password"
+              required
                 @keyup.enter="login"
             >
         </div>

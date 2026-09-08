@@ -5,13 +5,13 @@
         <div class="col-lg-4">
           <div class="d-flex align-items-center gap-2 mb-3">
             <RouterLink class="navbar-brand" to="/">
-              <img src="../assets/logo.png" class="logo">
+              <img src="../assets/logo.png" class="logo" alt="LIMANYA Groupe">
             </RouterLink>
           </div>
           <p class="foot-text mb-4">Spécialiste des forages hydrauliques en Côte d'Ivoire : études géophysiques, assainissement, BTP et vente de matériels.</p>
           <div class="d-flex gap-2">
-            <a class="foot-social" :href="whatsappLink" target="_blank" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
-            <a class="foot-social" href="https://www.facebook.com/limanyagroup" target="_blank" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a class="foot-social" :href="whatsappLink" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+            <a class="foot-social" href="https://www.facebook.com/limanyagroup" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
             <a class="foot-social" href="mailto:contact@limanyagroupe.com" aria-label="Email"><i class="bi bi-envelope-fill"></i></a>
           </div>
         </div>

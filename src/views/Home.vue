@@ -10,13 +10,13 @@ const portfolioExamples = [
   {
     categorie: 'Forage hydraulique',
     titre: 'Forage villageois & agricole',
-    lieu: 'Abidjan / Intérieur du pays',
+    lieu: 'Abidjan / intérieur du pays',
     image: getImageUrl('/uploads/forage_songon.jpg'),
     action: '/forage',
   },
   {
     categorie: 'Études géophysiques',
-    titre: 'Recherche d’eau & implantation',
+    titre: "Recherche d'eau & implantation",
     lieu: 'Sites industriels et agricoles',
     image: getImageUrl('/uploads/etude_geophysique_terrain.jpg'),
     action: '/etudes-geophysiques',
@@ -808,7 +808,7 @@ const highlights = [
         <p class="lead text-white-75 mb-4 mx-auto" style="max-width: 640px;">Contactez-nous pour un accompagnement personnalisé en BTP, forage hydraulique et énergies renouvelables.</p>
         <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
           <router-link to="/contacts" class="btn btn-primary btn-lg">Contactez-nous</router-link>
-          <a :href="whatsappLink" target="_blank" class="btn btn-outline-light btn-lg"><i class="bi bi-whatsapp me-2"></i>Discutons sur WhatsApp</a>
+          <a :href="whatsappLink" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-lg"><i class="bi bi-whatsapp me-2"></i>Discutons sur WhatsApp</a>
         </div>
       </div>
     </div>
@@ -1221,9 +1221,15 @@ const highlights = [
 
 .portfolio-example {
   display: block;
-  min-height: 360px;
+  min-height: 400px;
   text-decoration: none;
   color: inherit;
+}
+
+.portfolio-example:focus-visible {
+  outline: 3px solid var(--lg-water);
+  outline-offset: 4px;
+  border-radius: 1.5rem;
 }
 
 
@@ -1235,7 +1241,7 @@ const highlights = [
 
   position: relative;
 
-  min-height: 600px;
+  min-height: 400px;
 
   overflow: hidden;
 
@@ -1372,13 +1378,19 @@ const highlights = [
   line-height: 1.1;
 
   letter-spacing: -0.025em;
+
+  color: #fff;
+
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
 .featured-project-content p {
 
   margin: 0;
 
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.92);
+
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
 
   font-size: 0.9rem;
 }
@@ -1677,7 +1689,7 @@ const highlights = [
 
   .featured-project {
 
-    min-height: 500px;
+    min-height: 380px;
   }
 
   .secondary-projects {
@@ -1710,7 +1722,7 @@ const highlights = [
 
   .featured-project {
 
-    min-height: 430px;
+    min-height: 360px;
 
     border-radius: 1.2rem;
   }
@@ -2614,10 +2626,10 @@ const highlights = [
   background:
     linear-gradient(
       90deg,
-      rgba(18, 15, 11, 0.96) 0%,
-      rgba(18, 15, 11, 0.86) 42%,
-      rgba(18, 15, 11, 0.55) 72%,
-      rgba(18, 15, 11, 0.35) 100%
+      rgba(18, 15, 11, 0.78) 0%,
+      rgba(18, 15, 11, 0.68) 42%,
+      rgba(18, 15, 11, 0.38) 72%,
+      rgba(18, 15, 11, 0.2) 100%
     );
 }
 
@@ -2880,10 +2892,11 @@ const highlights = [
   .home-hero-overlay {
     background:
       linear-gradient(
-        180deg,
-        rgba(18, 15, 11, 0.7) 0%,
-        rgba(18, 15, 11, 0.88) 60%,
-        rgba(18, 15, 11, 0.97) 100%
+        90deg,
+        rgba(18, 15, 11, 0.78) 0%,
+        rgba(18, 15, 11, 0.68) 42%,
+        rgba(18, 15, 11, 0.38) 72%,
+        rgba(18, 15, 11, 0.2) 100%
       );
   }
 

@@ -144,7 +144,7 @@ onMounted(() => {
 
 <template>
 
-<div class="container py-5">
+<div class="container py-5 admin-news-page">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <p class="text-muted mb-4">
@@ -374,3 +374,29 @@ onMounted(() => {
     @close="showToast = false"
 />
 </template>
+
+<style scoped>
+.admin-news-page .table {
+    min-width: 700px;
+}
+
+@media (max-width: 767.98px) {
+    .admin-news-page {
+        padding-top: 1.25rem !important;
+    }
+
+    .admin-news-page > .d-flex {
+        align-items: flex-start !important;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .admin-news-page > .d-flex .btn {
+        width: 100%;
+    }
+
+    .admin-news-page .table-responsive .card-body {
+        padding: 0.75rem;
+    }
+}
+</style>

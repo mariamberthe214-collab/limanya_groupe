@@ -78,7 +78,7 @@ const ajouterActualite = async () => {
 
 <template>
 
-<div class="container py-5" style="max-width: 820px;">
+<div class="container py-5 admin-form-page" style="max-width: 820px;">
 
     <RouterLink to="/admin/actualites" class="text-muted d-inline-flex align-items-center mb-3" style="gap:6px;">
         <i class="bi bi-arrow-left"></i> Retour aux actualités
@@ -204,3 +204,25 @@ const ajouterActualite = async () => {
 </div>
 
 </template>
+
+<style scoped>
+@media (max-width: 767.98px) {
+    .admin-form-page {
+        padding-top: 1.25rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    .admin-form-page h2 {
+        font-size: 1.45rem;
+        line-height: 1.2;
+    }
+
+    .admin-form-page .card {
+        padding: 1.25rem !important;
+    }
+
+    .admin-form-page form > .btn {
+        width: 100%;
+    }
+}
+</style>

@@ -13,6 +13,8 @@ const form = reactive({
 
 const submitted = ref(false)
 const lastWhatsAppLink = ref('')
+const erreur = ref('')
+const envoiEnCours = ref(false)
 
 const buildRecapMessage = (data) => {
   const lignes = [
@@ -26,6 +28,11 @@ const buildRecapMessage = (data) => {
 }
 
 const submitContact = async () => {
+  if (envoiEnCours.value) return
+
+  erreur.value = ''
+  envoiEnCours.value = true
+
   try {
     const recapMessage = buildRecapMessage(form)
 
@@ -42,7 +49,9 @@ const submitContact = async () => {
 
   } catch (error) {
     console.error(error)
-    alert("Erreur lors de l'envoi du message.")
+    erreur.value = error.response?.data?.message || "Erreur lors de l'envoi du message. Veuillez réessayer."
+  } finally {
+    envoiEnCours.value = false
   }
 }
 </script>
@@ -72,10 +81,10 @@ const submitContact = async () => {
               <li><strong>Adresse :</strong> Port-Bouët, Gonzagueville, Rue I2T, à 100m du goudron</li>
             </ul>
             <div class="mt-4">
-              <a class="btn btn-success me-2" :href="buildWhatsAppLink('Bonjour LIMANYA Groupe, je souhaite avoir plus d\'informations sur vos services.')" target="_blank">
+              <a class="btn btn-success me-2" :href="buildWhatsAppLink('Bonjour LIMANYA Groupe, je souhaite avoir plus d\'informations sur vos services.')" target="_blank" rel="noopener noreferrer">
                 <i class="bi bi-whatsapp me-1"></i>WhatsApp
               </a>
-              <a class="btn btn-outline-primary" href="https://www.facebook.com/limanyagroup" target="_blank">Facebook</a>
+              <a class="btn btn-outline-primary" href="https://www.facebook.com/limanyagroup" target="_blank" rel="noopener noreferrer">Facebook</a>
             </div>
           </div>
         </div>
@@ -107,11 +116,17 @@ const submitContact = async () => {
                 <label class="form-label">Message</label>
                 <textarea v-model="form.message" rows="4" class="form-control" placeholder="Expliquez votre projet"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary mt-4">Envoyer</button>
+              <button type="submit" class="btn btn-primary mt-4" :disabled="envoiEnCours">
+                <span v-if="envoiEnCours" class="spinner-border spinner-border-sm me-2"></span>
+                {{ envoiEnCours ? 'Envoi en cours...' : 'Envoyer' }}
+              </button>
+              <div v-if="erreur" class="alert alert-danger mt-3 mb-0" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>{{ erreur }}
+              </div>
             </form>
             <div v-if="submitted" class="alert alert-success mt-4" role="alert">
               <p class="mb-3">Merci ! Votre message a bien été envoyé. Nous revenons vers vous rapidement.</p>
-              <a :href="lastWhatsAppLink" target="_blank" class="btn btn-success btn-sm">
+              <a :href="lastWhatsAppLink" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-sm">
                 <i class="bi bi-whatsapp me-1"></i>Continuer la conversation sur WhatsApp
               </a>
             </div>

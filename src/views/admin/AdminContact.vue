@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import api from '../../services/api'
 import ConfirmModal from '../../components/admin/ConfirmModal.vue'
@@ -8,14 +8,19 @@ import ToastNotification from '../../components/admin/ToastNotification.vue'
 const contacts = ref([])
 const recherche = ref('')
 const afficherModal = ref(false)
-const toast = ref(null)
 const toastMessage = ref('')
 const toastType = ref('success')
 const showToast = ref(false)
+const erreur = ref('')
 
 const pageCourante = ref(1)
 
 const parPage = 10
+
+watch(recherche, () => {
+    pageCourante.value = 1
+})
+
 const afficherToast = (message, type = 'success') => {
 
   toastMessage.value = message
@@ -36,6 +41,7 @@ const chargerContacts = async () => {
         contacts.value = response.data
     } catch (error) {
         console.error(error)
+        erreur.value = error.response?.data?.message || 'Impossible de charger les messages.'
     }
 }
 
@@ -110,10 +116,13 @@ onMounted(chargerContacts)
 
 <template>
 
-<div class="container py-4">
+<div class="container py-4 admin-contact-page">
 
     <h2 class="fw-bold mb-1"><i class="bi bi-envelope text-amber me-2"></i>Messages reçus</h2>
     <p class="text-muted mb-4">Consultez les messages envoyés via le formulaire de contact.</p>
+    <div v-if="erreur" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>{{ erreur }}
+    </div>
     <div class="row mb-3">
 
         <div class="col-md-4 position-relative">
@@ -287,3 +296,20 @@ onMounted(chargerContacts)
 />    
 
 </template>
+
+<style scoped>
+.admin-contact-page .table {
+    min-width: 900px;
+}
+
+@media (max-width: 767.98px) {
+    .admin-contact-page h2 {
+        font-size: 1.45rem;
+        line-height: 1.2;
+    }
+
+    .admin-contact-page .row.mb-3 .col-md-4 {
+        width: 100%;
+    }
+}
+</style>

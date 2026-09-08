@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import api from '../../services/api'
 import { getImageUrl } from '../../utils/images'
 import ConfirmModal from '../../components/admin/ConfirmModal.vue'
@@ -11,6 +11,10 @@ const showModal = ref(false)
 const idASupprimer = ref(null)
 const page = ref(1)
 const parPage = 10
+
+watch(recherche, () => {
+    page.value = 1
+})
 
 const chargerRealisations = async () => {
     try {
@@ -80,7 +84,7 @@ onMounted(chargerRealisations)
 
 <template>
 
-<div class="container py-4">
+<div class="container py-4 admin-realizations-page">
 
     <div class="d-flex justify-content-between align-items-center mb-1">
 
@@ -219,3 +223,26 @@ onMounted(chargerRealisations)
 />
 
 </template>
+
+<style scoped>
+.admin-realizations-page .table {
+    min-width: 850px;
+}
+
+@media (max-width: 767.98px) {
+    .admin-realizations-page h2 {
+        font-size: 1.45rem;
+        line-height: 1.2;
+    }
+
+    .admin-realizations-page > .d-flex:first-child {
+        align-items: flex-start !important;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .admin-realizations-page > .d-flex:first-child .btn {
+        width: 100%;
+    }
+}
+</style>

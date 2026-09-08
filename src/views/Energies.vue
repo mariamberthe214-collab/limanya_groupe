@@ -104,7 +104,7 @@ onMounted(chargerProduits)
               <span class="badge bg-amber-soft text-amber mb-2">{{ produit.categorie }}</span>
               <p class="text-muted small">{{ produit.description }}</p>
               <p class="fw-bold text-amber mb-3" v-if="produit.prix">{{ Number(produit.prix).toLocaleString('fr-FR') }} FCFA</p>
-              <a :href="demanderPrix(produit.nom)" target="_blank" class="btn btn-outline-success btn-sm w-100">
+              <a :href="demanderPrix(produit.nom)" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success btn-sm w-100">
                 <i class="bi bi-whatsapp me-1"></i>Demander via WhatsApp
               </a>
             </div>

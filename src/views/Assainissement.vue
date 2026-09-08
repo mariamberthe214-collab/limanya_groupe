@@ -162,6 +162,9 @@ onMounted(chargerRealisations)
                 <i class="bi bi-calendar3 me-1" v-if="projet.date_realisation"></i>{{ formatDate(projet.date_realisation) }}
               </p>
               <p class="text-muted">{{ projet.description }}</p>
+              <RouterLink :to="`/realisations/${projet.id}`" class="btn btn-outline-primary btn-sm mt-2">
+                Voir le projet <i class="bi bi-arrow-right ms-1"></i>
+              </RouterLink>
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { getImageUrl } from '../utils/images'
 
 const projets = ref([])
 const chargement = ref(true)
+const erreur = ref('')
 const filtreActif = ref(null)
 const lightbox = ref(null) // { type: 'image'|'video', src, titre }
 
@@ -68,6 +69,7 @@ const chargerProjets = async () => {
     projets.value = response.data
   } catch (error) {
     console.error(error)
+    erreur.value = 'Impossible de charger les réalisations pour le moment.'
   } finally {
     chargement.value = false
   }
@@ -194,6 +196,10 @@ onMounted(chargerProjets)
       </div>
 
       <!-- ÉTAT VIDE -->
+      <div v-else-if="erreur" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>{{ erreur }}
+      </div>
+
       <div v-else-if="projetsFiltres.length === 0" class="empty-state text-center py-5" v-reveal>
         <div class="empty-icon mb-3"><i class="bi bi-images"></i></div>
         <h4>Aucun projet publié pour le moment</h4>

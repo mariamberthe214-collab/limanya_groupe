@@ -121,7 +121,7 @@ a:hover {
 .page-hero {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #17140f 0%, #2c281f 100%);
+  background: linear-gradient(135deg, #211d17 0%, #40372b 100%);
   color: #f4f1e9;
 }
 
@@ -161,7 +161,7 @@ a:hover {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(23, 20, 15, 0.16) 0%, rgba(23, 20, 15, 0.62) 100%);
+  background: linear-gradient(180deg, rgba(23, 20, 15, 0.1) 0%, rgba(23, 20, 15, 0.44) 100%);
   z-index: 1;
 }
 
@@ -245,6 +245,28 @@ a:hover {
 
 .object-position-top {
   object-position: top center;
+}
+
+@media (max-width: 767.98px) {
+  .page-hero h1,
+  .btp-hero h1 {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+    line-height: 1.08;
+  }
+
+  .page-hero .lead,
+  .btp-hero .lead {
+    font-size: 1rem;
+  }
+
+  .hero-media {
+    min-height: 260px;
+    border-radius: 0.9rem;
+  }
+
+  .btp-hero {
+    min-height: 540px;
+  }
 }
 
 .bg-ink {

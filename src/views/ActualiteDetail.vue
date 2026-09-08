@@ -11,6 +11,7 @@ const article = ref(null)
 const autres = ref([])
 const chargement = ref(true)
 const introuvable = ref(false)
+const erreur = ref('')
 
 const formatDate = (date) => {
   if (!date) return ''
@@ -53,6 +54,7 @@ const galerieRestante = computed(() => {
 const charger = async () => {
   chargement.value = true
   introuvable.value = false
+  erreur.value = ''
   window.scrollTo({ top: 0 })
   try {
     const response = await api.get(`/actualites/${route.params.id}`)
@@ -62,7 +64,11 @@ const charger = async () => {
     autres.value = autresRes.data.filter((a) => a.id !== article.value.id).slice(0, 3)
   } catch (error) {
     console.error(error)
-    introuvable.value = true
+    if (error.response?.status === 404) {
+      introuvable.value = true
+    } else {
+      erreur.value = "Impossible de charger cet article pour le moment."
+    }
   } finally {
     chargement.value = false
   }
@@ -74,6 +80,12 @@ onMounted(charger)
 <template>
   <div v-if="chargement" class="text-center text-muted py-5">
     <span class="spinner-border spinner-border-sm me-2"></span>Chargement de l'article...
+  </div>
+
+  <div v-else-if="erreur" class="container py-5 text-center">
+    <i class="bi bi-exclamation-triangle fs-1 text-warning d-block mb-3"></i>
+    <h4>{{ erreur }}</h4>
+    <router-link to="/actualites" class="btn btn-primary mt-3">Retour aux actualités</router-link>
   </div>
 
   <div v-else-if="introuvable" class="container py-5 text-center">
@@ -138,7 +150,7 @@ onMounted(charger)
             </div>
 
             <div class="d-flex flex-wrap gap-2 mt-5 pt-4 border-top">
-              <a :href="lienPartage" target="_blank" class="btn btn-outline-success btn-sm">
+              <a :href="lienPartage" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success btn-sm">
                 <i class="bi bi-whatsapp me-1"></i>Partager sur WhatsApp
               </a>
               <router-link to="/contacts" class="btn btn-outline-primary btn-sm">

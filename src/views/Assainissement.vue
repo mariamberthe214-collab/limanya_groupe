@@ -83,18 +83,18 @@ onMounted(chargerRealisations)
 
 <template>
   <section class="page-hero py-5">
-    <div class="container py-4">
-      <div class="row align-items-center gy-4">
-        <div class="col-lg-6">
+    <div class="hero-background">
+      <img src="/images/hero-assainissement-fond.jpeg" alt="Chantier d'assainissement LIMANYA Groupe" />
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="container py-4 position-relative">
+      <div class="row align-items-center gy-4 min-vh-60">
+        <div class="col-lg-7 text-white">
           <span class="eyebrow">Assainissement Écologique</span>
           <h1 class="display-5 fw-bold mt-3">Des infrastructures durables pour la gestion des eaux</h1>
-          <p class="lead mt-4">LIMANYA GROUPE conçoit et réalise des fosses septiques biodigesteurs, des caniveaux, des égouts et des solutions complètes de traitement des eaux usées.</p>
+          <p class="lead mt-4 text-white-50">LIMANYA GROUPE conçoit et réalise des fosses septiques biodigesteurs, des caniveaux, des égouts et des solutions complètes de traitement des eaux usées.</p>
           <router-link to="/contacts" class="btn btn-primary btn-lg mt-3">Demander une étude</router-link>
-        </div>
-        <div class="col-lg-6">
-          <div class="hero-media ratio ratio-4x3">
-            <img :src="getImageUrl('/uploads/assainissement_angre_2.jpg')" alt="Chantier d'assainissement et de drainage" class="w-100 h-100 object-fit-cover" />
-          </div>
         </div>
       </div>
     </div>
@@ -194,6 +194,64 @@ onMounted(chargerRealisations)
 </template>
 
 <style scoped>
+.page-hero {
+  position: relative;
+  overflow: hidden;
+  background: #0f1720;
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.9) contrast(1.05);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10, 14, 18, 0.8) 0%, rgba(10, 14, 18, 0.42) 45%, rgba(10, 14, 18, 0.18) 100%);
+}
+
+.page-hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.page-hero h1 {
+  color: #fff;
+  max-width: 680px;
+}
+
+.page-hero .lead {
+  max-width: 620px;
+}
+
+.page-hero .btn-primary {
+  background: #f6c453;
+  border-color: #f6c453;
+  color: #101827;
+  font-weight: 700;
+}
+
 .lightbox {
   position: fixed;
   inset: 0;

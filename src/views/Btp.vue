@@ -4,12 +4,12 @@ import api from '../services/api'
 import { getImageUrl } from '../utils/images'
 
 const slides = [
+  '/images/hero-btp-premium.avif',
   getImageUrl('/uploads/btp_odienne_1.jpg'),
   getImageUrl('/uploads/btp_odienne_2.jpg'),
   getImageUrl('/uploads/btp_odienne_3.jpg'),
   getImageUrl('/uploads/btp_odienne_4.jpg'),
   getImageUrl('/uploads/btp_odienne_5.jpg'),
-  getImageUrl('/uploads/btp_odienne_6.jpg'),
 ]
 const activeSlide = ref(0)
 let slideTimer = null

@@ -131,8 +131,8 @@ const highlights = [
   <section class="home-hero">
     <div class="home-hero-bg">
       <img
-        :src="getImageUrl('/uploads/btp_odienne_4.jpg')"
-        alt="Projet de forage et travaux de construction LIMANYA Groupe"
+        src="/images/hero-construction.png"
+        alt="Chantier de construction LIMANYA Groupe"
         class="home-hero-image"
       />
       <div class="home-hero-overlay"></div>

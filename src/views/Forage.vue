@@ -4,7 +4,7 @@ import api from '../services/api'
 import { buildWhatsAppLink } from '../utils/whatsapp'
 import { getImageUrl } from '../utils/images'
 
-const heroBackground = getImageUrl('/uploads/forage_blolequin_2.jpg')
+const heroBackground = '/videos/hero-forage.mp4'
 
 const form = reactive({
   name: '',
@@ -122,7 +122,15 @@ const advantages = [
 </script>
 
 <template>
-  <section class="forage-hero" :style="{ backgroundImage: `url(${heroBackground})` }">
+  <section class="forage-hero">
+    <video
+      class="forage-video-bg"
+      :src="heroBackground"
+      autoplay
+      muted
+      loop
+      playsinline
+    ></video>
 
     <div class="overlay"></div>
 
@@ -882,11 +890,29 @@ const advantages = [
 
     min-height:100vh;
 
-    background:url("/images/service-forage.png") center center/cover no-repeat;
-
     display:flex;
 
     align-items:center;
+
+    overflow:hidden;
+
+    background:#0c1117;
+
+}
+
+.forage-video-bg{
+
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    filter: saturate(1.25) brightness(1.35) contrast(1.18);
 
 }
 
@@ -896,7 +922,7 @@ const advantages = [
 
     inset:0;
 
-    background:rgba(0,0,0,.60);
+    background:linear-gradient(90deg, rgba(12,17,23,0.58) 0%, rgba(12,17,23,0.25) 42%, rgba(12,17,23,0.18) 100%);
 
 }
 

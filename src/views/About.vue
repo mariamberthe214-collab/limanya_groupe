@@ -71,7 +71,7 @@ const services = [
   {
     icon: "bi-globe-africa",
     title: "Études Géophysiques",
-    text: "Recherche d'eau, études géophysiques et implantation des forages.",
+    text: "Recherche d'eau, mesures, implantation des forages et location de matériel géophysique.",
     image: getImageUrl('/uploads/etude_geophysique_terrain.jpg')
   },
   {
@@ -91,8 +91,42 @@ const services = [
     title: "Vente de Matériels",
     text: "Pompes solaires, électriques et hybrides, panneaux solaires, PVC hydrauliques et accessoires.",
     image: "/images/service-materiel.png"
+  },
+  {
+    icon: "bi-geo-alt",
+    title: "Vente de terrains",
+    text: "Renseignements auprès de notre équipe commerciale sur les terrains en lotissement et les parcelles disponibles.",
+    image: "/images/btp2.jpg"
   }
 ]
+
+const organigramme = {
+  direction: {
+    role: 'Directeur général',
+    nom: "M. N'DIAYE APPOLINAIRE",
+  },
+  coordination: [
+    { role: 'Assistante de direction', nom: 'Mme OUATTARA' },
+    { role: 'Service comptabilité', nom: "Mme N'DIAYE" },
+  ],
+  departements: [
+    {
+      role: 'Département technique BTP',
+      responsable: "Ingénieur N'GORAN FRANCK",
+      equipe: ['Mme KARAMA AWA', 'M. FANNY YACOUBA'],
+    },
+    {
+      role: 'Département technique eaux & assainissement',
+      responsable: 'Ingénieur DIBY SILVAIN',
+      equipe: ['M. KOFFI RICHMOND'],
+    },
+    {
+      role: 'Responsable des ventes et développement',
+      responsable: 'Mme DIALLO',
+      equipe: ['DJAMALA AHOU ESTELLE'],
+    },
+  ],
+}
 </script>
 
 <template>
@@ -172,6 +206,59 @@ const services = [
             <p class="text-muted mb-0">
              Être une référence nationale dans les domaines des forages hydrauliques, des études géophysiques, de l'assainissement et du BTP grâce à notre expertise et à notre capacité d'innovation.
             </p>          
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="organisation-section py-5 bg-light">
+    <div class="container">
+      <div class="text-center mb-5" v-reveal>
+        <span class="eyebrow">Notre organisation</span>
+        <h2 class="mt-3">L'organigramme de LIMANYA Groupe</h2>
+        <p class="text-muted mx-auto" style="max-width: 700px">
+          Une organisation structurée pour coordonner efficacement nos équipes
+          techniques, administratives et commerciales.
+        </p>
+      </div>
+
+      <div class="organisation-chart" aria-label="Organigramme de LIMANYA Groupe">
+        <div class="organisation-node organisation-node--direction">
+          <span class="organisation-role">{{ organigramme.direction.role }}</span>
+          <strong>{{ organigramme.direction.nom }}</strong>
+        </div>
+
+        <div class="organisation-connector organisation-connector--vertical"></div>
+
+        <div class="organisation-grid organisation-grid--coordination">
+          <div
+            v-for="poste in organigramme.coordination"
+            :key="poste.role"
+            class="organisation-node"
+          >
+            <span class="organisation-role">{{ poste.role }}</span>
+            <strong>{{ poste.nom }}</strong>
+          </div>
+        </div>
+
+        <div class="organisation-connector organisation-connector--branch"></div>
+
+        <div class="organisation-grid organisation-grid--departements">
+          <div
+            v-for="departement in organigramme.departements"
+            :key="departement.role"
+            class="organisation-column"
+          >
+            <div class="organisation-node organisation-node--department">
+              <span class="organisation-role">{{ departement.role }}</span>
+              <strong>{{ departement.responsable }}</strong>
+            </div>
+            <div class="organisation-connector organisation-connector--vertical organisation-connector--team"></div>
+            <div class="organisation-node organisation-node--team">
+              <span class="organisation-role">Équipe</span>
+              <strong v-for="membre in departement.equipe" :key="membre">{{ membre }}</strong>
+            </div>
           </div>
         </div>
       </div>
@@ -649,5 +736,128 @@ const services = [
     font-size:0.92rem;
     line-height:1.6;
     margin-bottom:0;
+}
+
+.organisation-section {
+  background: #f7f4ee !important;
+}
+
+.organisation-chart {
+  max-width: 1120px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.organisation-node {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 104px;
+  justify-content: center;
+  padding: 1.15rem 1rem;
+  border: 1px solid rgba(191, 87, 28, 0.25);
+  border-radius: 0.75rem;
+  background: #fffdf8;
+  box-shadow: 0 10px 24px rgba(53, 43, 29, 0.08);
+}
+
+.organisation-node--direction {
+  max-width: 320px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #fff0d7, #ffe0b3);
+  border-color: var(--lg-amber);
+}
+
+.organisation-node--department {
+  min-height: 126px;
+  background: #fff0d7;
+}
+
+.organisation-node--team {
+  min-height: 112px;
+  background: #fff9e8;
+}
+
+.organisation-role {
+  color: #5d5141;
+  font-size: 0.77rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.organisation-node strong {
+  color: #bd3d2f;
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.organisation-connector--vertical {
+  width: 2px;
+  height: 30px;
+  margin: 0 auto;
+  background: rgba(71, 81, 105, 0.55);
+}
+
+.organisation-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.organisation-grid--coordination {
+  max-width: 700px;
+  margin: 0 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.organisation-connector--branch {
+  height: 30px;
+  margin: 0 16.5%;
+  border-top: 2px solid rgba(71, 81, 105, 0.55);
+}
+
+.organisation-grid--departements {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+.organisation-column {
+  position: relative;
+}
+
+.organisation-column::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  width: 2px;
+  height: 30px;
+  background: rgba(71, 81, 105, 0.55);
+}
+
+.organisation-connector--team {
+  height: 24px;
+}
+
+@media (max-width: 767.98px) {
+  .organisation-grid--coordination,
+  .organisation-grid--departements {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .organisation-connector--branch {
+    height: 30px;
+    margin: 0 auto;
+    border-top: 0;
+    border-left: 2px solid rgba(71, 81, 105, 0.55);
+  }
+
+  .organisation-column::before {
+    display: none;
+  }
 }
 </style>

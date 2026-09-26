@@ -8,6 +8,7 @@ const items = [
   'Étude complète du sous-sol par méthodes électriques et sismiques',
   'Rapport de forage géophysique détaillé avant tout chantier',
   'Recommandations précises d\u2019implantation pour maximiser les chances de succès',
+  'Location de matériel géophysique pour vos travaux et campagnes de mesure',
 ]
 
 const realisations = ref([])
@@ -73,7 +74,15 @@ onMounted(chargerRealisations)
               <i class="bi bi-check-circle-fill text-amber me-2"></i>{{ item }}
             </li>
           </ul>
-          <router-link to="/contacts" class="btn btn-primary btn-lg mt-2">Demander un devis</router-link>
+          <div class="d-flex flex-wrap gap-3 mt-3">
+            <router-link to="/contacts" class="btn btn-primary btn-lg">Demander un devis</router-link>
+            <router-link
+              :to="{ path: '/contacts', query: { sujet: 'Location de matériel géophysique' } }"
+              class="btn btn-outline-primary btn-lg"
+            >
+              Louer du matériel
+            </router-link>
+          </div>
         </div>
         <div class="col-lg-6">
           <div class="hero-media ratio ratio-4x3">

@@ -66,7 +66,7 @@ const categories = [
     icon: 'bi-globe2',
     title: 'Études Géophysiques',
     description:
-      "Recherche d'eau, études géophysiques et implantation des forages avant tout chantier.",
+      "Recherche d'eau, études géophysiques, implantation des forages et location de matériel spécialisé.",
     action: '/etudes-geophysiques',
   },
   {
@@ -89,6 +89,13 @@ const categories = [
     description:
       'Pompes solaires, électriques et hybrides, panneaux solaires, PVC hydrauliques, matériels de forage et accessoires.',
     action: '/materiels-de-forages',
+  },
+  {
+    icon: 'bi-geo-alt',
+    title: 'Vente de terrains',
+    description:
+      'Renseignez-vous auprès de notre équipe sur les terrains en lotissement et les parcelles disponibles.',
+    action: { path: '/contacts', query: { sujet: 'Vente de terrains' } },
   },
 ]
 
@@ -315,8 +322,8 @@ const highlights = [
             </h3>
 
             <p>
-              Recherche d'eau, études géophysiques et
-              implantation des forages.
+              Recherche d'eau, études géophysiques,
+              implantation et location de matériel.
             </p>
 
             <span class="expertise-card-link">
@@ -422,6 +429,39 @@ const highlights = [
 
             <span class="expertise-card-link">
               Découvrir
+              <i class="bi bi-arrow-up-right"></i>
+            </span>
+          </div>
+        </router-link>
+
+        <!-- VENTE DE TERRAINS -->
+        <router-link
+          :to="{ path: '/contacts', query: { sujet: 'Vente de terrains' } }"
+          class="expertise-card"
+          v-reveal="400"
+        >
+          <div class="expertise-card-number">06</div>
+
+          <div class="expertise-card-icon">
+            <i class="bi bi-geo-alt"></i>
+          </div>
+
+          <div class="expertise-card-content">
+            <span class="expertise-card-label">
+              Foncier
+            </span>
+
+            <h3>
+              Vente de terrains
+            </h3>
+
+            <p>
+              Terrains en lotissement et parcelles disponibles :
+              contactez notre équipe pour les détails.
+            </p>
+
+            <span class="expertise-card-link">
+              Nous contacter
               <i class="bi bi-arrow-up-right"></i>
             </span>
           </div>

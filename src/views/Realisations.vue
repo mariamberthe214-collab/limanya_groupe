@@ -40,6 +40,12 @@ const sections = [
     icon: 'bi-box-seam',
     link: '/materiels-de-forages',
   },
+  {
+    title: 'Vente de terrains',
+    description: 'Terrains en lotissement et parcelles disponibles, selon les offres en cours.',
+    icon: 'bi-geo-alt',
+    link: { path: '/contacts', query: { sujet: 'Vente de terrains' } },
+  },
 ]
 
 const formatDate = (date) => {

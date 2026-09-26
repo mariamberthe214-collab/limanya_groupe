@@ -5,6 +5,11 @@ import { getImageUrl } from '../utils/images'
 
 const services = [
   {
+    icon: 'bi-clipboard2-check',
+    title: 'Visite technique',
+    description: 'Évaluation du site et des besoins avant de définir la solution d’assainissement adaptée.',
+  },
+  {
     icon: 'bi-water',
     title: 'Réseaux d\u2019assainissement',
     description: 'Construction et maintenance de caniveaux, égouts et réseaux de collecte des eaux.',
@@ -27,7 +32,12 @@ const services = [
   {
     icon: 'bi-recycle',
     title: 'Fosses biodigesteurs',
-    description: 'Installation de fosses septiques biodigesteurs modernes, écologiques et durables.',
+    description: 'Installation du biodigesteur et de ses équipements pour assurer le traitement des eaux usées.',
+  },
+  {
+    icon: 'bi-funnel',
+    title: 'Installation du filtre',
+    description: 'Mise en place et raccordement du filtre adapté au système de biodigesteur.',
   },
 ]
 

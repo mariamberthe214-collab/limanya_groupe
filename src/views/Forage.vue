@@ -202,8 +202,9 @@ const advantages = [
 
         <p>
           LIMANYA Groupe intervient dans toutes les étapes d'un projet
-          d'accès à l'eau : étude du terrain, forage, installation des
-          équipements de pompage et maintenance des ouvrages.
+          d'accès à l'eau : étude et réalisation, foration, équipement du forage
+          en PVC, installation de la pompe, construction de châteaux d'eau
+          et maintenance des ouvrages.
         </p>
 
       </div>
@@ -259,7 +260,22 @@ const advantages = [
           </div>
 
 
-          <div class="service-item" v-reveal="240">
+          <div class="service-item" v-reveal="200">
+
+            <div class="icon"><i class="bi bi-building-gear"></i></div>
+
+            <div>
+              <h4>Construction de châteaux d'eau</h4>
+              <p>
+                Réalisation d'ouvrages de stockage et de distribution d'eau
+                pour compléter les projets d'adduction et d'approvisionnement.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="service-item" v-reveal="280">
 
             <div class="icon"><i class="bi bi-graph-up-arrow"></i></div>
 
@@ -274,7 +290,7 @@ const advantages = [
           </div>
 
 
-          <div class="service-item" v-reveal="320">
+          <div class="service-item" v-reveal="360">
 
             <div class="icon"><i class="bi bi-globe-europe-africa"></i></div>
 
@@ -289,7 +305,7 @@ const advantages = [
           </div>
 
 
-          <div class="service-item" v-reveal="400">
+          <div class="service-item" v-reveal="440">
 
             <div class="icon"><i class="bi bi-tools"></i></div>
 
@@ -403,12 +419,12 @@ const advantages = [
           <div class="step-icon"><i class="bi bi-tools"></i></div>
 
           <h4>
-            Réalisation du forage
+            Foration & équipement PVC
           </h4>
 
           <p>
-            Exécution des travaux avec des équipements adaptés
-            et respect des normes techniques.
+            Foration du terrain et équipement du forage avec un tubage PVC
+            adapté aux caractéristiques de l’ouvrage.
           </p>
 
         </div>
@@ -432,8 +448,8 @@ const advantages = [
           </h4>
 
           <p>
-            Mise en place de pompes solaires, électriques ou hybrides
-            selon les besoins du projet.
+            Installation et mise en service d’une pompe solaire, électrique
+            ou hybride selon les besoins du projet.
           </p>
 
         </div>

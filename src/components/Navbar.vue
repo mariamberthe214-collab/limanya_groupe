@@ -110,133 +110,80 @@
 
           <li class="nav-item dropdown position-static">
 
-            <a
+            <button
+              type="button"
               class="nav-link dropdown-toggle"
-              href="#"
-              data-bs-toggle="dropdown">
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
 
               Nos Services
 
-            </a>
+            </button>
 
             <div class="dropdown-menu mega-menu shadow-lg">
-
-              <div class="row">
-
-                <!-- FORAGES HYDRAULIQUES (activité principale) -->
-
-                <div class="col-lg-3">
-
-                  <h6 class="mega-title">
-                    <i class="bi bi-droplet-half"></i>
-                    Forages Hydrauliques
-                  </h6>
-
-                  <RouterLink class="dropdown-item" to="/forage">
-                    Forages villageois
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/forage">
-                    Forages agricoles
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/forage">
-                    Forages industriels
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/forage">
-                    Essais de pompage
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/forage">
-                    Réhabilitation & maintenance
-                  </RouterLink>
-
-                </div>
-
-                <!-- ETUDES GEOPHYSIQUES -->
-
-                <div class="col-lg-3">
-
-                  <h6 class="mega-title">
-                    <i class="bi bi-globe2"></i>
-                    Études Géophysiques
-                  </h6>
-
-                  <RouterLink class="dropdown-item" to="/etudes-geophysiques">
-                    Recherche d'eau
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/etudes-geophysiques">
-                    Études géophysiques
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/etudes-geophysiques">
-                    Implantation des forages
-                  </RouterLink>
-
-                </div>
-
-                <!-- Assainissement -->
-
-                <div class="col-lg-3">
-
-                  <h6 class="mega-title">
-                    <i class="bi bi-recycle"></i>
-                    Assainissement
-                  </h6>
-
-                  <RouterLink class="dropdown-item" to="/assainissement">
-                    Réseaux d'assainissement
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/assainissement">
-                    Gestion des eaux usées
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/assainissement">
-                    Fosses septiques
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/assainissement">
-                    Fosses biodigesteurs
-                  </RouterLink>
-
-                </div>
-
-                <!-- BTP & Genie Civil -->
-
-                <div class="col-lg-3">
-
-                  <h6 class="mega-title">
-                    <i class="bi bi-building"></i>
-                    BTP & Génie Civil
-                  </h6>
-
-                  <RouterLink class="dropdown-item" to="/btp">
-                    Construction
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/btp">
-                    Génie civil
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/btp">
-                    VRD
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/btp">
-                    Travaux publics
-                  </RouterLink>
-
-                  <RouterLink class="dropdown-item" to="/materiels-de-forages">
-                    Vente de matériels
-                  </RouterLink>
-
-                </div>
-
+              <div class="service-menu-heading">
+                <span class="service-menu-eyebrow">Nos domaines d’expertise</span>
+                <p>Des solutions adaptées à chaque étape de votre projet.</p>
               </div>
 
+              <div class="service-menu-grid">
+                <RouterLink class="service-menu-card" to="/forage">
+                  <span class="service-menu-icon"><i class="bi bi-droplet-half"></i></span>
+                  <span class="service-menu-copy">
+                    <strong>Forages hydrauliques</strong>
+                    <small>Étude, réalisation et pompage</small>
+                  </span>
+                  <i class="bi bi-arrow-up-right service-menu-arrow"></i>
+                </RouterLink>
+
+                <RouterLink class="service-menu-card" to="/etudes-geophysiques">
+                  <span class="service-menu-icon"><i class="bi bi-globe2"></i></span>
+                  <span class="service-menu-copy">
+                    <strong>Études géophysiques</strong>
+                    <small>Études, mesures et location de matériel</small>
+                  </span>
+                  <i class="bi bi-arrow-up-right service-menu-arrow"></i>
+                </RouterLink>
+
+                <RouterLink class="service-menu-card" to="/assainissement">
+                  <span class="service-menu-icon"><i class="bi bi-recycle"></i></span>
+                  <span class="service-menu-copy">
+                    <strong>Assainissement</strong>
+                    <small>Réseaux et traitement des eaux</small>
+                  </span>
+                  <i class="bi bi-arrow-up-right service-menu-arrow"></i>
+                </RouterLink>
+
+                <RouterLink class="service-menu-card" to="/btp">
+                  <span class="service-menu-icon"><i class="bi bi-building"></i></span>
+                  <span class="service-menu-copy">
+                    <strong>BTP &amp; génie civil</strong>
+                    <small>Construction, VRD et travaux publics</small>
+                  </span>
+                  <i class="bi bi-arrow-up-right service-menu-arrow"></i>
+                </RouterLink>
+
+                <RouterLink class="service-menu-card" to="/materiels-de-forages">
+                  <span class="service-menu-icon"><i class="bi bi-tools"></i></span>
+                  <span class="service-menu-copy">
+                    <strong>Vente de matériels</strong>
+                    <small>Pompes et équipements hydrauliques</small>
+                  </span>
+                  <i class="bi bi-arrow-up-right service-menu-arrow"></i>
+                </RouterLink>
+
+                <RouterLink
+                  class="service-menu-card"
+                  :to="{ path: '/contacts', query: { sujet: 'Vente de terrains' } }"
+                >
+                  <span class="service-menu-icon"><i class="bi bi-geo-alt"></i></span>
+                  <span class="service-menu-copy">
+                    <strong>Vente de terrains</strong>
+                    <small>Terrains en lotissement, selon disponibilité</small>
+                  </span>
+                  <i class="bi bi-arrow-up-right service-menu-arrow"></i>
+                </RouterLink>
+              </div>
             </div>
 
           </li>
@@ -549,7 +496,7 @@ watch(() => route.fullPath, fermerMenuMobile)
 ========================================================= */
 
 .mega-menu {
-  width: min(900px, calc(100vw - 40px));
+  width: min(980px, calc(100vw - 40px));
 
   left: 50% !important;
 
@@ -561,39 +508,107 @@ watch(() => route.fullPath, fermerMenuMobile)
 
   border: 0;
 
-  border-radius: 20px;
+  border-radius: 18px;
 
-  background: #fff;
+  background: #fffefa;
 
   box-shadow:
-    0 25px 65px rgba(23, 20, 15, 0.14);
+    0 24px 60px rgba(23, 20, 15, 0.16);
 }
 
-.mega-title {
+.service-menu-heading {
+  margin-bottom: 18px;
+  padding: 0 2px 14px;
+  border-bottom: 1px solid rgba(23, 20, 15, 0.09);
+}
+
+.service-menu-eyebrow {
+  color: var(--lg-amber);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.service-menu-heading p {
+  margin: 5px 0 0;
+  color: #77736c;
+  font-size: 0.88rem;
+}
+
+.service-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.service-menu-card {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px 12px;
+  border: 1px solid rgba(23, 20, 15, 0.08);
+  border-radius: 12px;
+  background: #fff;
+  color: #292621;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
 
-  margin-bottom: 12px;
-  padding-bottom: 9px;
+.service-menu-card:hover,
+.service-menu-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(191, 87, 28, 0.45);
+  background: #fffaf3;
+  color: #292621;
+  box-shadow: 0 10px 22px rgba(23, 20, 15, 0.08);
+}
 
+.service-menu-icon {
+  display: inline-flex;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(191, 87, 28, 0.1);
   color: var(--lg-amber);
+  font-size: 1.2rem;
+}
 
-  font-size: 0.78rem;
+.service-menu-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  gap: 3px;
+}
+
+.service-menu-copy strong {
+  font-size: 0.84rem;
   font-weight: 700;
-
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-
-  border-bottom: 1px solid var(--lg-line);
+  line-height: 1.25;
 }
 
-.mega-title i {
-  font-size: 1rem;
+.service-menu-copy small {
+  color: #77736c;
+  font-size: 0.72rem;
+  line-height: 1.35;
 }
 
-.mega-menu .dropdown-item {
-  margin-bottom: 3px;
+.service-menu-arrow {
+  flex: 0 0 auto;
+  color: #a7a198;
+  font-size: 0.85rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.service-menu-card:hover .service-menu-arrow,
+.service-menu-card:focus-visible .service-menu-arrow {
+  color: var(--lg-amber);
+  transform: translate(2px, -2px);
 }
 
 
@@ -763,8 +778,21 @@ watch(() => route.fullPath, fermerMenuMobile)
     border-radius: 14px;
   }
 
-  .mega-menu .row {
-    row-gap: 10px;
+  .service-menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .service-menu-card {
+    padding: 11px 9px;
+  }
+
+  .service-menu-icon {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 1rem;
   }
 
   .devis-btn {
@@ -791,8 +819,16 @@ watch(() => route.fullPath, fermerMenuMobile)
     padding: 10px;
   }
 
-  .mega-title {
-    margin-top: 8px;
+  .mega-menu {
+    padding: 12px;
+  }
+
+  .service-menu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-menu-card {
+    padding: 11px;
   }
 }
 

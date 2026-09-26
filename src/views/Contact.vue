@@ -1,7 +1,10 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import api from '../services/api'
 import { buildWhatsAppLink } from '../utils/whatsapp'
+
+const route = useRoute()
 
 const form = reactive({
   nom: '',
@@ -15,6 +18,14 @@ const submitted = ref(false)
 const lastWhatsAppLink = ref('')
 const erreur = ref('')
 const envoiEnCours = ref(false)
+
+watch(
+  () => route.query.sujet,
+  (sujet) => {
+    if (typeof sujet === 'string') form.sujet = sujet
+  },
+  { immediate: true },
+)
 
 const buildRecapMessage = (data) => {
   const lignes = [

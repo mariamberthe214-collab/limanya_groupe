@@ -18,7 +18,7 @@ const services = [
   {
     icon: 'bi-building',
     title: 'Construction',
-    description: 'Plans 2D et 3D, devis, gros-œuvre et second-œuvre pour donner vie à vos bâtiments.',
+    description: 'Études techniques, plans et réalisation de constructions ou extensions de bâtiments jusqu’au R+2.',
   },
   {
     icon: 'bi-diagram-3',
@@ -122,7 +122,7 @@ onUnmounted(stopSlides)
           <div class="col-lg-7">
             <span class="eyebrow">BTP &amp; Génie Civil</span>
             <h1 class="display-5 fw-bold mt-3">Construction, génie civil et travaux publics</h1>
-            <p class="lead mt-4">LIMANYA GROUPE accompagne les projets de construction, rénovation et travaux publics avec une expertise terrain solide et une gestion de chantier professionnelle.</p>
+            <p class="lead mt-4">LIMANYA GROUPE accompagne vos projets d’études techniques, de construction et d’extension de bâtiments, ainsi que vos travaux publics, avec un suivi professionnel du chantier.</p>
             <router-link to="/contacts" class="btn btn-primary btn-lg mt-3">Démarrer un projet</router-link>
           </div>
         </div>
@@ -227,6 +227,77 @@ onUnmounted(stopSlides)
 </template>
 
 <style scoped>
+.page-hero {
+  position: relative;
+  overflow: hidden;
+  background: #0f1720;
+}
+
+.hero-slideshow {
+  position: relative;
+  min-height: 560px;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.hero-slide--active {
+  opacity: 1;
+}
+
+.hero-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.2) brightness(1.25) contrast(1.1);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(12, 17, 23, 0.7) 0%, rgba(12, 17, 23, 0.32) 45%, rgba(12, 17, 23, 0.18) 100%);
+}
+
+.page-hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.page-hero h1 {
+  color: #fff;
+  max-width: 680px;
+  line-height: 1.08;
+}
+
+.page-hero .lead {
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 620px;
+}
+
+.page-hero .btn-primary {
+  background: #f6c453;
+  border-color: #f6c453;
+  color: #101827;
+  font-weight: 700;
+}
+
 .lightbox {
   position: fixed;
   inset: 0;

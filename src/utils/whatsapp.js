@@ -1,5 +1,5 @@
 // Numéro WhatsApp officiel de LIMANYA Groupe (format international, sans le "+")
-export const WHATSAPP_NUMBER = '2250798449360'
+export const WHATSAPP_NUMBER = '2250797398700'
 
 /**
  * Normalise un numéro de téléphone saisi par un client (formats variés :

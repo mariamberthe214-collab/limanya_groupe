@@ -12,7 +12,7 @@
 
         <a href="mailto:contact@limanyagroupe.com">
           <i class="bi bi-envelope-fill"></i>
-          contact@limanyagroupe.com
+          contact@limanyagroupe.ci
         </a>
 
         <span>

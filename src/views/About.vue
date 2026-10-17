@@ -103,10 +103,10 @@ const services = [
 const organigramme = {
   direction: {
     role: 'Directeur général',
-    nom: "M. N'DIAYE APPOLINAIRE",
+    nom: "M.  DRAMANE N'DIAYE",
   },
   coordination: [
-    { role: 'Assistante de direction', nom: 'Mme OUATTARA' },
+    { role: 'Assistante de direction', nom: 'Mlle ATSE ANAIS' },
     { role: 'Service comptabilité', nom: "Mme N'DIAYE" },
   ],
   departements: [
@@ -121,7 +121,7 @@ const organigramme = {
       equipe: ['M. KOFFI RICHMOND'],
     },
     {
-      role: 'Responsable des ventes et développement',
+      role: 'Services des ventes et développement',
       responsable: 'Mme DIALLO',
       equipe: ['DJAMALA AHOU ESTELLE'],
     },

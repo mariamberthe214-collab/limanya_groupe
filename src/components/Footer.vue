@@ -12,7 +12,7 @@
           <div class="d-flex gap-2">
             <a class="foot-social" :href="whatsappLink" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
             <a class="foot-social" href="https://www.facebook.com/limanyagroup" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-            <a class="foot-social" href="mailto:contact@limanyagroupe.com" aria-label="Email"><i class="bi bi-envelope-fill"></i></a>
+            <a class="foot-social" href="mailto:contact@limanyagroupe.ci" aria-label="Email"><i class="bi bi-envelope-fill"></i></a>
           </div>
         </div>
 
@@ -40,10 +40,10 @@
         <div class="col-lg-4">
           <h6 class="foot-title">Contact</h6>
           <ul class="list-unstyled foot-links">
-            <li><i class="bi bi-envelope me-2"></i>contact@limanyagroupe.com</li>
+            <li><i class="bi bi-envelope me-2"></i>contact@limanyagroupe.ci</li>
             <li><i class="bi bi-telephone me-2"></i>+225 21 50 04 33 27 (Fixe)</li>
             <li><i class="bi bi-telephone me-2"></i>+225 07 77 04 70 57 (Standard)</li>
-            <li><i class="bi bi-whatsapp me-2"></i>+225 07 98 44 93 60 (Commercial)</li>
+            <li><i class="bi bi-whatsapp me-2"></i>+225 07 97 39 87 00 (Commercial)</li>
             <li><i class="bi bi-geo-alt me-2"></i>Port-Bouët, Gonzagueville, Rue I2T, à 100m du goudron</li>
           </ul>
         </div>

@@ -88,7 +88,7 @@ const submitContact = async () => {
               <li class="mb-3"><strong>Email :</strong> <a href="mailto:contact@limanyagroupe.com">contact@limanyagroupe.com</a></li>
               <li class="mb-3"><strong>Fixe :</strong> +225 21 50 04 33 27</li>
               <li class="mb-3"><strong>Standard :</strong> +225 07 77 04 70 57</li>
-              <li class="mb-3"><strong>Commercial (WhatsApp) :</strong> +225 07 98 44 93 60</li>
+              <li class="mb-3"><strong>Commercial (WhatsApp) :</strong> +225 07 97 39 87 00</li>
               <li><strong>Adresse :</strong> Port-Bouët, Gonzagueville, Rue I2T, à 100m du goudron</li>
             </ul>
             <div class="mt-4">

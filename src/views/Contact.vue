@@ -73,7 +73,7 @@ const submitContact = async () => {
     <div class="container">
       <span class="eyebrow" style="color: #f6e7da;" v-reveal>Parlons de votre projet</span>
       <h1 class="display-5 fw-bold text-white mt-3" v-reveal="80">Contactez-nous</h1>
-      <p class="lead text-white-75 mt-3" v-reveal="160">contact@limanyagroupe.com &nbsp;•&nbsp; +225 21 50 04 33 27 &nbsp;•&nbsp; +225 07 77 04 70 57</p>
+      <p class="lead text-white-75 mt-3" v-reveal="160">contact@limanyagroupe.ci &nbsp;•&nbsp; +225 21 50 04 33 27 &nbsp;•&nbsp; +225 07 77 04 70 57</p>
     </div>
   </section>
 
@@ -85,10 +85,11 @@ const submitContact = async () => {
             <h2>Réseaux sociaux</h2>
             <p class="text-muted">Suivez-nous et contactez-nous via WhatsApp ou Facebook.</p>
             <ul class="list-unstyled mb-0">
-              <li class="mb-3"><strong>Email :</strong> <a href="mailto:contact@limanyagroupe.com">contact@limanyagroupe.com</a></li>
+              <li class="mb-3"><strong>Email général :</strong> <a href="mailto:contact@limanyagroupe.ci">contact@limanyagroupe.ci</a></li>
               <li class="mb-3"><strong>Fixe :</strong> +225 21 50 04 33 27</li>
               <li class="mb-3"><strong>Standard :</strong> +225 07 77 04 70 57</li>
               <li class="mb-3"><strong>Commercial (WhatsApp) :</strong> +225 07 97 39 87 00</li>
+              <li class="mb-3"><strong>Email du contact WhatsApp :</strong> <a href="mailto:acr2@limanyagroupe.ci">acr2@limanyagroupe.ci</a></li>
               <li><strong>Adresse :</strong> Port-Bouët, Gonzagueville, Rue I2T, à 100m du goudron</li>
             </ul>
             <div class="mt-4">

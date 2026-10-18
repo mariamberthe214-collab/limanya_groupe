@@ -41,6 +41,7 @@
           <h6 class="foot-title">Contact</h6>
           <ul class="list-unstyled foot-links">
             <li><i class="bi bi-envelope me-2"></i>contact@limanyagroupe.ci</li>
+            <li><i class="bi bi-envelope me-2"></i><a href="mailto:acr2@limanyagroupe.ci">acr2@limanyagroupe.ci</a> (Contact WhatsApp)</li>
             <li><i class="bi bi-telephone me-2"></i>+225 21 50 04 33 27 (Fixe)</li>
             <li><i class="bi bi-telephone me-2"></i>+225 07 77 04 70 57 (Standard)</li>
             <li><i class="bi bi-whatsapp me-2"></i>+225 07 97 39 87 00 (Commercial)</li>

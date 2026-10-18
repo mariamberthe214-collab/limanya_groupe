@@ -29,20 +29,31 @@ class UsersController
     public function store()
     {
         $input = json_decode(file_get_contents('php://input'), true);
-        if (!$input) {
-            $this->sendJson(['message' => 'Invalid input'], 400);
+        if (!is_array($input)) {
+            $this->sendJson(['message' => 'Données invalides.'], 400);
             return;
         }
 
-        $passwordHash = password_hash($input['password'] ?? '', PASSWORD_DEFAULT);
+        $validation = $this->validateUser($input, true);
+        if ($validation !== null) {
+            $this->sendJson(['message' => $validation], 422);
+            return;
+        }
+
+        $email = strtolower(trim($input['email']));
+        if ($this->model->findByEmail($email)) {
+            $this->sendJson(['message' => 'Cette adresse e-mail est déjà utilisée.'], 409);
+            return;
+        }
+
         $id = $this->model->create([
-            'nom' => $input['nom'] ?? null,
-            'prenom' => $input['prenom'] ?? null,
-            'email' => $input['email'] ?? null,
-            'telephone' => $input['telephone'] ?? null,
+            'nom' => trim($input['nom']),
+            'prenom' => trim($input['prenom'] ?? ''),
+            'email' => $email,
+            'telephone' => trim($input['telephone'] ?? ''),
             'photo' => $input['photo'] ?? null,
-            'password' => $passwordHash,
-            'role' => $input['role'] ?? 'admin',
+            'password' => password_hash($input['password'], PASSWORD_DEFAULT),
+            'role' => $input['role'],
         ]);
 
         $this->sendJson(['id' => $id], 201);
@@ -52,20 +63,33 @@ class UsersController
     {
         $input = json_decode(file_get_contents('php://input'), true);
         if (!$input) {
-            $this->sendJson(['message' => 'Invalid input'], 400);
+            $this->sendJson(['message' => 'Données invalides.'], 400);
+            return;
+        }
+
+        $validation = $this->validateUser($input, false);
+        if ($validation !== null) {
+            $this->sendJson(['message' => $validation], 422);
+            return;
+        }
+
+        $email = strtolower(trim($input['email']));
+        $existingUser = $this->model->findByEmail($email);
+        if ($existingUser && (int)$existingUser['id'] !== (int)$id) {
+            $this->sendJson(['message' => 'Cette adresse e-mail est déjà utilisée.'], 409);
             return;
         }
 
         $data = [
-            'nom' => $input['nom'] ?? null,
-            'prenom' => $input['prenom'] ?? null,
-            'email' => $input['email'] ?? null,
-            'telephone' => $input['telephone'] ?? null,
+            'nom' => trim($input['nom']),
+            'prenom' => trim($input['prenom'] ?? ''),
+            'email' => $email,
+            'telephone' => trim($input['telephone'] ?? ''),
             'photo' => $input['photo'] ?? null,
-            'role' => $input['role'] ?? 'admin',
+            'role' => $input['role'],
         ];
 
-        if (!empty($input['password'])) {
+        if (isset($input['password']) && $input['password'] !== '') {
             $data['password'] = password_hash($input['password'], PASSWORD_DEFAULT);
         }
 
@@ -85,6 +109,33 @@ class UsersController
         } else {
             $this->sendJson(['message' => 'Delete failed'], 500);
         }
+    }
+
+    private function validateUser(array $input, bool $passwordRequired): ?string
+    {
+        if (!isset($input['nom']) || trim((string)$input['nom']) === '') {
+            return 'Le nom est obligatoire.';
+        }
+
+        if (!isset($input['email']) || !filter_var(trim((string)$input['email']), FILTER_VALIDATE_EMAIL)) {
+            return 'Veuillez saisir une adresse e-mail valide.';
+        }
+
+        $password = $input['password'] ?? '';
+        if (($passwordRequired || $password !== '') && strlen((string)$password) < 8) {
+            return 'Le mot de passe doit contenir au moins 8 caractères.';
+        }
+
+        $roles = ['admin', 'gestionnaire_contenu', 'gestionnaire_commercial'];
+        if (!isset($input['role']) || !in_array($input['role'], $roles, true)) {
+            return 'Veuillez choisir un rôle valide.';
+        }
+
+        if (isset($input['photo']) && !is_string($input['photo'])) {
+            return 'La photo de profil est invalide.';
+        }
+
+        return null;
     }
 
     private function sendJson($data, $status = 200)

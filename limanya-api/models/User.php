@@ -76,8 +76,13 @@ class User extends BaseModel
     {
         $value = strtolower(trim((string)$role));
         if ($value === 'editeur') {
-            return 'editeur';
+            return 'gestionnaire_contenu';
         }
-        return 'admin';
+
+        if (in_array($value, ['admin', 'gestionnaire_contenu', 'gestionnaire_commercial'], true)) {
+            return $value;
+        }
+
+        throw new InvalidArgumentException('Rôle invalide');
     }
 }

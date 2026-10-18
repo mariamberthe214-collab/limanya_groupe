@@ -50,68 +50,83 @@ const routes = [
  {
   path: '/admin',
   component: AdminLayout,
-  meta: { requiresAdmin: true },
+  meta: { requiresAuth: true },
   children: [
     {
       path: 'dashboard',
       name: 'dashboard',
-      component: Dashboard
+      component: Dashboard,
+      meta: { roles: ['admin'] }
     },
     {
       path: 'actualites',
-      component: AdminActualites
+      component: AdminActualites,
+      meta: { roles: ['gestionnaire_contenu'] }
     },
     {
       path: 'actualites/ajouter',
-      component: AjouterActualite
+      component: AjouterActualite,
+      meta: { roles: ['gestionnaire_contenu'] }
     },
     {
       path: 'actualites/modifier/:id',
-      component: ModifierActualite
+      component: ModifierActualite,
+      meta: { roles: ['gestionnaire_contenu'] }
     },
     {
       path: 'contacts',
-      component: AdminContact
+      component: AdminContact,
+      meta: { roles: ['gestionnaire_commercial'] }
     },
     {
         path: 'contacts/:id',
-        component: VoirContact
+        component: VoirContact,
+        meta: { roles: ['gestionnaire_commercial'] }
     },
     {
       path: 'realisations',
-      component: AdminRealisations
+      component: AdminRealisations,
+      meta: { roles: ['gestionnaire_contenu'] }
     },
     {
       path: 'realisations/ajouter',
-      component: AjouterRealisation
+      component: AjouterRealisation,
+      meta: { roles: ['gestionnaire_contenu'] }
     },
     {
       path: 'realisations/modifier/:id',
-      component: ModifierRealisation
+      component: ModifierRealisation,
+      meta: { roles: ['gestionnaire_contenu'] }
     },
     {
       path: 'equipements',
-      component: AdminEquipements
+      component: AdminEquipements,
+      meta: { roles: ['admin'] }
     },
     {
       path: 'equipements/ajouter',
-      component: AjouterEquipement
+      component: AjouterEquipement,
+      meta: { roles: ['admin'] }
     },
     {
       path: 'equipements/modifier/:id',
-      component: ModifierEquipement
+      component: ModifierEquipement,
+      meta: { roles: ['admin'] }
     },
     {
       path: 'devis',
-      component: AdminDevis
+      component: AdminDevis,
+      meta: { roles: ['gestionnaire_commercial'] }
     },
     {
       path: 'devis/:id',
-      component: VoirDevis
+      component: VoirDevis,
+      meta: { roles: ['gestionnaire_commercial'] }
     },
     {
       path: 'utilisateurs',
-      component: AdminUtilisateurs
+      component: AdminUtilisateurs,
+      meta: { roles: ['admin'] }
     }
   ]
 },
@@ -145,23 +160,36 @@ router.afterEach((to) => {
 })
 
 router.beforeEach((to) => {
-  let adminConnecte = false
+  let utilisateur = null
   try {
-    const utilisateur = JSON.parse(localStorage.getItem('admin_user') || 'null')
-    adminConnecte = utilisateur?.role === 'admin'
+    utilisateur = JSON.parse(localStorage.getItem('admin_user') || 'null')
   } catch {
     localStorage.removeItem('admin_user')
   }
 
-  if (to.meta.requiresAdmin && !adminConnecte) {
+  if (to.matched.some((record) => record.meta.requiresAuth) && !utilisateur) {
     return {
       name: 'admin-login',
       query: { redirect: to.fullPath },
     }
   }
 
-  if (to.name === 'admin-login' && adminConnecte) {
-    return { name: 'dashboard' }
+  const rolesAutorises = to.meta.roles
+  const role = utilisateur?.role === 'editeur' ? 'gestionnaire_contenu' : utilisateur?.role
+  if (rolesAutorises && role !== 'admin' && !rolesAutorises.includes(role)) {
+    return role === 'gestionnaire_commercial'
+      ? '/admin/devis'
+      : role === 'gestionnaire_contenu'
+        ? '/admin/realisations'
+        : '/admin/login'
+  }
+
+  if (to.name === 'admin-login' && utilisateur) {
+    return role === 'admin'
+      ? { name: 'dashboard' }
+      : role === 'gestionnaire_commercial'
+        ? '/admin/devis'
+        : '/admin/realisations'
   }
 })
 

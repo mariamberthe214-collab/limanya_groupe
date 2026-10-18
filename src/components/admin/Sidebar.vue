@@ -4,6 +4,18 @@ import logo from '../../assets/logo.png'
 
 const sidebarOpen = inject('sidebarOpen')
 const closeSidebar = inject('closeSidebar')
+
+let utilisateur = null
+try {
+  utilisateur = JSON.parse(localStorage.getItem('admin_user') || 'null')
+} catch {
+  localStorage.removeItem('admin_user')
+}
+
+const role = utilisateur?.role === 'editeur' ? 'gestionnaire_contenu' : utilisateur?.role
+const isAdmin = role === 'admin'
+const isGestionnaireContenu = role === 'gestionnaire_contenu'
+const isGestionnaireCommercial = role === 'gestionnaire_commercial'
 </script>
 
 <template>
@@ -17,37 +29,37 @@ const closeSidebar = inject('closeSidebar')
     </div>
 
     <nav class="sidebar-nav">
-      <RouterLink to="/admin/dashboard" @click="closeSidebar">
+      <RouterLink v-if="isAdmin" to="/admin/dashboard" @click="closeSidebar">
         <i class="bi bi-grid-1x2-fill"></i>
         <span>Dashboard</span>
       </RouterLink>
 
-      <RouterLink to="/admin/actualites" @click="closeSidebar">
+      <RouterLink v-if="isAdmin || isGestionnaireContenu" to="/admin/actualites" @click="closeSidebar">
         <i class="bi bi-newspaper"></i>
         <span>Actualités</span>
       </RouterLink>
 
-      <RouterLink to="/admin/realisations" @click="closeSidebar">
+      <RouterLink v-if="isAdmin || isGestionnaireContenu" to="/admin/realisations" @click="closeSidebar">
         <i class="bi bi-building"></i>
         <span>Réalisations</span>
       </RouterLink>
 
-      <RouterLink to="/admin/equipements" @click="closeSidebar">
+      <RouterLink v-if="isAdmin" to="/admin/equipements" @click="closeSidebar">
         <i class="bi bi-truck"></i>
         <span>Équipements</span>
       </RouterLink>
 
-      <RouterLink to="/admin/devis" @click="closeSidebar">
+      <RouterLink v-if="isAdmin || isGestionnaireCommercial" to="/admin/devis" @click="closeSidebar">
         <i class="bi bi-file-earmark-text"></i>
         <span>Devis</span>
       </RouterLink>
 
-      <RouterLink to="/admin/contacts" class="nav-link" @click="closeSidebar">
+      <RouterLink v-if="isAdmin || isGestionnaireCommercial" to="/admin/contacts" class="nav-link" @click="closeSidebar">
         <i class="bi bi-envelope"></i>
         <span>Messages</span>
       </RouterLink>
 
-      <RouterLink to="/admin/utilisateurs" @click="closeSidebar">
+      <RouterLink v-if="isAdmin" to="/admin/utilisateurs" @click="closeSidebar">
         <i class="bi bi-person"></i>
         <span>Utilisateurs</span>
       </RouterLink>

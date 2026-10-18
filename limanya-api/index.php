@@ -87,9 +87,9 @@ switch ($resource) {
         $ctrl = new ActualiteController();
         if ($method === 'GET' && !$id) $ctrl->index();
         elseif ($method === 'GET' && $id) $ctrl->show($id);
-        elseif ($method === 'POST') { requireAdmin(); $ctrl->store(); }
-        elseif (($method === 'PUT' || $method === 'PATCH') && $id) { requireAdmin(); $ctrl->update($id); }
-        elseif ($method === 'DELETE' && $id) { requireAdmin(); $ctrl->destroy($id); }
+        elseif ($method === 'POST') { requireRole(['gestionnaire_contenu']); $ctrl->store(); }
+        elseif (($method === 'PUT' || $method === 'PATCH') && $id) { requireRole(['gestionnaire_contenu']); $ctrl->update($id); }
+        elseif ($method === 'DELETE' && $id) { requireRole(['gestionnaire_contenu']); $ctrl->destroy($id); }
         else {
             http_response_code(405);
             echo json_encode(['message' => 'Method not allowed']);
@@ -99,9 +99,9 @@ switch ($resource) {
         $ctrl = new RealisationController();
         if ($method === 'GET' && !$id) $ctrl->index();
         elseif ($method === 'GET' && $id) $ctrl->show($id);
-        elseif ($method === 'POST') { requireAdmin(); $ctrl->store(); }
-        elseif (($method === 'PUT' || $method === 'PATCH') && $id) { requireAdmin(); $ctrl->update($id); }
-        elseif ($method === 'DELETE' && $id) { requireAdmin(); $ctrl->destroy($id); }
+        elseif ($method === 'POST') { requireRole(['gestionnaire_contenu']); $ctrl->store(); }
+        elseif (($method === 'PUT' || $method === 'PATCH') && $id) { requireRole(['gestionnaire_contenu']); $ctrl->update($id); }
+        elseif ($method === 'DELETE' && $id) { requireRole(['gestionnaire_contenu']); $ctrl->destroy($id); }
         else {
             http_response_code(405);
             echo json_encode(['message' => 'Method not allowed']);
@@ -109,11 +109,11 @@ switch ($resource) {
         break;
     case 'devis':
         $ctrl = new DevisController();
-        if ($method === 'GET' && !$id) { requireAdmin(); $ctrl->index(); }
-        elseif ($method === 'GET' && $id) { requireAdmin(); $ctrl->show($id); }
+        if ($method === 'GET' && !$id) { requireRole(['gestionnaire_commercial']); $ctrl->index(); }
+        elseif ($method === 'GET' && $id) { requireRole(['gestionnaire_commercial']); $ctrl->show($id); }
         elseif ($method === 'POST') $ctrl->store();
-        elseif (($method === 'PUT' || $method === 'PATCH') && $id) { requireAdmin(); $ctrl->update($id); }
-        elseif ($method === 'DELETE' && $id) { requireAdmin(); $ctrl->destroy($id); }
+        elseif (($method === 'PUT' || $method === 'PATCH') && $id) { requireRole(['gestionnaire_commercial']); $ctrl->update($id); }
+        elseif ($method === 'DELETE' && $id) { requireRole(['gestionnaire_commercial']); $ctrl->destroy($id); }
         else {
             http_response_code(405);
             echo json_encode(['message' => 'Method not allowed']);
@@ -121,11 +121,11 @@ switch ($resource) {
         break;
     case 'contacts':
         $ctrl = new ContactController();
-        if ($method === 'GET' && !$id) { requireAdmin(); $ctrl->index(); }
-        elseif ($method === 'GET' && $id) { requireAdmin(); $ctrl->show($id); }
+        if ($method === 'GET' && !$id) { requireRole(['gestionnaire_commercial']); $ctrl->index(); }
+        elseif ($method === 'GET' && $id) { requireRole(['gestionnaire_commercial']); $ctrl->show($id); }
         elseif ($method === 'POST') $ctrl->store();
-        elseif (($method === 'PUT' || $method === 'PATCH') && $id) { requireAdmin(); $ctrl->update($id); }
-        elseif ($method === 'DELETE' && $id) { requireAdmin(); $ctrl->destroy($id); }
+        elseif (($method === 'PUT' || $method === 'PATCH') && $id) { requireRole(['gestionnaire_commercial']); $ctrl->update($id); }
+        elseif ($method === 'DELETE' && $id) { requireRole(['gestionnaire_commercial']); $ctrl->destroy($id); }
         else {
             http_response_code(405);
             echo json_encode(['message' => 'Method not allowed']);
@@ -158,7 +158,7 @@ switch ($resource) {
         }
         break;
     case 'upload':
-        requireAdmin();
+        requireRole(['gestionnaire_contenu']);
         $ctrl = new UploadController();
         if ($method === 'POST') $ctrl->store();
         else {

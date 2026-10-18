@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import api from '../../services/api'
 import ConfirmModal from '../../components/admin/ConfirmModal.vue'
+import { uploadImage, getImageUrl } from '../../utils/images'
 
 const utilisateurs = ref([])
 const recherche = ref('')
@@ -9,10 +10,14 @@ const page = ref(1)
 const parPage = 10
 const showModal = ref(false)
 const utilisateurASupprimer = ref(null)
-const nouveauUtilisateur = ref({ nom: '', email: '', password: '', role: 'admin' })
+const nouveauUtilisateur = ref({ nom: '', prenom: '', email: '', telephone: '', photo: '', password: '', role: '' })
 const showForm = ref(false)
 const idEnEdition = ref(null)
 const erreur = ref('')
+const succes = ref('')
+const envoiEnCours = ref(false)
+const photoFichier = ref(null)
+const photoApercu = ref('')
 
 watch(recherche, () => {
   page.value = 1
@@ -63,7 +68,11 @@ const supprimer = async () => {
 
 const ouvrirAjout = () => {
   idEnEdition.value = null
-  nouveauUtilisateur.value = { nom: '', email: '', password: '', role: 'admin' }
+  nouveauUtilisateur.value = { nom: '', prenom: '', email: '', telephone: '', photo: '', password: '', role: '' }
+  photoFichier.value = null
+  photoApercu.value = ''
+  erreur.value = ''
+  succes.value = ''
   showForm.value = true
 }
 
@@ -71,35 +80,68 @@ const ouvrirEdition = (item) => {
   idEnEdition.value = item.id
   nouveauUtilisateur.value = {
     nom: item.nom || '',
+    prenom: item.prenom || '',
     email: item.email || '',
+    telephone: item.telephone || '',
+    photo: item.photo || '',
     password: '',
-    role: item.role || 'admin',
+    role: item.role === 'editeur' ? 'gestionnaire_contenu' : item.role || 'admin',
   }
+  photoFichier.value = null
+  photoApercu.value = item.photo ? getImageUrl(item.photo) : ''
+  erreur.value = ''
+  succes.value = ''
   showForm.value = true
 }
 
 const annulerForm = () => {
+  if (photoApercu.value.startsWith('blob:')) URL.revokeObjectURL(photoApercu.value)
   showForm.value = false
   idEnEdition.value = null
-  nouveauUtilisateur.value = { nom: '', email: '', password: '', role: 'admin' }
+  nouveauUtilisateur.value = { nom: '', prenom: '', email: '', telephone: '', photo: '', password: '', role: '' }
+  photoFichier.value = null
+  photoApercu.value = ''
+}
+
+const choisirPhoto = (event) => {
+  const fichier = event.target.files?.[0] || null
+  photoFichier.value = fichier
+  if (photoApercu.value.startsWith('blob:')) URL.revokeObjectURL(photoApercu.value)
+  photoApercu.value = fichier ? URL.createObjectURL(fichier) : (nouveauUtilisateur.value.photo ? getImageUrl(nouveauUtilisateur.value.photo) : '')
 }
 
 const enregistrerUtilisateur = async () => {
+  const edition = Boolean(idEnEdition.value)
+  erreur.value = ''
+  succes.value = ''
+  envoiEnCours.value = true
   try {
+    const data = { ...nouveauUtilisateur.value }
+    if (photoFichier.value) data.photo = await uploadImage(photoFichier.value)
+
     if (idEnEdition.value) {
-      // En modification : n'envoie le mot de passe que s'il a été renseigné
-      const data = { ...nouveauUtilisateur.value }
       if (!data.password) delete data.password
       await api.put(`/users/${idEnEdition.value}`, data)
     } else {
-      await api.post('/users', nouveauUtilisateur.value)
+      await api.post('/users', data)
     }
     annulerForm()
-    chargerUtilisateurs()
+    succes.value = edition ? 'Utilisateur modifié.' : 'Utilisateur créé.'
+    await chargerUtilisateurs()
   } catch (error) {
     console.error(error)
+    erreur.value = error.response?.data?.message || "Impossible d'enregistrer cet utilisateur. Vérifiez les informations et réessayez."
+  } finally {
+    envoiEnCours.value = false
   }
 }
+
+const roleLibelle = (role) => ({
+  admin: 'Admin',
+  gestionnaire_contenu: 'Gestionnaire contenu',
+  gestionnaire_commercial: 'Gestionnaire commercial',
+  editeur: 'Gestionnaire contenu',
+}[role] || role)
 
 const formatDate = (date) => {
   return new Date(date).toLocaleDateString('fr-FR')
@@ -114,37 +156,67 @@ onMounted(chargerUtilisateurs)
       <h2 class="fw-bold mb-0"><i class="bi bi-people text-amber me-2"></i>Gestion des utilisateurs</h2>
       <button class="btn btn-primary" @click="ouvrirAjout"><i class="bi bi-person-plus me-1"></i>Ajouter un utilisateur</button>
     </div>
-    <p class="text-muted mb-4">Gérez les comptes ayant accès à l'administration.</p>
+    <p class="text-muted mb-4">Attribuez à chaque compte les espaces qu’il est autorisé à gérer.</p>
     <div v-if="erreur" class="alert alert-danger" role="alert">
       <i class="bi bi-exclamation-triangle me-2"></i>{{ erreur }}
     </div>
+    <div v-if="succes" class="alert alert-success" role="status">{{ succes }}</div>
 
     <div v-if="showForm" class="card p-3 mb-4">
       <h5 class="mb-3">{{ idEnEdition ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur' }}</h5>
+      <form @submit.prevent="enregistrerUtilisateur">
       <div class="row g-3">
-        <div class="col-md-4">
-          <input v-model="nouveauUtilisateur.nom" class="form-control" placeholder="Nom" />
+        <div class="col-md-6">
+          <label class="form-label" for="utilisateur-prenom">Prénom</label>
+          <input id="utilisateur-prenom" v-model="nouveauUtilisateur.prenom" class="form-control" autocomplete="given-name" />
         </div>
-        <div class="col-md-4">
-          <input v-model="nouveauUtilisateur.email" class="form-control" placeholder="Email" />
+        <div class="col-md-6">
+          <label class="form-label" for="utilisateur-nom">Nom <span class="text-danger">*</span></label>
+          <input id="utilisateur-nom" v-model="nouveauUtilisateur.nom" class="form-control" autocomplete="family-name" required />
         </div>
-        <div class="col-md-2">
+        <div class="col-md-6">
+          <label class="form-label" for="utilisateur-email">Adresse e-mail <span class="text-danger">*</span></label>
+          <input id="utilisateur-email" v-model="nouveauUtilisateur.email" type="email" class="form-control" autocomplete="email" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="utilisateur-telephone">Téléphone</label>
+          <input id="utilisateur-telephone" v-model="nouveauUtilisateur.telephone" type="tel" class="form-control" autocomplete="tel" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="utilisateur-password">{{ idEnEdition ? 'Nouveau mot de passe' : 'Mot de passe *' }}</label>
           <input
+            id="utilisateur-password"
             v-model="nouveauUtilisateur.password"
             type="password"
             class="form-control"
-            :placeholder="idEnEdition ? 'Laisser vide pour ne pas changer' : 'Mot de passe'" />
+            :required="!idEnEdition"
+            :minlength="nouveauUtilisateur.password ? 8 : undefined"
+            autocomplete="new-password"
+            :placeholder="idEnEdition ? 'Laisser vide pour conserver l’actuel' : '8 caractères minimum'" />
         </div>
-        <div class="col-md-2">
-          <select v-model="nouveauUtilisateur.role" class="form-select">
-            <option value="admin">Admin</option>
+        <div class="col-md-6">
+          <label class="form-label" for="utilisateur-role">Rôle <span class="text-danger">*</span></label>
+          <select id="utilisateur-role" v-model="nouveauUtilisateur.role" class="form-select" required>
+            <option disabled value="">Choisir un rôle</option>
+            <option value="admin">Admin · accès complet</option>
+            <option value="gestionnaire_contenu">Gestionnaire contenu · actualités et réalisations</option>
+            <option value="gestionnaire_commercial">Gestionnaire commercial · messages et devis</option>
           </select>
         </div>
+        <div class="col-12">
+          <label class="form-label" for="utilisateur-photo">Photo de profil</label>
+          <input id="utilisateur-photo" type="file" accept="image/*" class="form-control" @change="choisirPhoto" />
+          <img v-if="photoApercu" :src="photoApercu" alt="Aperçu de la photo de profil" class="user-photo-preview mt-2" />
+        </div>
+        <div class="col-12">
+          <button class="btn btn-success" type="submit" :disabled="envoiEnCours">
+            <span v-if="envoiEnCours" class="spinner-border spinner-border-sm me-2"></span>
+            {{ envoiEnCours ? 'Enregistrement...' : 'Enregistrer' }}
+          </button>
+          <button class="btn btn-outline-secondary ms-2" type="button" @click="annulerForm">Annuler</button>
+        </div>
       </div>
-      <div class="mt-3 d-flex gap-2">
-        <button class="btn btn-success" @click="enregistrerUtilisateur">Enregistrer</button>
-        <button class="btn btn-outline-secondary" @click="annulerForm">Annuler</button>
-      </div>
+      </form>
     </div>
 
     <div class="mb-3 position-relative" style="max-width: 420px;">
@@ -161,8 +233,10 @@ onMounted(chargerUtilisateurs)
       <thead class="table-dark">
         <tr>
           <th>ID</th>
-          <th>Nom</th>
+          <th>Photo</th>
+          <th>Nom complet</th>
           <th>Email</th>
+          <th>Téléphone</th>
           <th>Rôle</th>
           <th>Date</th>
           <th>Actions</th>
@@ -171,11 +245,14 @@ onMounted(chargerUtilisateurs)
       <tbody>
         <tr v-for="item in utilisateursPagine" :key="item.id">
           <td>{{ item.id }}</td>
-          <td>{{ item.nom }}</td>
-          <td>{{ item.email }}</td>
           <td>
-            <span class="badge bg-primary">{{ item.role || 'admin' }}</span>
+            <img v-if="item.photo" :src="getImageUrl(item.photo)" alt="" class="user-photo-thumb" />
+            <i v-else class="bi bi-person-circle fs-4 text-muted"></i>
           </td>
+          <td>{{ [item.prenom, item.nom].filter(Boolean).join(' ') }}</td>
+          <td>{{ item.email }}</td>
+          <td>{{ item.telephone || '—' }}</td>
+          <td><span class="badge bg-primary">{{ roleLibelle(item.role || 'admin') }}</span></td>
           <td>{{ formatDate(item.created_at) }}</td>
           <td>
             <button class="btn btn-outline-primary btn-sm me-2" @click="ouvrirEdition(item)"><i class="bi bi-pencil"></i></button>
@@ -210,7 +287,20 @@ onMounted(chargerUtilisateurs)
 }
 
 .admin-users-page .table {
-  min-width: 680px;
+  min-width: 900px;
+}
+
+.user-photo-thumb,
+.user-photo-preview {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-photo-preview {
+  width: 72px;
+  height: 72px;
 }
 
 @media (max-width: 767.98px) {

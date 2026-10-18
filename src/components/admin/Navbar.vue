@@ -2,6 +2,7 @@
 import { ref, onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../../services/api'
+import { getImageUrl } from '../../utils/images'
 
 const router = useRouter()
 const utilisateur = ref(null)
@@ -53,7 +54,13 @@ const deconnexion = async () => {
     <div class="right">
 
       <span class="admin-user">
-        <span class="avatar">{{ initiales(utilisateur?.nom) }}</span>
+        <img
+          v-if="utilisateur?.photo"
+          :src="getImageUrl(utilisateur.photo)"
+          :alt="`Photo de ${utilisateur.nom || 'l’utilisateur'}`"
+          class="avatar"
+          @error="utilisateur.photo = null">
+        <span v-else class="avatar">{{ initiales(utilisateur?.nom) }}</span>
         <span class="admin-name">{{ utilisateur?.nom || 'Administrateur' }}</span>
       </span>
 
@@ -155,6 +162,7 @@ const deconnexion = async () => {
     font-weight:700;
     font-size:0.8rem;
     flex-shrink:0;
+    object-fit:cover;
 
 }
 

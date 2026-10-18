@@ -101,17 +101,17 @@ const routes = [
     {
       path: 'equipements',
       component: AdminEquipements,
-      meta: { roles: ['admin'] }
+      meta: { roles: ['gestionnaire_commercial'] }
     },
     {
       path: 'equipements/ajouter',
       component: AjouterEquipement,
-      meta: { roles: ['admin'] }
+      meta: { roles: ['gestionnaire_commercial'] }
     },
     {
       path: 'equipements/modifier/:id',
       component: ModifierEquipement,
-      meta: { roles: ['admin'] }
+      meta: { roles: ['gestionnaire_commercial'] }
     },
     {
       path: 'devis',

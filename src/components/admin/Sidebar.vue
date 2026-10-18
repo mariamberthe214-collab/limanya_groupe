@@ -44,7 +44,7 @@ const isGestionnaireCommercial = role === 'gestionnaire_commercial'
         <span>Réalisations</span>
       </RouterLink>
 
-      <RouterLink v-if="isAdmin" to="/admin/equipements" @click="closeSidebar">
+      <RouterLink v-if="isAdmin || isGestionnaireCommercial" to="/admin/equipements" @click="closeSidebar">
         <i class="bi bi-truck"></i>
         <span>Équipements</span>
       </RouterLink>

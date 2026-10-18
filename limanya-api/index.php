@@ -149,9 +149,9 @@ switch ($resource) {
         $ctrl = new EquipementController();
         if ($method === 'GET' && !$id) $ctrl->index();
         elseif ($method === 'GET' && $id) $ctrl->show($id);
-        elseif ($method === 'POST') { requireAdmin(); $ctrl->store(); }
-        elseif (($method === 'PUT' || $method === 'PATCH') && $id) { requireAdmin(); $ctrl->update($id); }
-        elseif ($method === 'DELETE' && $id) { requireAdmin(); $ctrl->destroy($id); }
+        elseif ($method === 'POST') { requireRole(['gestionnaire_commercial']); $ctrl->store(); }
+        elseif (($method === 'PUT' || $method === 'PATCH') && $id) { requireRole(['gestionnaire_commercial']); $ctrl->update($id); }
+        elseif ($method === 'DELETE' && $id) { requireRole(['gestionnaire_commercial']); $ctrl->destroy($id); }
         else {
             http_response_code(405);
             echo json_encode(['message' => 'Method not allowed']);

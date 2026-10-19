@@ -52,7 +52,7 @@ onMounted(chargerProduits)
               <i class="bi bi-check-circle-fill text-amber me-2"></i>{{ item }}
             </li>
           </ul>
-          <router-link to="/contacts" class="btn btn-primary btn-lg mt-2">Demander un devis</router-link>
+          <router-link :to="{ path: '/demande-de-devis', query: { service: 'Énergies renouvelables' } }" class="btn btn-primary btn-lg mt-2">Demander un devis</router-link>
         </div>
         <div class="col-lg-6">
           <div class="hero-media ratio ratio-4x3">

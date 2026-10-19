@@ -75,7 +75,7 @@ onMounted(chargerRealisations)
             </li>
           </ul>
           <div class="d-flex flex-wrap gap-3 mt-3">
-            <router-link to="/contacts" class="btn btn-primary btn-lg">Demander un devis</router-link>
+            <router-link :to="{ path: '/demande-de-devis', query: { service: 'Études Géophysiques' } }" class="btn btn-primary btn-lg">Demander un devis</router-link>
             <router-link
               :to="{ path: '/contacts', query: { sujet: 'Location de matériel géophysique' } }"
               class="btn btn-outline-primary btn-lg"

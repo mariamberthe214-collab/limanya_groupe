@@ -93,7 +93,7 @@ onMounted(chargerEquipements)
               <i class="bi" :class="a.icon"></i>{{ a.label }}
             </li>
           </ul>
-          <router-link to="/contacts" class="btn btn-primary btn-lg mt-4" v-reveal="300">
+          <router-link :to="{ path: '/demande-de-devis', query: { service: 'Équipements hydrauliques' } }" class="btn btn-primary btn-lg mt-4" v-reveal="300">
             Demander un devis
           </router-link>
         </div>

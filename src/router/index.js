@@ -11,6 +11,7 @@ import RealisationDetail from '../views/RealisationDetail.vue'
 import Actualites from '../views/Actualites.vue'
 import ActualiteDetail from '../views/ActualiteDetail.vue'
 import Contact from '../views/Contact.vue'
+import DemandeDevis from '../views/DemandeDevis.vue'
 import NotFound from '../views/NotFound.vue'
 import AdminLogin from '../views/AdminLogin.vue'
 import Dashboard from '../views/admin/Dashboard.vue'
@@ -38,6 +39,7 @@ const routes = [
   { path: '/realisations/:id', name: 'realisation-detail', component: RealisationDetail, meta: { title: 'Réalisation — LIMANYA GROUPE' } },
   { path: '/materiels-de-forages', name: 'materiels', component: Materiels, meta: { title: 'Vente de Matériels — LIMANYA GROUPE' } },
   { path: '/contacts', name: 'contacts', component: Contact, meta: { title: 'Contact — LIMANYA GROUPE' } },
+  { path: '/demande-de-devis', name: 'demande-de-devis', component: DemandeDevis, meta: { title: 'Demande de devis — LIMANYA GROUPE' } },
   { path: '/apropos', name: 'about', component: About, meta: { title: 'À propos — LIMANYA GROUPE' } },
   { path: '/forage', name: 'forage', component: Forage, meta: { title: 'Forages Hydrauliques — LIMANYA GROUPE' } },
   { path: '/btp', name: 'btp', component: Btp, meta: { title: 'BTP & Génie Civil — LIMANYA GROUPE' } },

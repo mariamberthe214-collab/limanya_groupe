@@ -175,7 +175,7 @@ const highlights = [
           <!-- ACTIONS -->
           <div class="home-hero-actions mt-4" v-reveal="260">
 
-            <router-link to="/contacts" class="hero-btn hero-btn-primary">
+            <router-link :to="{ path: '/demande-de-devis' }" class="hero-btn hero-btn-primary">
               Demander un devis
               <i class="bi bi-arrow-up-right"></i>
             </router-link>
@@ -481,7 +481,7 @@ const highlights = [
           </strong>
         </div>
 
-        <router-link to="/contacts" class="expertises-bottom-btn">
+        <router-link :to="{ path: '/demande-de-devis' }" class="expertises-bottom-btn">
           Demander un devis
           <i class="bi bi-arrow-right"></i>
         </router-link>

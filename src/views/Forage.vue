@@ -1,23 +1,9 @@
 <script setup>
-import { reactive, ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import api from '../services/api'
-import { buildWhatsAppLink } from '../utils/whatsapp'
 import { getImageUrl } from '../utils/images'
 
 const heroBackground = '/videos/hero-forage.mp4'
-
-const form = reactive({
-  name: '',
-  email: '',
-  phone: '',
-  project: '',
-  message: '',
-})
-
-const submitted = ref(false)
-const lastWhatsAppLink = ref('')
-const erreur = ref('')
-const envoiEnCours = ref(false)
 
 const realisations = ref([])
 const chargementRealisations = ref(true)
@@ -68,51 +54,6 @@ const chargerRealisations = async () => {
 
 onMounted(chargerRealisations)
 
-const buildRecapMessage = (data) => {
-  const lignes = [
-    `Bonjour LIMANYA Groupe, je viens de faire une demande de devis via votre site :`,
-    `Nom : ${data.name}`,
-    data.project ? `Service souhaité : ${data.project}` : null,
-    `Téléphone : ${data.phone}`,
-    `Message : ${data.message}`,
-  ].filter(Boolean)
-  return lignes.join('\n')
-}
-
-const submitForm = async () => {
-  if (envoiEnCours.value) return
-
-  erreur.value = ''
-  envoiEnCours.value = true
-
-  try {
-    const recapMessage = buildRecapMessage(form)
-
-    await api.post('/devis', {
-      nom: form.name,
-      email: form.email,
-      telephone: form.phone,
-      service: form.project,
-      message: form.message,
-      statut: 'nouveau',
-    })
-
-    lastWhatsAppLink.value = buildWhatsAppLink(recapMessage)
-    submitted.value = true
-
-    form.name = ''
-    form.email = ''
-    form.phone = ''
-    form.project = ''
-    form.message = ''
-  } catch (error) {
-    console.error(error)
-    erreur.value = error.response?.data?.message || 'Une erreur est survenue lors de l’envoi de votre demande. Veuillez réessayer.'
-  } finally {
-    envoiEnCours.value = false
-  }
-}
-
 const advantages = [
   'Équipements de forage modernes et performants',
   'Études du sous-sol précises avant chantier',
@@ -159,7 +100,7 @@ const advantages = [
           <div class="mt-5 d-flex flex-wrap gap-3">
 
             <RouterLink
-              to="/contacts"
+              :to="{ path: '/demande-de-devis', query: { service: 'Forages Hydrauliques' } }"
               class="btn btn-warning btn-lg">
 
               Demander un devis
@@ -545,71 +486,17 @@ const advantages = [
 
 </section>
 
-<section class="devis-section py-5">
-
-  <div class="container">
-
-    <div class="row justify-content-center">
-
-      <div class="col-lg-8">
-
-        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
-
-          <div class="text-center mb-4">
-            <span class="section-tag">Demande de devis</span>
-            <h2 class="mt-3">Un projet en tête ? Parlons-en</h2>
-            <p class="text-muted">Remplissez ce formulaire, nous vous répondrons rapidement avec une proposition adaptée.</p>
-          </div>
-
-          <form @submit.prevent="submitForm">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label">Nom complet</label>
-                <input v-model="form.name" type="text" class="form-control" placeholder="Votre nom" required />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Téléphone</label>
-                <input v-model="form.phone" type="tel" class="form-control" placeholder="+225 07 77 04 70 57" required />
-              </div>
-            </div>
-            <div class="row g-3 mt-3">
-              <div class="col-md-6">
-                <label class="form-label">Email</label>
-                <input v-model="form.email" type="email" class="form-control" placeholder="email@exemple.com" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Type de projet</label>
-                <input v-model="form.project" type="text" class="form-control" placeholder="Forage, étude géophysique..." />
-              </div>
-            </div>
-            <div class="mt-3">
-              <label class="form-label">Message</label>
-              <textarea v-model="form.message" rows="4" class="form-control" placeholder="Décrivez votre projet"></textarea>
-            </div>
-            <button type="submit" class="btn btn-warning btn-lg mt-4" :disabled="envoiEnCours">
-              <span v-if="envoiEnCours" class="spinner-border spinner-border-sm me-2"></span>
-              {{ envoiEnCours ? 'Envoi en cours...' : 'Envoyer ma demande' }}
-            </button>
-            <div v-if="erreur" class="alert alert-danger mt-3 mb-0" role="alert">
-              <i class="bi bi-exclamation-triangle me-2"></i>{{ erreur }}
-            </div>
-          </form>
-
-          <div v-if="submitted" class="alert alert-success mt-4" role="alert">
-            <p class="mb-3">Merci ! Votre demande a bien été envoyée. Nous revenons vers vous rapidement.</p>
-            <a :href="lastWhatsAppLink" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-sm">
-              <i class="bi bi-whatsapp me-1"></i>Continuer la conversation sur WhatsApp
-            </a>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
+<section class="py-5 bg-light">
+  <div class="container text-center">
+    <span class="section-tag">Demande de devis</span>
+    <h2 class="mt-3">Un projet de forage en tête ?</h2>
+    <p class="text-muted mb-4">Décrivez-nous votre besoin dans notre formulaire de devis.</p>
+    <RouterLink
+      :to="{ path: '/demande-de-devis', query: { service: 'Forages Hydrauliques' } }"
+      class="btn btn-warning btn-lg">
+      Demander un devis
+    </RouterLink>
   </div>
-
 </section>
 
   <!-- LIGHTBOX -->
@@ -1027,11 +914,6 @@ const advantages = [
 
 }
 
-.devis-section{
-
-    background:#f8f8f8;
-
-}
 .lightbox {
   position: fixed;
   inset: 0;

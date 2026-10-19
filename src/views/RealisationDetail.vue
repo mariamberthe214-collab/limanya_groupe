@@ -91,7 +91,7 @@ onMounted(chargerProjet)
             <p>{{ projet.description || 'Découvrez le savoir-faire de LIMANYA Groupe à travers cette réalisation.' }}</p>
           </article>
           <div class="d-flex flex-wrap gap-2 mt-4">
-            <RouterLink to="/contacts" class="btn btn-primary">
+            <RouterLink :to="{ path: '/demande-de-devis', query: { service: projet.categorie, message: `Je souhaite un devis concernant votre réalisation : ${projet.titre}` } }" class="btn btn-primary">
               <i class="bi bi-file-earmark-text me-2"></i>Demander un devis
             </RouterLink>
             <a :href="buildWhatsAppLink(`Bonjour LIMANYA Groupe, je souhaite parler de la réalisation : ${projet.titre}`)" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success">

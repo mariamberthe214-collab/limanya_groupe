@@ -19,16 +19,15 @@ import AdminActualites from '../views/admin/AdminActualites.vue'
 import AjouterActualite from '../views/admin/AjouterActualite.vue'
 import ModifierActualite from '../views/admin/ModifierActualite.vue'
 import AdminLayout from '../layouts/AdminLayout.vue'
-import AdminContact from '../views/admin/AdminContact.vue'
 import VoirContact from '../views/admin/VoirContact.vue'
 import VoirDevis from '../views/admin/VoirDevis.vue'
+import AdminDemandes from '../views/admin/AdminDemandes.vue'
 import AdminRealisations from '../views/admin/AdminRealisations.vue'
 import AjouterRealisation from '../views/admin/AjouterRealisation.vue'
 import ModifierRealisation from '../views/admin/ModifierRealisation.vue'
 import AdminEquipements from '../views/admin/AdminEquipements.vue'
 import AjouterEquipement from '../views/admin/AjouterEquipement.vue'
 import ModifierEquipement from '../views/admin/ModifierEquipement.vue'
-import AdminDevis from '../views/admin/AdminDevis.vue'
 import AdminUtilisateurs from '../views/admin/AdminUtilisateurs.vue'
 
 
@@ -76,8 +75,13 @@ const routes = [
       meta: { roles: ['gestionnaire_contenu'] }
     },
     {
+      path: 'demandes',
+      component: AdminDemandes,
+      meta: { roles: ['gestionnaire_commercial'] }
+    },
+    {
       path: 'contacts',
-      component: AdminContact,
+      redirect: { path: '/admin/demandes', query: { type: 'message' } },
       meta: { roles: ['gestionnaire_commercial'] }
     },
     {
@@ -117,7 +121,7 @@ const routes = [
     },
     {
       path: 'devis',
-      component: AdminDevis,
+      redirect: { path: '/admin/demandes', query: { type: 'devis' } },
       meta: { roles: ['gestionnaire_commercial'] }
     },
     {

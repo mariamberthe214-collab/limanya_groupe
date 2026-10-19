@@ -49,14 +49,9 @@ const isGestionnaireCommercial = role === 'gestionnaire_commercial'
         <span>Équipements</span>
       </RouterLink>
 
-      <RouterLink v-if="isAdmin || isGestionnaireCommercial" to="/admin/devis" @click="closeSidebar">
-        <i class="bi bi-file-earmark-text"></i>
-        <span>Devis</span>
-      </RouterLink>
-
-      <RouterLink v-if="isAdmin || isGestionnaireCommercial" to="/admin/contacts" class="nav-link" @click="closeSidebar">
-        <i class="bi bi-envelope"></i>
-        <span>Messages</span>
+      <RouterLink v-if="isAdmin || isGestionnaireCommercial" to="/admin/demandes" @click="closeSidebar">
+        <i class="bi bi-inboxes"></i>
+        <span>Demandes clients</span>
       </RouterLink>
 
       <RouterLink v-if="isAdmin" to="/admin/utilisateurs" @click="closeSidebar">

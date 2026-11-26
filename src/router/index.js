@@ -57,7 +57,7 @@ const routes = [
       path: 'dashboard',
       name: 'dashboard',
       component: Dashboard,
-      meta: { roles: ['admin'] }
+      meta: { roles: ['gestionnaire_contenu', 'gestionnaire_commercial'] }
     },
     {
       path: 'actualites',
@@ -184,18 +184,14 @@ router.beforeEach((to) => {
   const role = utilisateur?.role === 'editeur' ? 'gestionnaire_contenu' : utilisateur?.role
   if (rolesAutorises && role !== 'admin' && !rolesAutorises.includes(role)) {
     return role === 'gestionnaire_commercial'
-      ? '/admin/devis'
+      ? '/admin/dashboard'
       : role === 'gestionnaire_contenu'
-        ? '/admin/realisations'
+        ? '/admin/dashboard'
         : '/admin/login'
   }
 
   if (to.name === 'admin-login' && utilisateur) {
-    return role === 'admin'
-      ? { name: 'dashboard' }
-      : role === 'gestionnaire_commercial'
-        ? '/admin/devis'
-        : '/admin/realisations'
+    return { name: 'dashboard' }
   }
 })
 

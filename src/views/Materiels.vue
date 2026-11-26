@@ -161,8 +161,13 @@ onMounted(chargerEquipements)
 
       <div v-else-if="equipementsFiltres.length === 0" class="empty-state text-center py-5" v-reveal>
         <div class="empty-icon mb-3"><i class="bi bi-box-seam"></i></div>
-        <h4>Catalogue en cours de mise à jour</h4>
-        <p class="text-muted mb-0">Contactez-nous pour connaître nos disponibilités.</p>
+        <h4>Notre catalogue est en cours de mise à jour</h4>
+        <p class="text-muted mb-3">Aucun équipement n’est actuellement publié en ligne. Contactez notre équipe pour connaître les disponibilités.</p>
+        <RouterLink
+          :to="{ path: '/demande-de-devis', query: { service: 'Équipements hydrauliques' } }"
+          class="btn btn-primary">
+          <i class="bi bi-file-earmark-text me-2"></i>Demander un devis
+        </RouterLink>
       </div>
 
       <!-- GRILLE PRODUITS -->

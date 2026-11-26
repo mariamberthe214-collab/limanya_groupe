@@ -10,7 +10,7 @@
           +225 07 77 04 70 57
         </a>
 
-        <a href="mailto:contact@limanyagroupe.com">
+        <a href="mailto:contact@limanyagroupe.ci">
           <i class="bi bi-envelope-fill"></i>
           contact@limanyagroupe.ci
         </a>
@@ -44,6 +44,13 @@
 
       <RouterLink class="navbar-brand" to="/">
         <img src="../assets/logo.png" class="logo" alt="LIMANYA Groupe">
+      </RouterLink>
+
+      <RouterLink
+        class="btn devis-btn devis-btn-mobile d-lg-none"
+        to="/demande-de-devis"
+        aria-label="Demander un devis">
+        <i class="bi bi-file-earmark-text me-1" aria-hidden="true"></i>Devis
       </RouterLink>
 
       <button
@@ -196,8 +203,8 @@
 
         </ul>
         <RouterLink
-          class="btn devis-btn"
-          to="/contacts">
+          class="btn devis-btn d-none d-lg-inline-flex"
+          to="/demande-de-devis">
 
           Demander un devis
 
@@ -656,6 +663,14 @@ watch(() => route.fullPath, fermerMenuMobile)
     0 13px 28px rgba(191, 87, 28, 0.32);
 }
 
+.devis-btn-mobile {
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  flex: 0 0 auto;
+}
+
 
 /* =========================================================
    MENU MOBILE
@@ -801,6 +816,14 @@ watch(() => route.fullPath, fermerMenuMobile)
     margin-top: 12px;
 
     padding: 12px 18px;
+  }
+
+  .devis-btn-mobile {
+    width: auto;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 12px;
+    flex-shrink: 0;
   }
 }
 

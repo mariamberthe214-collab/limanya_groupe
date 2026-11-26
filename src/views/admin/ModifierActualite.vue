@@ -99,7 +99,7 @@ const modifierActualite = async () => {
     } catch (error) {
 
         console.error(error)
-        alert("Erreur lors de la modification.")
+        alert(error.message || "Erreur lors de la modification.")
 
     } finally {
         envoiEnCours.value = false

@@ -48,7 +48,7 @@ const enregistrer = async () => {
     } catch (error) {
 
         console.error(error)
-        erreur.value = "Erreur lors de l'enregistrement. Vérifiez les champs et réessayez."
+        erreur.value = error.message || "Erreur lors de l'enregistrement. Vérifiez les champs et réessayez."
 
     } finally {
         envoiEnCours.value = false

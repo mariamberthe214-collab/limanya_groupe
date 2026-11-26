@@ -4,6 +4,7 @@ import api from '../services/api'
 const CLOUDINARY_CLOUD_NAME = 'dwyibyy50'
 const CLOUDINARY_UPLOAD_PRESET = 'sxfwn8vq'
 const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`
+const CLOUDINARY_CHUNK_SIZE = 5 * 1024 * 1024
 
 /**
  * Construit l'URL complète d'une image/vidéo à afficher.
@@ -40,20 +41,58 @@ export function getImageUrl(path) {
  * @returns {Promise<string>} l'URL sécurisée (https) du fichier hébergé sur Cloudinary
  */
 export async function uploadImage(file) {
-  const formData = new FormData()
-  formData.append('file', file)
-  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+  const envoi = async (formData, headers = {}) => {
+    let response
+    try {
+      response = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        headers,
+        body: formData,
+      })
+    } catch (error) {
+      if (error instanceof TypeError) {
+        throw new Error('Cloudinary a interrompu le téléversement. Vérifiez le preset unsigned, la connexion et les limites de taille du compte.')
+      }
+      throw error
+    }
 
-  const response = await fetch(CLOUDINARY_UPLOAD_URL, {
-    method: 'POST',
-    body: formData,
-  })
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null)
+      if (response.status === 413) {
+        throw new Error('Cloudinary refuse la taille du fichier. Le téléversement par morceaux ne peut pas dépasser la limite maximale du compte.')
+      }
+      throw new Error(errorData?.error?.message || `Erreur Cloudinary (${response.status}).`)
+    }
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null)
-    throw new Error(errorData?.error?.message || "Erreur lors de l'envoi vers Cloudinary")
+    return response.json()
   }
 
-  const data = await response.json()
-  return data.secure_url
+  if (file.size <= CLOUDINARY_CHUNK_SIZE) {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+    return (await envoi(formData)).secure_url
+  }
+
+  const uploadId = globalThis.crypto?.randomUUID?.()
+    || `limanya-${Date.now()}-${Math.random().toString(36).slice(2)}`
+  let resultat
+
+  for (let debut = 0; debut < file.size; debut += CLOUDINARY_CHUNK_SIZE) {
+    const fin = Math.min(debut + CLOUDINARY_CHUNK_SIZE, file.size)
+    const formData = new FormData()
+    formData.append('file', file.slice(debut, fin), file.name)
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
+    resultat = await envoi(formData, {
+      'X-Unique-Upload-Id': uploadId,
+      'Content-Range': `bytes ${debut}-${fin - 1}/${file.size}`,
+    })
+  }
+
+  if (!resultat?.secure_url) {
+    throw new Error("Cloudinary n'a pas retourné l'URL du fichier envoyé.")
+  }
+
+  return resultat.secure_url
 }

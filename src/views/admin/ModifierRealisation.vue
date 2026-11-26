@@ -18,6 +18,7 @@ const form = ref({
 
 const medias = ref([])
 const envoiEnCours = ref(false)
+const erreur = ref('')
 
 const charger = async () => {
   try {
@@ -37,6 +38,7 @@ const choisirMedias = (event) => {
 }
 
 const update = async () => {
+  erreur.value = ''
   envoiEnCours.value = true
   try {
     const mediasUploades = medias.value.length
@@ -55,6 +57,7 @@ const update = async () => {
     router.push('/admin/realisations')
   } catch (err) {
     console.error(err)
+    erreur.value = err.message || "Erreur lors de l'enregistrement. Vérifiez les champs et réessayez."
   } finally {
     envoiEnCours.value = false
   }
@@ -120,6 +123,8 @@ onMounted(charger)
       <label class="form-label">Description</label>
       <textarea v-model="form.description" rows="5" class="form-control" placeholder="Description"></textarea>
     </div>
+
+    <div v-if="erreur" class="alert alert-danger" role="alert">{{ erreur }}</div>
 
     <button class="btn btn-primary btn-lg" :disabled="envoiEnCours">
       <span v-if="envoiEnCours" class="spinner-border spinner-border-sm me-2"></span>

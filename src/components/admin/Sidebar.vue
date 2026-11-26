@@ -29,7 +29,7 @@ const isGestionnaireCommercial = role === 'gestionnaire_commercial'
     </div>
 
     <nav class="sidebar-nav">
-      <RouterLink v-if="isAdmin" to="/admin/dashboard" @click="closeSidebar">
+      <RouterLink v-if="isAdmin || isGestionnaireContenu || isGestionnaireCommercial" to="/admin/dashboard" @click="closeSidebar">
         <i class="bi bi-grid-1x2-fill"></i>
         <span>Dashboard</span>
       </RouterLink>

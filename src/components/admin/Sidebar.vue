@@ -58,7 +58,26 @@ const isGestionnaireCommercial = role === 'gestionnaire_commercial'
         <i class="bi bi-person"></i>
         <span>Utilisateurs</span>
       </RouterLink>
+
+      <RouterLink
+        v-if="isAdmin"
+        to="/admin/calendrier-des-reves"
+        @click="closeSidebar"
+       >
+        <i class="bi bi-calendar-heart"></i>
+        <span>Calendrier des Rêves</span>
+      </RouterLink>
     </nav>
+
+    <router-link
+        to="/admin/calendrier-reves/participants"
+        class="sidebar-link"
+       >
+        <i class="fas fa-users"></i>
+        <span>Participants du calendrier</span>
+    </router-link>
+
+    
 
     <div class="sidebar-footer">
       <a href="/" target="_blank" rel="noopener noreferrer" class="sidebar-footer-link">

@@ -29,8 +29,8 @@ import AdminEquipements from '../views/admin/AdminEquipements.vue'
 import AjouterEquipement from '../views/admin/AjouterEquipement.vue'
 import ModifierEquipement from '../views/admin/ModifierEquipement.vue'
 import AdminUtilisateurs from '../views/admin/AdminUtilisateurs.vue'
-
-
+import AdminCalendrierReves from '../views/admin/AdminCalendrierReves.vue'
+import AdminParticipantsCalendrier from '../views/admin/AdminParticipantsCalendrier.vue'
 const routes = [
 
   { path: '/', name: 'home', component: Home, meta: { title: 'LIMANYA GROUPE — Forages Hydrauliques en Côte d\'Ivoire' } },
@@ -133,7 +133,20 @@ const routes = [
       path: 'utilisateurs',
       component: AdminUtilisateurs,
       meta: { roles: ['admin'] }
-    }
+    },
+    {
+      path: 'calendrier-des-reves',
+      name: 'admin-calendrier-des-reves',
+      component: AdminCalendrierReves,
+      meta: { roles: ['admin'] }
+    },
+
+    {
+    path: 'calendrier-reves/participants',
+    name: 'AdminParticipantsCalendrier',
+    component: AdminParticipantsCalendrier,
+    meta: { roles: ['admin'] }
+}
   ]
 },
   {
@@ -142,6 +155,7 @@ const routes = [
     component: NotFound,
     meta: { title: 'Page introuvable — LIMANYA GROUPE' },
   }
+
 ]
 
 const router = createRouter({

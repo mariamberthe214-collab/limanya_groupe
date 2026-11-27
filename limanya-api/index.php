@@ -41,14 +41,24 @@ session_set_cookie_params([
 session_start();
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
-$path = '/' . trim(substr($uri, strlen($base)), '/');
-$segments = array_values(array_filter(explode('/', $path)));
 
-// Supprimer index.php des segments s'il est présent
-if (!empty($segments) && $segments[0] === 'index.php') {
-    array_shift($segments);
+// Récupération du chemin transmis après index.php
+$pathInfo = $_SERVER['PATH_INFO'] ?? '';
+
+if ($pathInfo !== '') {
+    $path = $pathInfo;
+} else {
+    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+    $path = $uri;
+
+    if ($scriptName !== '' && strpos($path, $scriptName) === 0) {
+        $path = substr($path, strlen($scriptName));
+    }
 }
+
+$segments = array_values(
+    array_filter(explode('/', trim($path, '/')))
+);
 
 
 // Router minimal
@@ -63,6 +73,7 @@ require_once __DIR__ . '/controllers/UsersController.php';
 require_once __DIR__ . '/controllers/AuthController.php';
 require_once __DIR__ . '/controllers/UploadController.php';
 require_once __DIR__ . '/helpers/auth.php';
+require_once __DIR__ . '/controllers/JeuCalendrierController.php';
 
 if (count($segments) === 0 || $segments[0] === '') {
     echo json_encode(['message' => 'API root']);
@@ -73,6 +84,60 @@ $resource = $segments[0];
 $id = $segments[1] ?? null;
 
 switch ($resource) {
+
+
+    case 'calendrier-reves':
+
+        $ctrl = new JeuCalendrierController();
+
+        // Questions accessibles aux visiteurs
+        if ($method === 'GET' && !$id) {
+            $ctrl->questionsPubliques();
+        }
+
+        // Enregistrer une participation
+        elseif ($method === 'POST' && $id === 'participer') {
+            $ctrl->participer();
+        }
+
+        // Administration : consulter toutes les questions
+        elseif ($method === 'GET' && $id === 'admin') {
+            requireAdmin();
+            $ctrl->toutesLesQuestions();
+        }
+
+        elseif ($method === 'GET' && $id === 'participants') {
+            requireAdmin();
+            $ctrl->tousLesParticipants();
+        }
+        elseif ($method === 'GET' && $id === 'exporter') {
+            requireAdmin();
+            $ctrl->exporterParticipants();
+        }
+        // Administration : enregistrer une question
+        elseif ($method === 'POST' && !$id) {
+            requireAdmin();
+            $ctrl->enregistrerQuestion();
+        }  
+
+        // Administration : modifier une question
+        elseif ($method === 'PUT' && is_numeric($id)) {
+            requireAdmin();
+            $ctrl->modifierQuestion((int) $id);
+        }
+        elseif ($method === 'DELETE' && is_numeric($id)) {
+            requireAdmin();
+            $ctrl->supprimerQuestion((int) $id);
+        }
+        else {
+            http_response_code(404);
+            echo json_encode([
+                'message' => 'Route du calendrier introuvable.'
+            ]);
+        }
+
+        break;
+
     case 'auth':
         $auth = new AuthController();
         $action = $segments[1] ?? null;

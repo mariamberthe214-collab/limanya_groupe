@@ -89,6 +89,7 @@ switch ($resource) {
     case 'calendrier-reves':
 
         $ctrl = new JeuCalendrierController();
+        $actionId = $segments[2] ?? null;
 
         // Questions accessibles aux visiteurs
         if ($method === 'GET' && !$id) {
@@ -129,6 +130,29 @@ switch ($resource) {
             requireAdmin();
             $ctrl->supprimerQuestion((int) $id);
         }
+
+        // Administration : afficher tous les gagnants
+        elseif ($method === 'GET' && $id === 'gagnants') {
+            requireAdmin();
+            $ctrl->tousLesGagnants();
+        }
+
+        // Administration : enregistrer un gagnant
+        elseif ($method === 'POST' && $id === 'gagnants') {
+            requireAdmin();
+            $ctrl->enregistrerGagnant();
+        }
+
+        // Administration : modifier le statut d'un gagnant
+        elseif (
+            $method === 'PUT'
+            && $id === 'gagnants'
+            && is_numeric($actionId)
+        ) {
+            requireAdmin();
+            $ctrl->modifierStatutGagnant((int) $actionId);
+        }
+
         else {
             http_response_code(404);
             echo json_encode([

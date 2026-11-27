@@ -433,6 +433,83 @@ public function exporterParticipants(): void
         }
     } // Fin de exporterParticipants()
 
+public function enregistrerGagnant(): void
+{
+    
+
+    try {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $questionId = (int) ($data['question_id'] ?? 0);
+        $participantId = (int) ($data['participant_id'] ?? 0);
+
+        if ($questionId <= 0 || $participantId <= 0) {
+            $this->sendJson(['message' => 'Informations invalides.'], 400);
+            return;
+        }
+
+        $resultat = $this->model->enregistrerGagnant(
+            $questionId,
+            $participantId
+        );
+
+        $this->sendJson($resultat, 201);
+
+    } catch (RuntimeException $e) {
+        $this->sendJson(['message' => $e->getMessage()], 400);
+    } catch (Throwable $e) {
+        error_log($e->getMessage());
+        $this->sendJson(['message' => 'Erreur lors de l’enregistrement du gagnant.'], 500);
+    }
+}
+
+public function tousLesGagnants(): void
+{
+    
+
+    try {
+        $gagnants = $this->model->getTousLesGagnants();
+        $this->sendJson($gagnants);
+    } catch (Throwable $e) {
+        error_log($e->getMessage());
+        $this->sendJson(['message' => 'Erreur lors du chargement des gagnants.'], 500);
+    }
+}
+
+public function modifierStatutGagnant(int $id): void
+{
+    
+
+    try {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $statut = $data['statut'] ?? '';
+        $observation = $data['observation'] ?? null;
+
+        if (!is_string($statut)) {
+            $this->sendJson(['message' => 'Statut invalide.'], 400);
+            return;
+        }
+
+        $resultat = $this->model->modifierStatutGagnant(
+            $id,
+            $statut,
+            $observation
+        );
+
+        $this->sendJson($resultat);
+
+    } catch (InvalidArgumentException $e) {
+        $this->sendJson(['message' => $e->getMessage()], 400);
+    } catch (RuntimeException $e) {
+        $this->sendJson(['message' => $e->getMessage()], 404);
+    } catch (Throwable $e) {
+        error_log($e->getMessage());
+        $this->sendJson(['message' => 'Erreur lors de la mise à jour du gagnant.'], 500);
+    }
+}
+
+
 }// Fin de la classe JeuCalendrierController
 
 

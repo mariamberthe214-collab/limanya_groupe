@@ -31,6 +31,8 @@ import ModifierEquipement from '../views/admin/ModifierEquipement.vue'
 import AdminUtilisateurs from '../views/admin/AdminUtilisateurs.vue'
 import AdminCalendrierReves from '../views/admin/AdminCalendrierReves.vue'
 import AdminParticipantsCalendrier from '../views/admin/AdminParticipantsCalendrier.vue'
+import AdminGagnantsCalendrier from '../views/admin/AdminGagnantsCalendrier.vue'
+
 const routes = [
 
   { path: '/', name: 'home', component: Home, meta: { title: 'LIMANYA GROUPE — Forages Hydrauliques en Côte d\'Ivoire' } },
@@ -48,6 +50,8 @@ const routes = [
   { path: '/actualites', name: 'actualites', component: Actualites, meta: { title: 'Actualités — LIMANYA GROUPE' } },
   { path: '/actualites/:id', name: 'actualite-detail', component: ActualiteDetail, meta: { title: 'Article — LIMANYA GROUPE' } },
   { path: '/admin/login', name: 'admin-login',component: AdminLogin, meta: { title: 'Connexion admin — LIMANYA GROUPE' }},
+
+  
  {
   path: '/admin',
   component: AdminLayout,
@@ -146,7 +150,13 @@ const routes = [
     name: 'AdminParticipantsCalendrier',
     component: AdminParticipantsCalendrier,
     meta: { roles: ['admin'] }
-}
+   },
+   {
+    path: 'calendrier-reves/gagnants',
+    name: 'AdminGagnantsCalendrier',
+    component: AdminGagnantsCalendrier,
+    meta: { roles: ['admin'] }
+ }
   ]
 },
   {

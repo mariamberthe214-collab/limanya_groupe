@@ -269,4 +269,135 @@ public function getTousLesParticipants(?int $questionId = null): array
 }
 
 
+public function enregistrerGagnant(int $questionId, int $participantId): array
+{
+    // Vérifier que le participant existe et a donné la bonne réponse
+    $stmt = $this->pdo->prepare(
+        "SELECT id
+         FROM jeu_participants
+         WHERE id = :participant_id
+         AND question_id = :question_id
+         AND est_correcte = 1"
+    );
+
+    $stmt->execute([
+        ':participant_id' => $participantId,
+        ':question_id' => $questionId
+    ]);
+
+    if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+        throw new RuntimeException(
+            "Ce participant n'est pas éligible pour ce tirage."
+        );
+    }
+
+    // Vérifier qu'il n'a pas déjà été tiré pour ce jour
+    $verification = $this->pdo->prepare(
+        "SELECT id
+         FROM jeu_gagnants
+         WHERE question_id = :question_id
+         AND participant_id = :participant_id"
+    );
+
+    $verification->execute([
+        ':question_id' => $questionId,
+        ':participant_id' => $participantId
+    ]);
+
+    if ($verification->fetch(PDO::FETCH_ASSOC)) {
+        throw new RuntimeException(
+            "Ce participant a déjà été tiré pour ce jour."
+        );
+    }
+
+    // Enregistrer le gagnant
+    $insert = $this->pdo->prepare(
+        "INSERT INTO jeu_gagnants
+         (question_id, participant_id, date_tirage, statut)
+         VALUES (:question_id, :participant_id, NOW(), 'en_attente')"
+    );
+
+    $insert->execute([
+        ':question_id' => $questionId,
+        ':participant_id' => $participantId
+    ]);
+
+    return [
+        'message' => 'Gagnant enregistré avec succès.',
+        'id' => (int) $this->pdo->lastInsertId()
+    ];
+}
+
+public function getTousLesGagnants(): array
+{
+    $stmt = $this->pdo->prepare(
+        "SELECT
+            g.id,
+            g.question_id,
+            g.participant_id,
+            g.date_tirage,
+            g.statut,
+            g.observation,
+            p.nom,
+            p.prenoms,
+            p.whatsapp,
+            p.commune,
+            q.jour,
+            q.cadeau
+         FROM jeu_gagnants g
+         INNER JOIN jeu_participants p ON p.id = g.participant_id
+         INNER JOIN jeu_questions q ON q.id = g.question_id
+         ORDER BY q.jour DESC, g.date_tirage DESC"
+    );
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function modifierStatutGagnant(
+    int $id,
+    string $statut,
+    ?string $observation = null
+): array {
+    $statutsAutorises = [
+        'en_attente',
+        'confirme',
+        'publie',
+        'annule'
+    ];
+
+    if (!in_array($statut, $statutsAutorises, true)) {
+        throw new InvalidArgumentException("Statut invalide.");
+    }
+
+    $stmt = $this->pdo->prepare(
+        "UPDATE jeu_gagnants
+         SET statut = :statut,
+             observation = :observation
+         WHERE id = :id"
+    );
+
+    $stmt->execute([
+        ':statut' => $statut,
+        ':observation' => $observation,
+        ':id' => $id
+    ]);
+
+    if ($stmt->rowCount() === 0) {
+        $check = $this->pdo->prepare(
+            "SELECT id FROM jeu_gagnants WHERE id = :id"
+        );
+        $check->execute([':id' => $id]);
+
+        if (!$check->fetch(PDO::FETCH_ASSOC)) {
+            throw new RuntimeException("Gagnant introuvable.");
+        }
+    }
+
+    return ['message' => 'Statut du gagnant mis à jour.'];
+}
+
+
+
 }

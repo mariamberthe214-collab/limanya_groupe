@@ -269,8 +269,120 @@ public function getTousLesParticipants(?int $questionId = null): array
 }
 
 
-public function enregistrerGagnant(int $questionId, int $participantId): array
+public function getParticipantsEligiblesTirage(int $questionId): array
 {
+    $timezone = new DateTimeZone('Africa/Abidjan');
+    $maintenant = new DateTimeImmutable('now', $timezone);
+
+    // Vérifier que la question existe
+    $stmt = $this->pdo->prepare("
+        SELECT id, date_jeu
+        FROM jeu_questions
+        WHERE id = :question_id
+        LIMIT 1
+    ");
+
+    $stmt->execute([
+        ':question_id' => $questionId
+    ]);
+
+    $question = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$question) {
+        throw new RuntimeException("Question introuvable.");
+    }
+
+    // Calculer la fin de la journée concernée
+    $dateFin = new DateTimeImmutable(
+        $question['date_jeu'] . ' 00:00:00',
+        $timezone
+    );
+
+    $dateFin = $dateFin->modify('+1 day');
+
+    // Interdire le tirage avant minuit
+    if ($maintenant < $dateFin) {
+        throw new RuntimeException(
+            "Le tirage est possible uniquement après la fermeture de la journée."
+        );
+    }
+
+    // Vérifier qu'aucun gagnant n'a déjà été enregistré
+    $verification = $this->pdo->prepare("
+        SELECT id
+        FROM jeu_gagnants
+        WHERE question_id = :question_id
+        LIMIT 1
+    ");
+
+    $verification->execute([
+        ':question_id' => $questionId
+    ]);
+
+    if ($verification->fetch(PDO::FETCH_ASSOC)) {
+        throw new RuntimeException(
+            "Un gagnant existe déjà pour cette journée."
+        );
+    }
+
+    // Récupérer uniquement les bonnes réponses
+    $participants = $this->pdo->prepare("
+        SELECT
+            id,
+            nom,
+            prenoms,
+            whatsapp,
+            commune,
+            date_participation
+        FROM jeu_participants
+        WHERE question_id = :question_id
+        AND est_correcte = 1
+        ORDER BY id ASC
+    ");
+
+    $participants->execute([
+        ':question_id' => $questionId
+    ]);
+
+    return $participants->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+
+public function effectuerTirage(int $questionId): array
+{
+    // Récupérer les participants ayant donné la bonne réponse
+    $participants = $this->getParticipantsEligiblesTirage($questionId);
+
+    if (empty($participants)) {
+        throw new RuntimeException(
+            "Aucun participant éligible pour cette journée."
+        );
+    }
+
+    // Choisir un participant au hasard
+    $index = random_int(0, count($participants) - 1);
+
+    $gagnant = $participants[$index];
+
+    // Enregistrer le gagnant en attente de vérification
+    $enregistrement = $this->enregistrerGagnant(
+        $questionId,
+        (int) $gagnant['id']
+    );
+
+    return [
+        'message' => 'Le tirage au sort a été effectué avec succès.',
+        'gagnant' => $gagnant,
+        'gagnant_id' => $enregistrement['id'],
+        'statut' => 'en_attente'
+    ];
+}
+
+
+
+public function enregistrerGagnant(int $questionId, int $participantId): array
+{   
     // Vérifier que le participant existe et a donné la bonne réponse
     $stmt = $this->pdo->prepare(
         "SELECT id
@@ -327,6 +439,8 @@ public function enregistrerGagnant(int $questionId, int $participantId): array
         'id' => (int) $this->pdo->lastInsertId()
     ];
 }
+
+
 
 public function getTousLesGagnants(): array
 {
@@ -397,6 +511,7 @@ public function modifierStatutGagnant(
 
     return ['message' => 'Statut du gagnant mis à jour.'];
 }
+
 
 
 

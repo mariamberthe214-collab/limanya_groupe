@@ -9,6 +9,10 @@ const erreur = ref('')
 const message = ref('')
 const recherche = ref('')
 const filtreStatut = ref('')
+const questions = ref([])
+const jourSelectionne = ref('')
+const tirageEnCours = ref(false)
+const gagnantTire = ref(null)
 
 const gagnantsFiltres = computed(() => {
   return gagnants.value.filter(gagnant => {
@@ -96,6 +100,15 @@ async function chargerGagnants() {
   }
 }
 
+async function chargerQuestions() {
+  try {
+    const response = await api.get('calendrier-reves/admin')
+    questions.value = Array.isArray(response.data) ? response.data : []
+  } catch (error) {
+    erreur.value = 'Impossible de charger les journées du calendrier.'
+  }
+}
+
 async function modifierStatut(gagnant) {
   message.value = ''
   erreur.value = ''
@@ -128,7 +141,45 @@ async function modifierStatut(gagnant) {
   }
 }
 
-onMounted(chargerGagnants)
+async function lancerTirage() {
+  if (!jourSelectionne.value) return
+
+  const confirmation = window.confirm(
+    'Voulez-vous vraiment lancer le tirage au sort pour cette journée ? Cette opération ne pourra pas être répétée.'
+  )
+
+  if (!confirmation) return
+
+  tirageEnCours.value = true
+  erreur.value = ''
+  message.value = ''
+  gagnantTire.value = null
+
+  try {
+    const response = await api.post(
+      'calendrier-reves/gagnants/tirage',
+      {
+        question_id: Number(jourSelectionne.value)
+      }
+    )
+
+    gagnantTire.value = response.data.gagnant
+    message.value = response.data.message || 'Tirage effectué avec succès.'
+
+    await chargerGagnants()
+  } catch (error) {
+    erreur.value =
+      error.response?.data?.message ||
+      'Impossible d’effectuer le tirage au sort.'
+  } finally {
+    tirageEnCours.value = false
+  }
+}
+
+onMounted(() => {
+  chargerGagnants()
+  chargerQuestions()
+})
 </script>
 
 <template>
@@ -213,6 +264,113 @@ onMounted(chargerGagnants)
       </div>
 
     </div>
+
+    <div
+  v-if="message"
+  class="alert alert-success alert-dismissible fade show"
+  role="alert"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    @click="message = ''"
+  ></button>
+</div>
+
+<div
+  v-if="erreur"
+  class="alert alert-danger alert-dismissible fade show"
+  role="alert"
+>
+  {{ erreur }}
+  <button
+    type="button"
+    class="btn-close"
+    @click="erreur = ''"
+  ></button>
+</div>
+
+    <!-- Tirage au sort -->
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+  <div class="card-body p-3 p-md-4">
+    <h4 class="fw-bold mb-2">
+      <i class="bi bi-shuffle me-2 text-success"></i>
+      Tirage au sort
+    </h4>
+
+    <p class="text-muted">
+      Sélectionnez une journée pour effectuer le tirage parmi les participants ayant donné la bonne réponse.
+    </p>
+
+    <div class="row g-3 align-items-end">
+      <div class="col-md-8">
+        <label class="form-label fw-semibold">Journée du calendrier</label>
+        <select v-model="jourSelectionne" class="form-select">
+          <option value="">Choisir une journée</option>
+          <option
+            v-for="question in questions"
+            :key="question.id"
+            :value="question.id"
+          >
+            Jour {{ question.jour }} — {{ question.cadeau }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+       <button
+            type="button"
+            class="btn btn-success w-100"
+            @click="lancerTirage"
+            :disabled="!jourSelectionne || tirageEnCours"
+            >
+            <span
+                v-if="tirageEnCours"
+                class="spinner-border spinner-border-sm me-2"
+            ></span>
+
+            <i v-else class="bi bi-shuffle me-2"></i>
+
+            {{ tirageEnCours ? 'Tirage en cours...' : 'Lancer le tirage' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Résultat du tirage -->
+<div
+  v-if="gagnantTire"
+  class="card border-0 shadow-sm rounded-4 mb-4"
+>
+  <div class="card-body p-4">
+    <h4 class="fw-bold text-success mb-3">
+      <i class="bi bi-trophy-fill me-2"></i>
+      Félicitations au gagnant !
+    </h4>
+
+    <h5 class="fw-bold">
+      {{ gagnantTire.prenoms }} {{ gagnantTire.nom }}
+    </h5>
+
+    <p class="mb-1">
+      <strong>WhatsApp :</strong> {{ gagnantTire.whatsapp }}
+    </p>
+
+    <p class="mb-1">
+      <strong>Commune :</strong> {{ gagnantTire.commune }}
+    </p>
+
+    <p class="text-muted mb-0">
+      <strong>Journée :</strong> {{ jourSelectionne }}
+    </p>
+
+    <div class="alert alert-warning mt-3 mb-0">
+      Le gagnant est en attente de vérification avant toute publication.
+    </div>
+  </div>
+</div>
 
     <!-- Liste des gagnants -->
     <div class="card border-0 shadow-sm rounded-4">

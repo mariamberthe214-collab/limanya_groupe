@@ -433,6 +433,53 @@ public function exporterParticipants(): void
         }
     } // Fin de exporterParticipants()
 
+
+public function effectuerTirage(): void
+{
+    // Réserver cette opération à l'administrateur
+    requireAdmin();
+
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if (!is_array($data)) {
+        $this->sendJson([
+            'message' => 'Données invalides.'
+        ], 400);
+        return;
+    }
+
+    $questionId = filter_var(
+        $data['question_id'] ?? null,
+        FILTER_VALIDATE_INT
+    );
+
+    if ($questionId === false || $questionId === null || $questionId <= 0) {
+        $this->sendJson([
+            'message' => 'Identifiant de question invalide.'
+        ], 400);
+        return;
+    }
+
+    try {
+        $resultat = $this->model->effectuerTirage($questionId);
+
+        $this->sendJson($resultat, 201);
+
+    } catch (RuntimeException $e) {
+        $this->sendJson([
+            'message' => $e->getMessage()
+        ], 400);
+
+    } catch (Throwable $e) {
+        error_log($e->getMessage());
+
+        $this->sendJson([
+            'message' => 'Une erreur est survenue pendant le tirage.'
+        ], 500);
+    }
+}
+
+
 public function enregistrerGagnant(): void
 {
     

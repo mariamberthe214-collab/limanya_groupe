@@ -143,6 +143,17 @@ switch ($resource) {
             $ctrl->enregistrerGagnant();
         }
 
+        // Administration : effectuer le tirage au sort
+        elseif (
+            $method === 'POST'
+            && $id === 'gagnants'
+            && $actionId === 'tirage'
+        ) {
+           
+            $ctrl->effectuerTirage();
+        }
+
+
         // Administration : modifier le statut d'un gagnant
         elseif (
             $method === 'PUT'

@@ -136,14 +136,7 @@ switch ($resource) {
             requireAdmin();
             $ctrl->tousLesGagnants();
         }
-
-        // Administration : enregistrer un gagnant
-        elseif ($method === 'POST' && $id === 'gagnants') {
-            requireAdmin();
-            $ctrl->enregistrerGagnant();
-        }
-
-        // Administration : effectuer le tirage au sort
+          // Administration : effectuer le tirage au sort
         elseif (
             $method === 'POST'
             && $id === 'gagnants'
@@ -152,6 +145,13 @@ switch ($resource) {
            
             $ctrl->effectuerTirage();
         }
+        // Administration : enregistrer un gagnant
+        elseif ($method === 'POST' && $id === 'gagnants') {
+            requireAdmin();
+            $ctrl->enregistrerGagnant();
+        }
+
+      
 
 
         // Administration : modifier le statut d'un gagnant

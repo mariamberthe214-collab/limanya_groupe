@@ -133,6 +133,24 @@ const highlights = [
 </script>
 
 <template>
+  <section class="game-announcement" aria-label="Jeu Calendrier des Rêves">
+    <div class="container">
+      <div class="game-announcement-card">
+        <span class="game-announcement-icon" aria-hidden="true">
+          <i class="bi bi-calendar-heart"></i>
+        </span>
+        <div class="game-announcement-copy">
+          <span class="game-announcement-label">Jeu spécial · Décembre 2026</span>
+          <strong>Le Calendrier des Rêves Limanya</strong>
+          <span>31 fenêtres, une nouvelle question chaque jour à 12h.</span>
+        </div>
+        <RouterLink to="/calendrier-des-reves" class="game-announcement-link">
+          Découvrir le jeu <i class="bi bi-arrow-right" aria-hidden="true"></i>
+        </RouterLink>
+      </div>
+    </div>
+  </section>
+
     <!-- HERO -->
     <!-- HERO PREMIUM -->
   <section class="home-hero">
@@ -3159,6 +3177,94 @@ const highlights = [
   width: 240px;
   height: 240px;
   background: radial-gradient(circle, rgba(191, 87, 28, 0.35), transparent 70%);
+}
+
+.game-announcement {
+  position: relative;
+  z-index: 3;
+  padding: 16px 0;
+  background: var(--lg-cream);
+}
+
+.game-announcement-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--lg-line);
+  border-left: 5px solid var(--lg-amber);
+  border-radius: 14px;
+  background: linear-gradient(110deg, #fff 0%, #f6e7da 100%);
+  box-shadow: 0 8px 24px rgba(20, 17, 13, 0.08);
+}
+
+.game-announcement-icon {
+  display: grid;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--lg-ink);
+  color: #fff;
+  font-size: 1.35rem;
+}
+
+.game-announcement-copy {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+}
+
+.game-announcement-label {
+  color: var(--lg-amber-dark);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.game-announcement-copy strong {
+  color: var(--lg-ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.12rem;
+}
+
+.game-announcement-copy > span:last-child {
+  color: var(--lg-muted);
+  font-size: 0.88rem;
+}
+
+.game-announcement-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 9px;
+  background: var(--lg-amber);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.game-announcement-link:hover {
+  transform: translateY(-2px);
+  background: var(--lg-amber-dark);
+  color: #fff;
+}
+
+@media (max-width: 767.98px) {
+  .game-announcement { padding: 10px 0; }
+  .game-announcement-card { gap: 12px; padding: 13px; flex-wrap: wrap; }
+  .game-announcement-icon { flex-basis: 42px; width: 42px; height: 42px; }
+  .game-announcement-copy { min-width: calc(100% - 58px); }
+  .game-announcement-copy strong { font-size: 1rem; }
+  .game-announcement-copy > span:last-child { font-size: 0.8rem; }
+  .game-announcement-link { width: 100%; }
 }
 
 

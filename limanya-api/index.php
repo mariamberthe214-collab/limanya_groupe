@@ -103,37 +103,41 @@ switch ($resource) {
 
         // Administration : consulter toutes les questions
         elseif ($method === 'GET' && $id === 'admin') {
-            requireAdmin();
+            requireRole(['gestionnaire_contenu']);
             $ctrl->toutesLesQuestions();
         }
 
         elseif ($method === 'GET' && $id === 'participants') {
-            requireAdmin();
+            requireRole(['gestionnaire_contenu']);
             $ctrl->tousLesParticipants();
         }
         elseif ($method === 'GET' && $id === 'exporter') {
-            requireAdmin();
+            requireRole(['gestionnaire_contenu']);
             $ctrl->exporterParticipants();
         }
         // Administration : enregistrer une question
         elseif ($method === 'POST' && !$id) {
-            requireAdmin();
+            requireRole(['gestionnaire_contenu']);
             $ctrl->enregistrerQuestion();
         }  
 
         // Administration : modifier une question
         elseif ($method === 'PUT' && is_numeric($id)) {
-            requireAdmin();
+            requireRole(['gestionnaire_contenu']);
             $ctrl->modifierQuestion((int) $id);
         }
         elseif ($method === 'DELETE' && is_numeric($id)) {
-            requireAdmin();
+            requireRole(['gestionnaire_contenu']);
             $ctrl->supprimerQuestion((int) $id);
         }
 
         // Administration : afficher tous les gagnants
+        elseif ($method === 'GET' && $id === 'gagnants' && $actionId === 'candidats') {
+            requireRole(['gestionnaire_contenu']);
+            $ctrl->candidatsGagnants();
+        }
         elseif ($method === 'GET' && $id === 'gagnants') {
-            requireAdmin();
+            requireRole(['gestionnaire_contenu']);
             $ctrl->tousLesGagnants();
         }
           // Administration : effectuer le tirage au sort
@@ -143,11 +147,12 @@ switch ($resource) {
             && $actionId === 'tirage'
         ) {
            
-            $ctrl->effectuerTirage();
+            http_response_code(410);
+            echo json_encode(['message' => 'Le tirage est effectué manuellement par l’équipe.']);
         }
         // Administration : enregistrer un gagnant
         elseif ($method === 'POST' && $id === 'gagnants') {
-            requireAdmin();
+            requireRole(['gestionnaire_contenu']);
             $ctrl->enregistrerGagnant();
         }
 
@@ -160,7 +165,7 @@ switch ($resource) {
             && $id === 'gagnants'
             && is_numeric($actionId)
         ) {
-            requireAdmin();
+            requireRole(['gestionnaire_contenu']);
             $ctrl->modifierStatutGagnant((int) $actionId);
         }
 

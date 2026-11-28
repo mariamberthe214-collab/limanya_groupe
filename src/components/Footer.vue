@@ -33,6 +33,8 @@
             <li><router-link to="/apropos">À propos</router-link></li>
             <li><router-link to="/realisations-btp-services-de-construction">Réalisations</router-link></li>
             <li><router-link to="/actualites">Actualités</router-link></li>
+            <li><router-link to="/calendrier-des-reves">Calendrier des Rêves</router-link></li>
+            <li><router-link to="/reglement-calendrier">Règlement du jeu</router-link></li>
             <li><router-link to="/contacts">Contacts</router-link></li>
           </ul>
         </div>

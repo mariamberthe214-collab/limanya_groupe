@@ -60,7 +60,7 @@ const isGestionnaireCommercial = role === 'gestionnaire_commercial'
       </RouterLink>
 
       <RouterLink
-        v-if="isAdmin"
+        v-if="isAdmin || isGestionnaireContenu"
         to="/admin/calendrier-des-reves"
         @click="closeSidebar"
        >
@@ -70,6 +70,7 @@ const isGestionnaireCommercial = role === 'gestionnaire_commercial'
     </nav>
 
     <router-link
+        v-if="isAdmin || isGestionnaireContenu"
         to="/admin/calendrier-reves/participants"
         class="sidebar-link"
        >
@@ -78,7 +79,7 @@ const isGestionnaireCommercial = role === 'gestionnaire_commercial'
     </router-link>
 
     <RouterLink
-        v-if="isAdmin"
+        v-if="isAdmin || isGestionnaireContenu"
         to="/admin/calendrier-reves/gagnants"
         @click="closeSidebar"
        >

@@ -2,6 +2,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
+import { getImageUrl, uploadImage } from '../../utils/images'
 
 const annee = ref(2026)
 const questions = ref([])
@@ -13,6 +14,8 @@ const erreur = ref('')
 const questionEnModification = ref(null)
 const questionASupprimer = ref(null)
 const suppressionEnCours = ref(false)
+const mediaFichier = ref(null)
+const mediaApercu = ref('')
 
 function ouvrirConfirmationSuppression(question) {
     questionASupprimer.value = question
@@ -55,6 +58,8 @@ const formulaireVide = () => ({
   jour: '',
   date_jeu: '',
   cadeau: '',
+  media_cadeau: null,
+  type_media_cadeau: null,
   question: '',
   choix_a: '',
   choix_b: '',
@@ -90,6 +95,8 @@ const chargerQuestions = async () => {
 
 const ouvrirModal = () => {
   formulaire.value = formulaireVide()
+  mediaFichier.value = null
+  mediaApercu.value = ''
   message.value = ''
   erreur.value = ''
   afficherModal.value = true
@@ -102,6 +109,8 @@ const ouvrirModification = (item) => {
     jour: item.jour,
     date_jeu: item.date_jeu,
     cadeau: item.cadeau,
+    media_cadeau: item.media_cadeau || null,
+    type_media_cadeau: item.type_media_cadeau || null,
     question: item.question,
     choix_a: item.choix_a,
     choix_b: item.choix_b,
@@ -111,6 +120,9 @@ const ouvrirModification = (item) => {
     statut: item.statut,
   }
 
+  mediaFichier.value = null
+  mediaApercu.value = getImageUrl(item.media_cadeau) || ''
+
   message.value = ''
   erreur.value = ''
   afficherModal.value = true
@@ -118,6 +130,39 @@ const ouvrirModification = (item) => {
 
 const fermerModal = () => {
   afficherModal.value = false
+}
+
+const choisirMediaCadeau = (event) => {
+  const fichier = event.target.files?.[0] || null
+  mediaFichier.value = fichier
+  if (!fichier) return
+
+  const estImage = fichier.type.startsWith('image/')
+  const estVideo = ['video/mp4', 'video/webm', 'video/quicktime'].includes(fichier.type)
+  if (!estImage && !estVideo) {
+    erreur.value = 'Choisissez une image ou une vidéo MP4, WebM ou MOV.'
+    mediaFichier.value = null
+    event.target.value = ''
+    return
+  }
+
+  if (fichier.size > 50 * 1024 * 1024) {
+    erreur.value = 'Le média ne doit pas dépasser 50 Mo.'
+    mediaFichier.value = null
+    event.target.value = ''
+    return
+  }
+
+  erreur.value = ''
+  formulaire.value.type_media_cadeau = estVideo ? 'video' : 'image'
+  mediaApercu.value = URL.createObjectURL(fichier)
+}
+
+const retirerMediaCadeau = () => {
+  mediaFichier.value = null
+  mediaApercu.value = ''
+  formulaire.value.media_cadeau = null
+  formulaire.value.type_media_cadeau = null
 }
 
 const enregistrerQuestion = async () => {
@@ -132,8 +177,17 @@ const enregistrerQuestion = async () => {
   enregistrement.value = true
 
   try {
+    let mediaCadeau = formulaire.value.media_cadeau
+    let typeMediaCadeau = formulaire.value.type_media_cadeau
+    if (mediaFichier.value) {
+      mediaCadeau = await uploadImage(mediaFichier.value)
+      typeMediaCadeau = mediaFichier.value.type.startsWith('video/') ? 'video' : 'image'
+    }
+
     const donnees = {
       ...formulaire.value,
+      media_cadeau: mediaCadeau,
+      type_media_cadeau: mediaCadeau ? typeMediaCadeau : null,
       jour: Number(formulaire.value.jour),
       est_grand_lot: formulaire.value.est_grand_lot,
     }
@@ -152,6 +206,8 @@ const enregistrerQuestion = async () => {
     message.value = response.data.message
     afficherModal.value = false
     formulaire.value = formulaireVide()
+    mediaFichier.value = null
+    mediaApercu.value = ''
     questionEnModification.value = null
 
     await chargerQuestions()
@@ -308,12 +364,13 @@ onMounted(chargerQuestions)
     </div>
 
     <!-- Fenêtre modale -->
-    <div v-if="afficherModal" class="modal-backdrop-custom">
-      <div class="modal-dialog modal-dialog-centered modal-lg modal-custom">
+    <Teleport to="body">
+    <div v-if="afficherModal" class="modal-backdrop-custom" @click.self="fermerModal">
+      <div class="modal-dialog modal-lg modal-custom" role="dialog" aria-modal="true" aria-labelledby="calendrier-modal-title">
         <div class="modal-content border-0 rounded-4 shadow">
           <div class="modal-header border-0 p-4">
             <div>
-              <h4 class="fw-bold mb-1">
+              <h4 id="calendrier-modal-title" class="fw-bold mb-1">
                 {{ questionEnModification ? 'Modifier la question' : 'Nouvelle question' }}
               </h4>
               <p class="text-muted small mb-0">Préparez une journée du Calendrier des Rêves.</p>
@@ -342,6 +399,22 @@ onMounted(chargerQuestions)
                   <label class="form-label fw-semibold">Cadeau du jour</label>
                   <input v-model="formulaire.cadeau" type="text"
                     class="form-control" placeholder="Ex : Un bon de réduction" required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Photo ou vidéo du cadeau (facultatif)</label>
+                  <input type="file" class="form-control"
+                    accept="image/*,video/mp4,video/webm,video/quicktime"
+                    @change="choisirMediaCadeau">
+                  <small class="form-text text-muted">Image ou vidéo jusqu'à 50 Mo. Elle sera montrée avec le gagnant après publication.</small>
+                  <div v-if="mediaApercu" class="mt-3">
+                    <img v-if="formulaire.type_media_cadeau === 'image'"
+                      :src="mediaApercu" alt="Aperçu du cadeau" class="media-cadeau-apercu">
+                    <video v-else-if="formulaire.type_media_cadeau === 'video'"
+                      :src="mediaApercu" controls muted playsinline class="media-cadeau-apercu"></video>
+                    <button type="button" class="btn btn-sm btn-outline-danger d-block mt-2"
+                      @click="retirerMediaCadeau">Retirer le média</button>
+                  </div>
                 </div>
 
                 <div class="col-12">
@@ -411,9 +484,11 @@ onMounted(chargerQuestions)
         </div>
       </div>
     </div>
+    </Teleport>
   </div>
 
 
+<Teleport to="body">
 <div
     v-if="questionASupprimer"
     class="modal-backdrop-custom"
@@ -456,6 +531,7 @@ onMounted(chargerQuestions)
         </div>
     </div>
 </div>
+</Teleport>
 
 </template>
 
@@ -463,6 +539,8 @@ onMounted(chargerQuestions)
 
 .confirmation-modal {
     max-width: 420px;
+    background: #fff;
+    color: var(--lg-ink-soft);
     text-align: center;
     padding: 30px;
     border-radius: 16px;
@@ -531,29 +609,72 @@ onMounted(chargerQuestions)
 .modal-backdrop-custom {
   position: fixed;
   inset: 0;
-  z-index: 1050;
-  background: rgba(0, 0, 0, 0.55);
+  z-index: 2000;
+  background: rgba(12, 10, 8, 0.68);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 15px;
+  padding: 20px 16px;
   overflow-y: auto;
 }
 
 .modal-custom {
   width: 100%;
-  max-width: 800px;
+  max-width: 760px;
   margin: auto;
 }
 
 .modal-content {
-  max-height: 90vh;
+  background-color: #fff !important;
+  color: var(--lg-ink-soft);
+  opacity: 1;
+  max-height: calc(100dvh - 40px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-custom form {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.modal-custom .modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.modal-custom .modal-header,
+.modal-custom .modal-footer {
+  flex: 0 0 auto;
+  background: #fff;
+}
+
+@media (max-width: 575.98px) {
+  .modal-backdrop-custom { padding: 10px; }
+  .modal-content { max-height: calc(100dvh - 20px); }
+  .modal-custom .modal-header { padding: 1rem !important; }
+  .modal-custom .modal-body { padding: 0 1rem !important; }
+  .modal-custom .modal-footer { padding: 1rem !important; }
 }
 
 .form-control:focus,
 .form-select:focus {
   border-color: #c69a36;
   box-shadow: 0 0 0 0.2rem rgba(198, 154, 54, 0.15);
+}
+
+.media-cadeau-apercu {
+  display: block;
+  width: min(100%, 420px);
+  max-height: 260px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #f5f2eb;
 }
 </style>

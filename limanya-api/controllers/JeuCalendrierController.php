@@ -14,9 +14,34 @@ class JeuCalendrierController
         $this->model = new JeuCalendrier();
     }
 
+    private function validerMediaCadeau(array &$input): bool
+    {
+        $url = $input['media_cadeau'] ?? null;
+        $type = $input['type_media_cadeau'] ?? null;
+
+        if ($url === null || $url === '') {
+            $input['media_cadeau'] = null;
+            $input['type_media_cadeau'] = null;
+            return true;
+        }
+
+        $urlValide = is_string($url) && strlen($url) <= 2048 && (
+            (str_starts_with($url, 'https://') && filter_var($url, FILTER_VALIDATE_URL)) ||
+            preg_match('#^/uploads/[a-zA-Z0-9._-]+$#', $url)
+        );
+
+        if (!$urlValide || !in_array($type, ['image', 'video'], true)) {
+            $this->sendJson(['message' => 'Le média du cadeau est invalide.'], 422);
+            return false;
+        }
+
+        return true;
+    }
+
     // Questions accessibles au public
     public function questionsPubliques()
     {
+        header('Cache-Control: no-store, private');
         try {
             $questions = $this->model->getQuestionsPubliques();
 
@@ -39,6 +64,24 @@ class JeuCalendrierController
             $this->sendJson([
                 'message' => 'Impossible de récupérer les questions.'
             ], 500);
+        }
+    }
+
+    public function candidatsGagnants(): void
+    {
+        requireRole(['gestionnaire_contenu']);
+        $questionId = filter_var($_GET['question_id'] ?? null, FILTER_VALIDATE_INT);
+        if ($questionId === false || $questionId === null || $questionId <= 0) {
+            $this->sendJson(['message' => 'Identifiant de question invalide.'], 400);
+            return;
+        }
+        try {
+            $this->sendJson($this->model->getParticipantsEligiblesTirage($questionId));
+        } catch (RuntimeException $e) {
+            $this->sendJson(['message' => $e->getMessage()], 400);
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+            $this->sendJson(['message' => 'Impossible de charger les candidats.'], 500);
         }
     }
 
@@ -128,7 +171,7 @@ class JeuCalendrierController
 
     public function enregistrerQuestion()
    {
-    requireAdmin();
+    requireRole(['gestionnaire_contenu']);
 
     $input = json_decode(file_get_contents('php://input'), true);
 
@@ -150,6 +193,10 @@ class JeuCalendrierController
             ], 422);
             return;
         }
+    }
+
+    if (!$this->validerMediaCadeau($input)) {
+        return;
     }
 
     if (
@@ -177,6 +224,10 @@ class JeuCalendrierController
         $this->sendJson(['message' => 'La date est invalide.'], 422);
         return;
     }
+    if ($date->format('Y-m') !== '2026-12' || (int) $date->format('j') !== (int) $input['jour']) {
+        $this->sendJson(['message' => 'Le jour doit correspondre à la date de décembre 2026.'], 422);
+        return;
+    }
 
     try {
         $resultat = $this->model->enregistrerQuestion($input);
@@ -198,7 +249,7 @@ class JeuCalendrierController
 
 public function modifierQuestion($id)
 {
-    requireAdmin();
+    requireRole(['gestionnaire_contenu']);
 
     $id = (int) $id;
 
@@ -229,6 +280,10 @@ public function modifierQuestion($id)
         }
     }
 
+    if (!$this->validerMediaCadeau($input)) {
+        return;
+    }
+
     if (
         filter_var($input['jour'], FILTER_VALIDATE_INT) === false ||
         (int) $input['jour'] < 1 ||
@@ -254,6 +309,10 @@ public function modifierQuestion($id)
         $this->sendJson(['message' => 'La date est invalide.'], 422);
         return;
     }
+    if ($date->format('Y-m') !== '2026-12' || (int) $date->format('j') !== (int) $input['jour']) {
+        $this->sendJson(['message' => 'Le jour doit correspondre à la date de décembre 2026.'], 422);
+        return;
+    }
 
     try {
         $resultat = $this->model->modifierQuestion($id, $input);
@@ -267,6 +326,8 @@ public function modifierQuestion($id)
         }
 
         $this->sendJson(['message' => 'Erreur lors de la modification.'], 500);
+    } catch (RuntimeException $e) {
+        $this->sendJson(['message' => $e->getMessage()], 409);
     } catch (Throwable $e) {
         $this->sendJson(['message' => 'Une erreur inattendue est survenue.'], 500);
     }
@@ -276,7 +337,7 @@ public function modifierQuestion($id)
 
 public function supprimerQuestion(int $id): void
 {
-    requireAdmin();
+    requireRole(['gestionnaire_contenu']);
 
     if ($id <= 0) {
         $this->sendJson([
@@ -306,7 +367,7 @@ public function supprimerQuestion(int $id): void
 
 public function tousLesParticipants(): void
 {
-    requireAdmin();
+    requireRole(['gestionnaire_contenu']);
 
     try {
         $questionId = null;
@@ -341,7 +402,7 @@ public function tousLesParticipants(): void
 
 public function exporterParticipants(): void
 {
-    requireAdmin();
+    requireRole(['gestionnaire_contenu']);
 
     try {
         $questionId = null;
@@ -360,11 +421,7 @@ public function exporterParticipants(): void
             }
         }
 
-        $participants = $this->model->getTousLesParticipants($questionId);
-
-        $timezone = new DateTimeZone('Africa/Abidjan');
-        $aujourdHui = new DateTime('today', $timezone);
-        $aujourdHui = $aujourdHui->format('Y-m-d');
+        $participants = $this->model->getParticipantsCorrectsJoursTermines($questionId);
 
         $nomFichier = 'participants-calendrier-' .
             date('Ymd-His') . '.csv';
@@ -398,14 +455,6 @@ public function exporterParticipants(): void
         ], ';');
 
         foreach ($participants as $participant) {
-            $jourTermine = $participant['date_jeu'] < $aujourdHui;
-
-            $resultat = $jourTermine
-                ? ((int) $participant['est_correcte'] === 1
-                    ? 'Bonne réponse'
-                    : 'Mauvaise réponse')
-                : 'En attente';
-
             fputcsv($sortie, [
                 $participant['nom'],
                 $participant['prenoms'],
@@ -414,7 +463,7 @@ public function exporterParticipants(): void
                 $participant['jour'],
                 $participant['cadeau'],
                 $participant['reponse'],
-                $resultat,
+                'Bonne réponse',
                 $participant['date_participation']
             ], ';');
         }
@@ -436,52 +485,14 @@ public function exporterParticipants(): void
 
 public function effectuerTirage(): void
 {
-    // Réserver cette opération à l'administrateur
-    requireAdmin();
-
-    $data = json_decode(file_get_contents('php://input'), true);
-
-    if (!is_array($data)) {
-        $this->sendJson([
-            'message' => 'Données invalides.'
-        ], 400);
-        return;
-    }
-
-    $questionId = filter_var(
-        $data['question_id'] ?? null,
-        FILTER_VALIDATE_INT
-    );
-
-    if ($questionId === false || $questionId === null || $questionId <= 0) {
-        $this->sendJson([
-            'message' => 'Identifiant de question invalide.'
-        ], 400);
-        return;
-    }
-
-    try {
-        $resultat = $this->model->effectuerTirage($questionId);
-
-        $this->sendJson($resultat, 201);
-
-    } catch (RuntimeException $e) {
-        $this->sendJson([
-            'message' => $e->getMessage()
-        ], 400);
-
-    } catch (Throwable $e) {
-        error_log($e->getMessage());
-
-        $this->sendJson([
-            'message' => 'Une erreur est survenue pendant le tirage.'
-        ], 500);
-    }
+    http_response_code(410);
+    $this->sendJson(['message' => 'Le tirage doit être effectué manuellement.'], 410);
 }
 
 
 public function enregistrerGagnant(): void
 {
+    requireRole(['gestionnaire_contenu']);
     
 
     try {

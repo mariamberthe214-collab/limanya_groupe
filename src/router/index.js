@@ -32,6 +32,9 @@ import AdminUtilisateurs from '../views/admin/AdminUtilisateurs.vue'
 import AdminCalendrierReves from '../views/admin/AdminCalendrierReves.vue'
 import AdminParticipantsCalendrier from '../views/admin/AdminParticipantsCalendrier.vue'
 import AdminGagnantsCalendrier from '../views/admin/AdminGagnantsCalendrier.vue'
+import CalendrierReves from '../views/CalendrierReves.vue'
+import ReglementCalendrier from '../views/ReglementCalendrier.vue'
+
 
 const routes = [
 
@@ -42,6 +45,13 @@ const routes = [
   { path: '/contacts', name: 'contacts', component: Contact, meta: { title: 'Contact — LIMANYA GROUPE' } },
   { path: '/demande-de-devis', name: 'demande-de-devis', component: DemandeDevis, meta: { title: 'Demande de devis — LIMANYA GROUPE' } },
   { path: '/apropos', name: 'about', component: About, meta: { title: 'À propos — LIMANYA GROUPE' } },
+  {
+  path: '/calendrier-des-reves',
+  name: 'calendrier-reves',
+  component: CalendrierReves,
+  meta: { title: 'Calendrier des Rêves — LIMANYA GROUPE' }
+  },
+  { path: '/reglement-calendrier', name: 'reglement-calendrier', component: ReglementCalendrier, meta: { title: 'Règlement du Calendrier des Rêves — LIMANYA GROUPE' } },
   { path: '/forage', name: 'forage', component: Forage, meta: { title: 'Forages Hydrauliques — LIMANYA GROUPE' } },
   { path: '/btp', name: 'btp', component: Btp, meta: { title: 'BTP & Génie Civil — LIMANYA GROUPE' } },
   { path: '/assainissement', name: 'assainissement', component: Assainissement, meta: { title: 'Assainissement — LIMANYA GROUPE' } },
@@ -142,20 +152,20 @@ const routes = [
       path: 'calendrier-des-reves',
       name: 'admin-calendrier-des-reves',
       component: AdminCalendrierReves,
-      meta: { roles: ['admin'] }
+      meta: { roles: ['admin', 'gestionnaire_contenu'] }
     },
 
     {
     path: 'calendrier-reves/participants',
     name: 'AdminParticipantsCalendrier',
     component: AdminParticipantsCalendrier,
-    meta: { roles: ['admin'] }
+    meta: { roles: ['admin', 'gestionnaire_contenu'] }
    },
    {
     path: 'calendrier-reves/gagnants',
     name: 'AdminGagnantsCalendrier',
     component: AdminGagnantsCalendrier,
-    meta: { roles: ['admin'] }
+    meta: { roles: ['admin', 'gestionnaire_contenu'] }
  }
   ]
 },

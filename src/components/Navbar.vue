@@ -110,6 +110,7 @@
                   Actualités
                 </RouterLink>
               </li>
+              <li><RouterLink class="dropdown-item" to="/calendrier-des-reves"><i class="bi bi-calendar-heart me-2"></i>Calendrier des Rêves</RouterLink></li>
 
             </ul>
 

@@ -165,9 +165,9 @@ onMounted(async () => {
                     >
                         <i class="fas fa-file-excel"></i>
 
-                        {{ questionSelectionnee
-                            ? 'Exporter cette journée'
-                            : 'Exporter toutes les participations' }}
+                            {{ questionSelectionnee
+                                ? 'Exporter les bonnes réponses de cette journée'
+                                : 'Exporter les bonnes réponses des journées terminées' }}
                     </button>
                 </div>
             </div>
@@ -252,7 +252,7 @@ onMounted(async () => {
                             </td>
                         </tr>
 
-                        <tr v-if="participants.filter(rechercherParticipant).length === 0"">
+                        <tr v-if="participants.filter(rechercherParticipant).length === 0">
                             <td colspan="6" class="empty-message">
                                 Aucun participant pour le moment.
                             </td>

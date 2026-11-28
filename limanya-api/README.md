@@ -16,6 +16,14 @@ mysql -u root -p < database/limanya_db.sql
 
 Éditez `config/database.php` et renseignez vos identifiants MySQL.
 
+Pour activer le Calendrier des Rêves sur une base existante, exécutez aussi une seule fois `database/migration_jeu_calendrier.sql` après avoir sélectionné la base `limanya`. Cette migration ajoute les tables du jeu sans modifier les tables existantes.
+
+Pour associer une photo ou une vidéo à chaque cadeau et l'afficher avec le gagnant publié, exécutez une seule fois `database/migration_media_cadeau_calendrier.sql` après la migration du jeu.
+
+Si une ancienne table `jeu_participants` ne contient pas encore `whatsapp_normalise`, exécutez une seule fois `database/migration_normalisation_whatsapp_calendrier.sql`. Les nouvelles installations ont déjà ce champ dans `migration_jeu_calendrier.sql`.
+
+Pour une recette avant décembre, le backend accepte une date simulée uniquement lorsque `APP_ENV=testing` est défini côté PHP. Définissez alors `CALENDRIER_TEST_NOW` (par exemple `2026-12-01T12:05:00+00:00`) sur l'environnement de test. Ne définissez pas ces variables sur le site de production ; sans `APP_ENV=testing`, le backend utilise l'heure réelle d'Abidjan.
+
 Si la base existe déjà, exécutez aussi `database/migration_medias_realisations.sql` pour activer les galeries de photos et vidéos des réalisations.
 
 3) Lancer le serveur PHP interne (pour tests)

@@ -11,8 +11,10 @@ const recherche = ref('')
 const filtreStatut = ref('')
 const questions = ref([])
 const jourSelectionne = ref('')
-const tirageEnCours = ref(false)
-const gagnantTire = ref(null)
+const candidats = ref([])
+const participantSelectionne = ref('')
+const chargementCandidats = ref(false)
+const enregistrementGagnant = ref(false)
 
 const gagnantsFiltres = computed(() => {
   return gagnants.value.filter(gagnant => {
@@ -109,6 +111,46 @@ async function chargerQuestions() {
   }
 }
 
+async function chargerCandidats() {
+  candidats.value = []
+  participantSelectionne.value = ''
+  if (!jourSelectionne.value) return
+  chargementCandidats.value = true
+  try {
+    const response = await api.get('calendrier-reves/gagnants/candidats', {
+      params: { question_id: jourSelectionne.value }
+    })
+    candidats.value = Array.isArray(response.data) ? response.data : []
+  } catch (error) {
+    erreur.value = error.response?.data?.message || 'Impossible de charger les participants éligibles.'
+  } finally {
+    chargementCandidats.value = false
+  }
+}
+
+async function enregistrerGagnantManuel() {
+  if (!jourSelectionne.value || !participantSelectionne.value) return
+  if (!window.confirm('Confirmez-vous que le tirage a été effectué manuellement et que l’identité du gagnant sera vérifiée avant publication ?')) return
+  enregistrementGagnant.value = true
+  erreur.value = ''
+  message.value = ''
+  try {
+    const response = await api.post('calendrier-reves/gagnants', {
+      question_id: Number(jourSelectionne.value),
+      participant_id: Number(participantSelectionne.value)
+    })
+    message.value = response.data.message || 'Le gagnant a été enregistré en attente de vérification.'
+    participantSelectionne.value = ''
+    jourSelectionne.value = ''
+    candidats.value = []
+    await chargerGagnants()
+  } catch (error) {
+    erreur.value = error.response?.data?.message || 'Impossible d’enregistrer ce gagnant.'
+  } finally {
+    enregistrementGagnant.value = false
+  }
+}
+
 async function modifierStatut(gagnant) {
   message.value = ''
   erreur.value = ''
@@ -138,41 +180,6 @@ async function modifierStatut(gagnant) {
     gagnant.observationModifiee = gagnant.observation || ''
   } finally {
     gagnant.enregistrement = false
-  }
-}
-
-async function lancerTirage() {
-  if (!jourSelectionne.value) return
-
-  const confirmation = window.confirm(
-    'Voulez-vous vraiment lancer le tirage au sort pour cette journée ? Cette opération ne pourra pas être répétée.'
-  )
-
-  if (!confirmation) return
-
-  tirageEnCours.value = true
-  erreur.value = ''
-  message.value = ''
-  gagnantTire.value = null
-
-  try {
-    const response = await api.post(
-      'calendrier-reves/gagnants/tirage',
-      {
-        question_id: Number(jourSelectionne.value)
-      }
-    )
-
-    gagnantTire.value = response.data.gagnant
-    message.value = response.data.message || 'Tirage effectué avec succès.'
-
-    await chargerGagnants()
-  } catch (error) {
-    erreur.value =
-      error.response?.data?.message ||
-      'Impossible d’effectuer le tirage au sort.'
-  } finally {
-    tirageEnCours.value = false
   }
 }
 
@@ -291,88 +298,36 @@ onMounted(() => {
   ></button>
 </div>
 
-    <!-- Tirage au sort -->
+    <!-- Sélection manuelle du gagnant -->
 <div class="card border-0 shadow-sm rounded-4 mb-4">
   <div class="card-body p-3 p-md-4">
-    <h4 class="fw-bold mb-2">
-      <i class="bi bi-shuffle me-2 text-success"></i>
-      Tirage au sort
-    </h4>
-
-    <p class="text-muted">
-      Sélectionnez une journée pour effectuer le tirage parmi les participants ayant donné la bonne réponse.
-    </p>
-
+    <h4 class="fw-bold mb-2"><i class="bi bi-person-check me-2 text-success"></i>Enregistrer le gagnant tiré manuellement</h4>
+    <p class="text-muted">Après la fermeture, exportez les bonnes réponses, réalisez le tirage hors du site, puis sélectionnez ici le participant retenu. Son identité devra être confirmée avant publication.</p>
     <div class="row g-3 align-items-end">
-      <div class="col-md-8">
-        <label class="form-label fw-semibold">Journée du calendrier</label>
-        <select v-model="jourSelectionne" class="form-select">
+      <div class="col-md-4">
+        <label class="form-label fw-semibold">Journée</label>
+        <select v-model="jourSelectionne" class="form-select" @change="chargerCandidats">
           <option value="">Choisir une journée</option>
-          <option
-            v-for="question in questions"
-            :key="question.id"
-            :value="question.id"
-          >
-            Jour {{ question.jour }} — {{ question.cadeau }}
-          </option>
+          <option v-for="question in questions" :key="question.id" :value="question.id">Jour {{ question.jour }} — {{ question.cadeau }}</option>
         </select>
       </div>
-
-      <div class="col-md-4">
-       <button
-            type="button"
-            class="btn btn-success w-100"
-            @click="lancerTirage"
-            :disabled="!jourSelectionne || tirageEnCours"
-            >
-            <span
-                v-if="tirageEnCours"
-                class="spinner-border spinner-border-sm me-2"
-            ></span>
-
-            <i v-else class="bi bi-shuffle me-2"></i>
-
-            {{ tirageEnCours ? 'Tirage en cours...' : 'Lancer le tirage' }}
+      <div class="col-md-5">
+        <label class="form-label fw-semibold">Participant éligible</label>
+        <select v-model="participantSelectionne" class="form-select" :disabled="!jourSelectionne || chargementCandidats || !candidats.length">
+          <option value="">{{ chargementCandidats ? 'Chargement…' : 'Choisir un participant' }}</option>
+          <option v-for="participant in candidats" :key="participant.id" :value="participant.id">{{ participant.prenoms }} {{ participant.nom }} — {{ participant.whatsapp }}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button type="button" class="btn btn-success w-100" @click="enregistrerGagnantManuel" :disabled="!participantSelectionne || enregistrementGagnant">
+          {{ enregistrementGagnant ? 'Enregistrement…' : 'Enregistrer le gagnant' }}
         </button>
       </div>
     </div>
+    <p v-if="jourSelectionne && !chargementCandidats && !candidats.length" class="small text-muted mt-3 mb-0">Aucun candidat éligible pour cette journée, ou journée encore ouverte.</p>
   </div>
 </div>
-
-<!-- Résultat du tirage -->
-<div
-  v-if="gagnantTire"
-  class="card border-0 shadow-sm rounded-4 mb-4"
->
-  <div class="card-body p-4">
-    <h4 class="fw-bold text-success mb-3">
-      <i class="bi bi-trophy-fill me-2"></i>
-      Félicitations au gagnant !
-    </h4>
-
-    <h5 class="fw-bold">
-      {{ gagnantTire.prenoms }} {{ gagnantTire.nom }}
-    </h5>
-
-    <p class="mb-1">
-      <strong>WhatsApp :</strong> {{ gagnantTire.whatsapp }}
-    </p>
-
-    <p class="mb-1">
-      <strong>Commune :</strong> {{ gagnantTire.commune }}
-    </p>
-
-    <p class="text-muted mb-0">
-      <strong>Journée :</strong> {{ jourSelectionne }}
-    </p>
-
-    <div class="alert alert-warning mt-3 mb-0">
-      Le gagnant est en attente de vérification avant toute publication.
-    </div>
-  </div>
-</div>
-
-    <!-- Liste des gagnants -->
+<!-- Liste des gagnants -->
     <div class="card border-0 shadow-sm rounded-4">
       <div class="card-body p-3 p-md-4">
 
